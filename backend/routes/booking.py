@@ -3,13 +3,15 @@ import logging
 import uuid
 from typing import Optional
 from datetime import datetime
+import time
+import urllib.request
 import jwt
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
-from config import API_BASE_URL, SUPABASE_JWT_SECRET, SUPABASE_URL
+from config import API_BASE_URL, SUPABASE_ANON_KEY, SUPABASE_JWT_SECRET, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL
 from consultants import CONSULTANTS
 from limiter import limiter
 from email_service import send_client_confirmation, send_client_decline, send_consultant_booking_request
@@ -20,7 +22,7 @@ security = HTTPBearer(auto_error=False)
 
 # Lazy import to avoid circular dependency
 _supabase = None
-_jwks_client = None
+_jwks_cache = {"expires_at": 0.0, "jwks_json": ""}
 
 
 def get_supabase():
@@ -32,17 +34,48 @@ def get_supabase():
     return _supabase
 
 
-def _get_jwks_client():
-    global _jwks_client
-    if _jwks_client is None:
-        # Supabase JWKS endpoint for RS256 verification
-        # Example: https://<project-ref>.supabase.co/auth/v1/keys
-        from jwt import PyJWKClient
+def _fetch_supabase_jwks_json() -> str:
+    if not SUPABASE_URL:
+        raise RuntimeError("SUPABASE_URL is not set")
+    api_key = SUPABASE_ANON_KEY or SUPABASE_SERVICE_ROLE_KEY
+    if not api_key:
+        raise RuntimeError("SUPABASE_ANON_KEY (or SUPABASE_SERVICE_ROLE_KEY) is not set")
+    url = f"{SUPABASE_URL.rstrip('/')}/auth/v1/keys"
+    req = urllib.request.Request(
+        url,
+        headers={
+            "apikey": api_key,
+            # Some setups also accept Bearer, but apikey is the important one
+            "Authorization": f"Bearer {api_key}",
+        },
+        method="GET",
+    )
+    with urllib.request.urlopen(req, timeout=10) as resp:
+        raw = resp.read()
+        return raw.decode("utf-8", errors="replace")
 
-        if not SUPABASE_URL:
-            raise RuntimeError("SUPABASE_URL is not set")
-        _jwks_client = PyJWKClient(f"{SUPABASE_URL.rstrip('/')}/auth/v1/keys")
-    return _jwks_client
+
+def _get_jwks_set():
+    now = time.time()
+    if _jwks_cache["jwks_json"] and now < float(_jwks_cache["expires_at"]):
+        return jwt.PyJWKSet.from_json(_jwks_cache["jwks_json"])
+    jwks_json = _fetch_supabase_jwks_json()
+    # Cache for 10 minutes
+    _jwks_cache["jwks_json"] = jwks_json
+    _jwks_cache["expires_at"] = now + 600.0
+    return jwt.PyJWKSet.from_json(jwks_json)
+
+
+def _get_signing_key_from_jwks(token: str):
+    header = jwt.get_unverified_header(token) or {}
+    kid = header.get("kid")
+    if not kid:
+        raise jwt.InvalidTokenError("Missing kid in JWT header")
+    jwks_set = _get_jwks_set()
+    for jwk in (jwks_set.keys or []):
+        if getattr(jwk, "key_id", None) == kid:
+            return jwk.key
+    raise jwt.InvalidTokenError(f"No matching JWK for kid={kid}")
 
 
 def _decode_supabase_jwt(token: str) -> dict:
@@ -65,8 +98,7 @@ def _decode_supabase_jwt(token: str) -> dict:
         )
 
     if alg in {"RS256", "RS512", "ES256", "ES384", "ES512"}:
-        jwks_client = _get_jwks_client()
-        signing_key = jwks_client.get_signing_key_from_jwt(token).key
+        signing_key = _get_signing_key_from_jwks(token)
         return jwt.decode(
             token,
             signing_key,
