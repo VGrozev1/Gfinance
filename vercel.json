@@ -6,6 +6,8 @@
     { "source": "/api/:path*", "destination": "/api" },
     { "source": "/health", "destination": "/api" },
     { "source": "/confirm", "destination": "/api?x-path=/api/book/confirm" },
-    { "source": "/decline", "destination": "/api?x-path=/api/book/decline" }
+    { "source": "/confirm/", "destination": "/api?x-path=/api/book/confirm" },
+    { "source": "/decline", "destination": "/api?x-path=/api/book/decline" },
+    { "source": "/decline/", "destination": "/api?x-path=/api/book/decline" }
   ]
 }
