@@ -1,5 +1,5 @@
 {
-  "installCommand": "pip install -r requirements.txt",
+  "installCommand": "pip install --break-system-packages -r requirements.txt",
   "buildCommand": "mkdir -p public && cp -r frontend/* public/",
   "trailingSlash": true,
   "rewrites": [
