@@ -107,20 +107,8 @@ async def get_taken_slots(
     return {"taken": taken}
 
 
-@router.post("")
-@limiter.limit("10/minute")
-async def create_booking_request(
-    request: Request,
-    req: BookRequest,
-    credentials: Optional[HTTPAuthorizationCredentials] = security,
-) -> dict:
-    """Create a pending booking request and email the consultant. Requires login."""
-    auth_email = await _get_email_from_auth(credentials)
-    if not auth_email:
-        raise HTTPException(
-            status_code=401,
-            detail="Моля влезте в профила си, за да направите запис.",
-        )
+async def _create_booking_with_auth(req: BookRequest, auth_email: str) -> dict:
+    """Core booking creation (used by both POST /api/book and POST /api for Vercel)."""
     if req.client_email.lower() != auth_email:
         raise HTTPException(
             status_code=403,
@@ -168,6 +156,23 @@ async def create_booking_request(
         decline_token=token,  # same token for both; we distinguish by path
     )
     return {"ok": True, "message": "Your request has been sent. The consultant will confirm shortly."}
+
+
+@router.post("")
+@limiter.limit("10/minute")
+async def create_booking_request(
+    request: Request,
+    req: BookRequest,
+    credentials: Optional[HTTPAuthorizationCredentials] = security,
+) -> dict:
+    """Create a pending booking request and email the consultant. Requires login."""
+    auth_email = await _get_email_from_auth(credentials)
+    if not auth_email:
+        raise HTTPException(
+            status_code=401,
+            detail="Моля влезте в профила си, за да направите запис.",
+        )
+    return await _create_booking_with_auth(req, auth_email)
 
 
 async def _get_email_from_auth(credentials: Optional[HTTPAuthorizationCredentials]) -> Optional[str]:

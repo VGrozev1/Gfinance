@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 from urllib.parse import unquote, parse_qsl, urlencode
 
+from typing import Optional
 from fastapi import FastAPI
 from starlette.middleware.gzip import GZipMiddleware
 
@@ -81,6 +82,36 @@ app.add_middleware(
 
 from routes.booking import router as booking_router
 from routes.auth import router as auth_router
+from routes.booking import (
+    BookRequest,
+    _create_booking_with_auth,
+    _get_email_from_auth as booking_get_email,
+)
+from fastapi import Depends, Request, HTTPException
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
+_booking_security = HTTPBearer(auto_error=False)
+
+
+@app.post("/api")
+async def vercel_book_post(
+    request: Request,
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(_booking_security),
+):
+    """Vercel: POST /api with JSON body (no query) so body is preserved."""
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON body")
+    body = {k: v for k, v in (body or {}).items() if k != "_path"}
+    try:
+        req = BookRequest(**body)
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    auth_email = await booking_get_email(credentials)
+    if not auth_email:
+        raise HTTPException(status_code=401, detail="Моля влезте в профила си, за да направите запис.")
+    return await _create_booking_with_auth(req, auth_email)
 
 
 @app.on_event("startup")

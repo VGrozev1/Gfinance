@@ -16,12 +16,13 @@
       ? 'http://localhost:8000'
       : '');
 
-  function url(path) {
+  function url(path, isPostBooking) {
     var p = (path || '').trim();
     if (API_BASE) {
       p = p.replace(/^\//, '');
       return API_BASE + '/' + p;
     }
+    if (isPostBooking) return '/api';
     var pathOnly = p.split('?')[0].replace(/^\//, '') || 'api';
     var qs = p.indexOf('?') >= 0 ? p.substring(p.indexOf('?') + 1) : '';
     var xpath = pathOnly.startsWith('api') ? '/' + pathOnly : (pathOnly === 'health' ? '/health' : '/api/' + pathOnly);
@@ -49,11 +50,12 @@
 
     post: function (path, data, timeoutMs) {
       timeoutMs = timeoutMs || 30000;
+      var isBook = (path || '').replace(/^\//, '') === 'api/book' || (path || '').replace(/^\//, '') === 'api/book/';
       return authHeaders().then(function (h) {
         var headers = Object.assign({}, h, { 'Content-Type': 'application/json' });
         var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
         var id = ctrl ? setTimeout(function () { ctrl.abort(); }, timeoutMs) : null;
-        return fetch(url(path), {
+        return fetch(url(path, isBook), {
           method: 'POST',
           headers: headers,
           credentials: 'include',
