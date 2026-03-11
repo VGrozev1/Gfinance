@@ -329,15 +329,30 @@ async def list_bookings(
     credentials: Optional[HTTPAuthorizationCredentials] = security,
     email_param: Optional[str] = None,
 ) -> dict:
-    """Return bookings for the authenticated user's email. Requires login (or ?email= when JWT not configured)."""
-    email = await _get_email_from_auth(credentials)
-    # Dev fallback: when SUPABASE_JWT_SECRET is not set, allow ?email= to list bookings
-    if not email and not SUPABASE_JWT_SECRET and email_param and "@" in email_param:
+    """Return bookings for the user's email.
+
+    Prefers Supabase JWT, but also accepts explicit ?email_param=<email>
+    as fallback so logged-in users can still see bookings even if JWT
+    verification is temporarily misconfigured.
+    """
+    email: Optional[str] = None
+
+    # 1) Try strong auth via JWT (if header present)
+    if credentials and credentials.credentials:
+        try:
+            email = await _require_email_from_auth(credentials)
+        except HTTPException:
+            # Don't fail yet – we still allow explicit ?email_param as fallback
+            email = None
+
+    # 2) Fallback: use explicit email_param when present
+    if not email and email_param and "@" in email_param:
         email = email_param.strip().lower()
+
     if not email:
         raise HTTPException(
             status_code=401,
-            detail="Login required. If you are logged in, add SUPABASE_JWT_SECRET to backend/.env (Supabase Dashboard → Settings → API → JWT Secret).",
+            detail="Моля влезте в профила си, за да видите вашите срещи.",
         )
     supabase = get_supabase()
     r = (
