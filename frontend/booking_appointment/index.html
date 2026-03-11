@@ -174,8 +174,8 @@
 <script src="../assets/js/supabase-config.js"></script>
 <script>if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) { window.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY); }</script>
 <script src="../assets/js/auth.js"></script>
-<script src="../assets/js/api.js" defer></script>
-<script src="../assets/js/main.js" defer></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/main.js"></script>
 <script>
 (function() {
   if (window.supabase && typeof window.supabase.auth !== 'undefined') {
@@ -354,7 +354,12 @@
   document.querySelector('.consultant-option[data-consultant-id="georgi_grozev"]').classList.add('border-primary','bg-primary/5');
   document.querySelector('.consultant-option[data-consultant-id="georgi_grozev"] .consultant-check').classList.remove('opacity-0');
 
-  document.getElementById('booking-submit').addEventListener('click', function() {
+  document.getElementById('booking-submit').addEventListener('click', function(e) {
+    e.preventDefault();
+    if (!window.api || typeof window.api.post !== 'function') {
+      alert('Грешка при зареждане. Опреснете страницата.');
+      return;
+    }
     var name = document.getElementById('booking-name').value.trim();
     var email = document.getElementById('booking-email').value.trim();
     var notes = document.getElementById('booking-notes').value.trim();
