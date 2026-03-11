@@ -215,8 +215,13 @@ async def _require_email_from_auth(credentials: Optional[HTTPAuthorizationCreden
         )
     except jwt.InvalidAudienceError:
         raise HTTPException(status_code=401, detail="Невалиден токен: грешна аудитория (aud).")
-    except jwt.PyJWTError:
-        raise HTTPException(status_code=401, detail="Невалиден токен. Моля влезте отново.")
+    except jwt.PyJWTError as e:
+        detail = str(e).strip()
+        suffix = f": {detail}" if detail else ""
+        raise HTTPException(
+            status_code=401,
+            detail=f"Невалиден токен ({e.__class__.__name__}){suffix}. Моля влезте отново.",
+        )
 
 
 @router.get("/list")
