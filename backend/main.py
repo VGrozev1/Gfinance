@@ -85,7 +85,7 @@ from routes.auth import router as auth_router
 from routes.booking import (
     BookRequest,
     _create_booking_with_auth,
-    _get_email_from_auth as booking_get_email,
+    _require_email_from_auth as booking_require_email,
 )
 from fastapi import Depends, Request, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -106,9 +106,7 @@ async def _vercel_book_post_impl(
         req = BookRequest(**body)
     except Exception as e:
         raise HTTPException(status_code=422, detail=str(e))
-    auth_email = await booking_get_email(credentials)
-    if not auth_email:
-        raise HTTPException(status_code=401, detail="Моля влезте в профила си, за да направите запис.")
+    auth_email = await booking_require_email(credentials)
     return await _create_booking_with_auth(req, auth_email)
 
 

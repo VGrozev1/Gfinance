@@ -18,7 +18,7 @@ Add these in **Vercel Dashboard → Project → Settings → Environment Variabl
 | `SUPABASE_URL` | Supabase project URL |
 | `SUPABASE_ANON_KEY` | Supabase anon key |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key |
-| `SUPABASE_JWT_SECRET` | Supabase JWT secret (Dashboard → Settings → API) |
+| `SUPABASE_JWT_SECRET` | **Required for booking.** Supabase JWT secret (Dashboard → Settings → API). Without it, logged-in users get "login required" when submitting a booking. |
 | `GOOGLE_CALENDAR_ID` | Your Google Calendar ID (e.g. `you@gmail.com`) |
 | `GOOGLE_SERVICE_ACCOUNT_JSON` | **Full JSON content** of the service account key (one line). Paste the entire contents of `credentials/google-calendar.json`. |
 | `API_BASE_URL` | Your Vercel URL, e.g. `https://your-project.vercel.app` |

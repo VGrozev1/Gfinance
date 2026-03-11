@@ -166,12 +166,7 @@ async def create_booking_request(
     credentials: Optional[HTTPAuthorizationCredentials] = security,
 ) -> dict:
     """Create a pending booking request and email the consultant. Requires login."""
-    auth_email = await _get_email_from_auth(credentials)
-    if not auth_email:
-        raise HTTPException(
-            status_code=401,
-            detail="Моля влезте в профила си, за да направите запис.",
-        )
+    auth_email = await _require_email_from_auth(credentials)
     return await _create_booking_with_auth(req, auth_email)
 
 
@@ -189,6 +184,39 @@ async def _get_email_from_auth(credentials: Optional[HTTPAuthorizationCredential
         return (payload.get("email") or "").lower()
     except jwt.PyJWTError:
         return None
+
+
+async def _require_email_from_auth(credentials: Optional[HTTPAuthorizationCredentials]) -> str:
+    """Extract email from Supabase JWT or raise an HTTPException with a clear reason."""
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Моля влезте в профила си, за да направите запис.")
+    if not SUPABASE_JWT_SECRET:
+        raise HTTPException(
+            status_code=503,
+            detail="Входът не може да се провери: липсва SUPABASE_JWT_SECRET във Vercel. Задайте го в Settings → Environment Variables.",
+        )
+    try:
+        payload = jwt.decode(
+            credentials.credentials,
+            SUPABASE_JWT_SECRET,
+            audience="authenticated",
+            algorithms=["HS256"],
+        )
+        email = (payload.get("email") or "").lower()
+        if not email:
+            raise HTTPException(status_code=401, detail="Входът не може да се провери: липсва email в токена.")
+        return email
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Сесията е изтекла. Моля влезте отново.")
+    except jwt.InvalidSignatureError:
+        raise HTTPException(
+            status_code=401,
+            detail="Невалиден токен: подписът не съвпада (вероятно грешен SUPABASE_JWT_SECRET във Vercel).",
+        )
+    except jwt.InvalidAudienceError:
+        raise HTTPException(status_code=401, detail="Невалиден токен: грешна аудитория (aud).")
+    except jwt.PyJWTError:
+        raise HTTPException(status_code=401, detail="Невалиден токен. Моля влезте отново.")
 
 
 @router.get("/list")
