@@ -231,6 +231,16 @@ async def _require_email_from_auth(credentials: Optional[HTTPAuthorizationCreden
     """Extract email from Supabase JWT or raise an HTTPException with a clear reason."""
     if not credentials:
         raise HTTPException(status_code=401, detail="Моля влезте в профила си, за да направите запис.")
+    # Grab JWT header early for better diagnostics (safe: does not verify signature).
+    header_hint = ""
+    try:
+        h = jwt.get_unverified_header(credentials.credentials) or {}
+        alg = h.get("alg")
+        kid = h.get("kid")
+        typ = h.get("typ")
+        header_hint = f" (jwt header: alg={alg}, kid={kid}, typ={typ})"
+    except Exception:
+        header_hint = " (jwt header: unreadable)"
     try:
         payload = _decode_supabase_jwt(credentials.credentials)
         email = (payload.get("email") or "").lower()
@@ -246,10 +256,10 @@ async def _require_email_from_auth(credentials: Optional[HTTPAuthorizationCreden
         )
     except jwt.InvalidAudienceError:
         raise HTTPException(status_code=401, detail="Невалиден токен: грешна аудитория (aud).")
-    except jwt.InvalidAlgorithmError:
+    except jwt.InvalidAlgorithmError as e:
         raise HTTPException(
             status_code=401,
-            detail="Невалиден токен: неподдържан алгоритъм (alg). Ако Supabase е на RS256/RS512, уверете се че SUPABASE_URL е зададен и бекендът може да достъпи /auth/v1/keys.",
+            detail=f"Невалиден токен: неподдържан алгоритъм (alg). {str(e)}{header_hint}",
         )
     except RuntimeError as e:
         raise HTTPException(status_code=503, detail=str(e))
@@ -258,7 +268,7 @@ async def _require_email_from_auth(credentials: Optional[HTTPAuthorizationCreden
         suffix = f": {detail}" if detail else ""
         raise HTTPException(
             status_code=401,
-            detail=f"Невалиден токен ({e.__class__.__name__}){suffix}. Моля влезте отново.",
+            detail=f"Невалиден токен ({e.__class__.__name__}){suffix}{header_hint}. Моля влезте отново.",
         )
 
 
