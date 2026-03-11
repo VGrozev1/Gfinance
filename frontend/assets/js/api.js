@@ -17,13 +17,16 @@
       : '');
 
   function url(path) {
-    path = (path || '').replace(/^\//, '');
-    return API_BASE ? API_BASE + '/' + path : '/' + path;
-  }
-
-  function pathForHeader(path) {
-    var p = (path || '').split('?')[0];
-    return p && !p.startsWith('/') ? '/' + p : p || '/';
+    var p = (path || '').trim();
+    if (API_BASE) {
+      p = p.replace(/^\//, '');
+      return API_BASE + '/' + p;
+    }
+    var pathOnly = p.split('?')[0].replace(/^\//, '') || 'api';
+    var qs = p.indexOf('?') >= 0 ? p.substring(p.indexOf('?') + 1) : '';
+    var xpath = pathOnly.startsWith('api') ? '/' + pathOnly : (pathOnly === 'health' ? '/health' : '/api/' + pathOnly);
+    var base = '/api?x-path=' + encodeURIComponent(xpath);
+    return qs ? base + '&' + qs : base;
   }
 
   async function authHeaders() {
@@ -40,9 +43,7 @@
 
     get: function (path) {
       return authHeaders().then(function (h) {
-        var headers = Object.assign({}, h);
-        if (!API_BASE) headers['X-Original-Path'] = pathForHeader(path);
-        return fetch(url(path), { credentials: 'include', headers: headers });
+        return fetch(url(path), { credentials: 'include', headers: h });
       });
     },
 
@@ -50,7 +51,6 @@
       timeoutMs = timeoutMs || 30000;
       return authHeaders().then(function (h) {
         var headers = Object.assign({}, h, { 'Content-Type': 'application/json' });
-        if (!API_BASE) headers['X-Original-Path'] = pathForHeader(path);
         var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
         var id = ctrl ? setTimeout(function () { ctrl.abort(); }, timeoutMs) : null;
         return fetch(url(path), {
