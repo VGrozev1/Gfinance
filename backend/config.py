@@ -25,6 +25,8 @@ def _resolve_path(p: str) -> str:
 GOOGLE_SERVICE_ACCOUNT_FILE = _resolve_path(
     os.getenv("GOOGLE_SERVICE_ACCOUNT_FILE", "credentials/google-calendar.json")
 )
+# For Vercel: JSON content as string (credentials file is gitignored)
+GOOGLE_SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "")
 GOOGLE_CALENDAR_ID = os.getenv("GOOGLE_CALENDAR_ID", "")
 
 # Email (optional - if not set, logs instead of sending)

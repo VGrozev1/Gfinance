@@ -1,5 +1,6 @@
 .env
 .venv/
+public/
 __pycache__/
 *.pyc
 credentials/
