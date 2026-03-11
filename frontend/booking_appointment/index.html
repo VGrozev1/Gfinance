@@ -390,7 +390,7 @@
         return r.text().then(function(t) {
           var d;
           try { d = t ? JSON.parse(t) : {}; } catch (e) { d = {}; }
-          return { ok: r.ok, status: r.status, data: d };
+          return { ok: r.ok, status: r.status, data: d, raw: t };
         });
       })
       .then(function(res) {
@@ -408,7 +408,15 @@
           var msg = d.detail;
           if (Array.isArray(msg)) msg = msg.map(function(x) { return x.msg || x.loc ? (x.loc + ': ' + (x.msg || '')) : String(x); }).join('. ');
           else if (typeof msg !== 'string') msg = d.message || d.error || (typeof d.detail === 'string' ? d.detail : null) || ('Грешка ' + res.status);
-          if (!msg) msg = 'Грешка ' + res.status + ' от сървъра. Опитайте отново или влезте в профила си.';
+          if (!msg) {
+            // Fallback: show at least part of raw response so we can see server error details (e.g. from Vercel).
+            if (res.raw) {
+              var raw = String(res.raw);
+              msg = 'Грешка ' + res.status + ' от сървъра. Детайли: ' + raw.slice(0, 400);
+            } else {
+              msg = 'Грешка ' + res.status + ' от сървъра. Опитайте отново или влезте в профила си.';
+            }
+          }
           alert(msg);
           if (res.status === 401 && String(msg).indexOf('SUPABASE_JWT_SECRET') < 0) {
             window.location.href = '/login?redirect=' + encodeURIComponent('/booking_appointment/');

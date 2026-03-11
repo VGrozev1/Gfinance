@@ -5,6 +5,7 @@ from typing import Optional
 from datetime import datetime
 import time
 import urllib.request
+import urllib.error
 import jwt
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
@@ -40,19 +41,36 @@ def _fetch_supabase_jwks_json() -> str:
     api_key = SUPABASE_ANON_KEY or SUPABASE_SERVICE_ROLE_KEY
     if not api_key:
         raise RuntimeError("SUPABASE_ANON_KEY (or SUPABASE_SERVICE_ROLE_KEY) is not set")
-    url = f"{SUPABASE_URL.rstrip('/')}/auth/v1/keys"
-    req = urllib.request.Request(
-        url,
-        headers={
-            "apikey": api_key,
-            # Some setups also accept Bearer, but apikey is the important one
-            "Authorization": f"Bearer {api_key}",
-        },
-        method="GET",
-    )
-    with urllib.request.urlopen(req, timeout=10) as resp:
-        raw = resp.read()
-        return raw.decode("utf-8", errors="replace")
+    base = SUPABASE_URL.rstrip("/")
+    # Preferred Supabase JWKS endpoints for ES256/RS256
+    candidates = [
+        f"{base}/auth/v1/.well-known/jwks.json",
+        f"{base}/auth/v1/jwks",
+    ]
+    last_err: Exception | None = None
+    for url in candidates:
+        try:
+            req = urllib.request.Request(
+                url,
+                headers={
+                    "apikey": api_key,
+                    "Authorization": f"Bearer {api_key}",
+                },
+                method="GET",
+            )
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                raw = resp.read()
+                return raw.decode("utf-8", errors="replace")
+        except urllib.error.HTTPError as e:
+            last_err = e
+            # Try next candidate on 404; for 401/403 we also fall through to raise a clear error
+            continue
+        except urllib.error.URLError as e:
+            last_err = e
+            continue
+    if last_err is not None:
+        raise RuntimeError(f"Failed to fetch Supabase JWKS: {last_err}")
+    raise RuntimeError("Failed to fetch Supabase JWKS: unknown error")
 
 
 def _get_jwks_set():
