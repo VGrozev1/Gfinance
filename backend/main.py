@@ -1,6 +1,7 @@
 import logging
 import sys
 from pathlib import Path
+from urllib.parse import unquote
 
 from fastapi import FastAPI
 from starlette.middleware.gzip import GZipMiddleware
@@ -26,6 +27,35 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(GZipMiddleware, minimum_size=500)
+
+
+class VercelPathMiddleware:
+    """ASGI middleware: rewrite scope path from x-path query (set by Vercel rewrites)."""
+
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope.get("type") != "http":
+            await self.app(scope, receive, send)
+            return
+        qs = scope.get("query_string", b"").decode("utf-8")
+        path = scope.get("path", "/")
+        if qs:
+            for part in qs.split("&"):
+                if part.startswith("x-path="):
+                    new_path = unquote(part[7:].strip())
+                    if new_path and new_path.startswith("/"):
+                        scope = dict(scope)
+                        scope["path"] = new_path
+                        scope["raw_path"] = new_path.encode("utf-8")
+                        new_qs = "&".join(p for p in qs.split("&") if not p.startswith("x-path="))
+                        scope["query_string"] = new_qs.encode("utf-8")
+                    break
+        await self.app(scope, receive, send)
+
+
+app.add_middleware(VercelPathMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
