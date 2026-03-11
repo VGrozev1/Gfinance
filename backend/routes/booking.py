@@ -109,12 +109,28 @@ async def get_taken_slots(
 
 @router.post("")
 @limiter.limit("10/minute")
-async def create_booking_request(request: Request, req: BookRequest) -> dict:
-    """Create a pending booking request and email the consultant."""
+async def create_booking_request(
+    request: Request,
+    req: BookRequest,
+    credentials: Optional[HTTPAuthorizationCredentials] = security,
+) -> dict:
+    """Create a pending booking request and email the consultant. Requires login."""
+    auth_email = await _get_email_from_auth(credentials)
+    if not auth_email:
+        raise HTTPException(
+            status_code=401,
+            detail="Моля влезте в профила си, за да направите запис.",
+        )
+    if req.client_email.lower() != auth_email:
+        raise HTTPException(
+            status_code=403,
+            detail="Имейлът трябва да съвпада с профила ви.",
+        )
     if req.consultant_id not in CONSULTANTS:
         raise HTTPException(status_code=400, detail="Invalid consultant")
     consultant = CONSULTANTS[req.consultant_id]
     time_val = req.time if len(req.time) >= 8 else f"{req.time}:00"  # HH:MM -> HH:MM:00
+    token = str(uuid.uuid4())
     if _is_slot_taken(req.consultant_id, req.date, time_val):
         raise HTTPException(
             status_code=400,

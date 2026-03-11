@@ -178,6 +178,27 @@
 <script src="../assets/js/main.js" defer></script>
 <script>
 (function() {
+  if (window.supabase && typeof window.supabase.auth !== 'undefined') {
+    window.supabase.auth.getSession().then(function(r) {
+      if (!r.data?.session) {
+        window.location.href = '/login?redirect=' + encodeURIComponent('/booking_appointment');
+      }
+    });
+  }
+</script>
+<script>
+(function() {
+  if (window.supabase && window.supabase.auth) {
+    window.supabase.auth.getSession().then(function(r) {
+      var user = r.data?.session?.user;
+      if (user) {
+        var emailEl = document.getElementById('booking-email');
+        var nameEl = document.getElementById('booking-name');
+        if (emailEl) { emailEl.value = user.email || ''; emailEl.readOnly = true; }
+        if (nameEl && user.user_metadata?.full_name) { nameEl.value = user.user_metadata.full_name; }
+      }
+    });
+  }
   var MONTHS_BG = ['Януари','Февруари','Март','Април','Май','Юни','Юли','Август','Септември','Октомври','Ноември','Декември'];
   var DAYS_BG = ['Нд','Пн','Вт','Ср','Чт','Пт','Сб'];
   var today = new Date();
@@ -360,7 +381,13 @@
       notes: notes
     };
     window.api.post('/api/book', payload)
-      .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+      .then(function(r) {
+        return r.text().then(function(t) {
+          var d;
+          try { d = t ? JSON.parse(t) : {}; } catch (e) { d = {}; }
+          return { ok: r.ok, data: d };
+        });
+      })
       .then(function(res) {
         if (res.ok) {
           var names = { georgi_grozev: 'Georgi Grozev', petya_grozeva: 'Petya Grozeva' };
@@ -370,17 +397,23 @@
             date: selectedDate,
             time: selectedTime
           }));
-          window.location.href = '/booking_confirmed';
+          window.location.href = '/booking_confirmed/';
         } else {
-          if (typeof showMessage === 'function') showMessage(res.data.detail || 'Грешка при изпращане.', 'error');
-          else alert(res.data.detail || 'Грешка при изпращане.');
+          var msg = res.data.detail;
+          if (Array.isArray(msg)) msg = msg.map(function(x) { return x.msg || String(x); }).join('. ');
+          else if (typeof msg !== 'string') msg = 'Грешка при изпращане.';
+          if (msg.indexOf('влезте') >= 0) {
+            window.location.href = '/login?redirect=' + encodeURIComponent('/booking_appointment/');
+            return;
+          }
+          alert(msg);
           btn.disabled = false;
           btn.textContent = 'Потвърди часа';
         }
       })
       .catch(function(err) {
-        if (typeof showMessage === 'function') showMessage('Неуспешно свързване. Опитайте отново.', 'error');
-        else alert('Неуспешно свързване. Опитайте отново.');
+        console.error('Booking error:', err);
+        alert('Неуспешно свързване. Проверете интернет и опитайте отново.');
         btn.disabled = false;
         btn.textContent = 'Потвърди часа';
       });

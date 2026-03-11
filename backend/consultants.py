@@ -5,10 +5,10 @@ Replace with real emails before launch (see roadmap Section 0.4).
 CONSULTANTS = {
     "georgi_grozev": {
         "name": "Georgi Grozev",
-        "email": "foodydeliveryapp@gmail.com",  # testing
+        "email": "foodydeliveryapp@gmail.com",
     },
     "petya_grozeva": {
         "name": "Petya Grozeva",
-        "email": "consultant2@gfinance.bg",  # placeholder
+        "email": "pgrozeva78@gmail.com",
     },
 }

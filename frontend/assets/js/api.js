@@ -39,14 +39,20 @@
       });
     },
 
-    post: function (path, data) {
+    post: function (path, data, timeoutMs) {
+      timeoutMs = timeoutMs || 30000;
       return authHeaders().then(function (h) {
         var headers = Object.assign({}, h, { 'Content-Type': 'application/json' });
+        var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        var id = ctrl ? setTimeout(function () { ctrl.abort(); }, timeoutMs) : null;
         return fetch(url(path), {
           method: 'POST',
           headers: headers,
           credentials: 'include',
           body: JSON.stringify(data),
+          signal: ctrl ? ctrl.signal : undefined,
+        }).finally(function () {
+          if (id) clearTimeout(id);
         });
       });
     },
