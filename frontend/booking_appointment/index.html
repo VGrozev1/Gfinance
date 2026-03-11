@@ -390,7 +390,7 @@
         return r.text().then(function(t) {
           var d;
           try { d = t ? JSON.parse(t) : {}; } catch (e) { d = {}; }
-          return { ok: r.ok, data: d };
+          return { ok: r.ok, status: r.status, data: d };
         });
       })
       .then(function(res) {
@@ -404,10 +404,12 @@
           }));
           window.location.href = '/booking_confirmed/';
         } else {
-          var msg = res.data.detail;
-          if (Array.isArray(msg)) msg = msg.map(function(x) { return x.msg || String(x); }).join('. ');
-          else if (typeof msg !== 'string') msg = 'Грешка при изпращане.';
-          if (msg.indexOf('влезте') >= 0) {
+          var d = res.data || {};
+          var msg = d.detail;
+          if (Array.isArray(msg)) msg = msg.map(function(x) { return x.msg || x.loc ? (x.loc + ': ' + (x.msg || '')) : String(x); }).join('. ');
+          else if (typeof msg !== 'string') msg = d.message || d.error || (typeof d.detail === 'string' ? d.detail : null) || ('Грешка ' + res.status);
+          if (!msg) msg = 'Грешка ' + res.status + ' от сървъра. Опитайте отново или влезте в профила си.';
+          if (String(msg).indexOf('влезте') >= 0 || res.status === 401) {
             window.location.href = '/login?redirect=' + encodeURIComponent('/booking_appointment/');
             return;
           }
