@@ -51,8 +51,7 @@ class VercelPathMiddleware:
                         scope = dict(scope)
                         scope["path"] = new_path
                         scope["raw_path"] = new_path.encode("utf-8")
-                        new_qs = "&".join(p for p in qs.split("&") if not p.startswith("x-path="))
-                        scope["query_string"] = new_qs.encode("utf-8")
+                        # Do not modify query_string - can break body parsing on Vercel
                     break
         await self.app(scope, receive, send)
 
