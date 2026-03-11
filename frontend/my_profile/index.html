@@ -357,12 +357,21 @@
     goToLogin();
     return;
   }
+  // First try getUser; if that fails, fall back to getSession to avoid blank profile glitches.
   window.auth.getUser().then(function(r) {
-    if (r.error || !r.data || !r.data.user) {
+    if (!r.error && r.data && r.data.user) {
+      renderProfile(r.data.user);
+      return;
+    }
+    return window.supabase.auth.getSession();
+  }).then(function(sess) {
+    if (!sess || !sess.data || !sess.data.session || !sess.data.session.user) {
       goToLogin();
       return;
     }
-    renderProfile(r.data.user);
+    renderProfile(sess.data.session.user);
+  }).catch(function() {
+    goToLogin();
   });
   document.getElementById('logout-btn').addEventListener('click', function() {
     if (!window.auth) return;

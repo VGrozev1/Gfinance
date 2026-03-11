@@ -215,6 +215,18 @@ async def _create_booking_with_auth(req: BookRequest, auth_email: str) -> dict:
     consultant = CONSULTANTS[req.consultant_id]
     time_val = req.time if len(req.time) >= 8 else f"{req.time}:00"  # HH:MM -> HH:MM:00
     token = str(uuid.uuid4())
+    # Prevent booking slots in the past (server-side check)
+    try:
+        now = datetime.now()
+        slot_dt = datetime.strptime(f"{req.date} {time_val[:5]}", "%Y-%m-%d %H:%M")
+        if slot_dt <= now:
+            raise HTTPException(
+                status_code=400,
+                detail="Не може да запазите час в миналото. Моля изберете друг ден или по-късен час.",
+            )
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Невалидна дата или час.")
+
     if _is_slot_taken(req.consultant_id, req.date, time_val):
         raise HTTPException(
             status_code=400,

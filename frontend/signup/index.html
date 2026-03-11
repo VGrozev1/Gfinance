@@ -154,7 +154,7 @@
     })
       .then(function(r) {
         if (r.error) throw new Error(r.error.message);
-        alert('Профилът е създаден. Можете да влезете.');
+        alert('Профилът е създаден. Моля потвърдете имейла си чрез линка, който изпратихме (проверете и папка Спам).');
         window.location.href = '/login';
       })
       .catch(function(err) {

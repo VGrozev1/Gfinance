@@ -210,6 +210,7 @@
   var selectedTime = null;
   var consultantId = 'georgi_grozev';
   var takenSlots = [];
+  var now = new Date();
 
   function pad(n) { return n < 10 ? '0' + n : '' + n; }
   function dateStr(y,m,d) { return y + '-' + pad(m+1) + '-' + pad(d); }
@@ -276,17 +277,29 @@
     document.querySelectorAll('.booking-time').forEach(function(btn) {
       var t = btn.getAttribute('data-time');
       var taken = takenSlots.indexOf(t) >= 0;
-      btn.disabled = taken;
+      var disabled = taken;
+      // Disable past times for today
+      if (selectedDate === dateStr(today.getFullYear(), today.getMonth(), today.getDate())) {
+        var parts = (t || '').split(':');
+        var h = parseInt(parts[0] || '0', 10);
+        var m = parseInt(parts[1] || '0', 10);
+        var slotMinutes = h * 60 + m;
+        var nowMinutes = now.getHours() * 60 + now.getMinutes();
+        if (slotMinutes <= nowMinutes) {
+          disabled = true;
+        }
+      }
+      btn.disabled = disabled;
       btn.classList.remove('border-2','border-primary','bg-primary/5','text-primary','font-bold','shadow-sm');
       btn.classList.remove('line-through','opacity-60','cursor-not-allowed','bg-slate-100','dark:bg-slate-800');
-      if (taken) {
+      if (disabled) {
         btn.classList.add('line-through','opacity-60','cursor-not-allowed','bg-slate-100','dark:bg-slate-800','text-slate-400');
         btn.classList.remove('hover:border-primary','hover:text-primary');
       } else {
         btn.classList.add('border','border-slate-200','dark:border-slate-700','text-slate-700','dark:text-slate-300');
         btn.classList.add('hover:border-primary','hover:text-primary');
       }
-      if (taken && selectedTime === t) selectedTime = null;
+      if (disabled && selectedTime === t) selectedTime = null;
     });
     if (selectedTime && takenSlots.indexOf(selectedTime) >= 0) {
       selectedTime = null;
@@ -349,8 +362,17 @@
 
   renderCalendar();
   fetchTakenSlots();
-  selectedTime = '09:00';
-  document.querySelector('.booking-time[data-time="09:00"]').classList.add('border-2','border-primary','bg-primary/5','text-primary','font-bold','shadow-sm');
+  // Preselect the earliest available time that is not taken and not in the past (for today)
+  (function() {
+    var firstSelectable = null;
+    document.querySelectorAll('.booking-time').forEach(function(btn) {
+      if (!btn.disabled && !firstSelectable) firstSelectable = btn;
+    });
+    if (firstSelectable) {
+      selectedTime = firstSelectable.getAttribute('data-time');
+      firstSelectable.classList.add('border-2','border-primary','bg-primary/5','text-primary','font-bold','shadow-sm');
+    }
+  })();
   document.querySelector('.consultant-option[data-consultant-id="georgi_grozev"]').classList.add('border-primary','bg-primary/5');
   document.querySelector('.consultant-option[data-consultant-id="georgi_grozev"] .consultant-check').classList.remove('opacity-0');
 
