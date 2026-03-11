@@ -332,22 +332,21 @@ async def list_bookings(
     """Return bookings for the user's email.
 
     Prefers Supabase JWT, but also accepts explicit ?email_param=<email>
-    as fallback so logged-in users can still see bookings even if JWT
-    verification is temporarily misconfigured.
+    so logged-in users can still see bookings even if JWT verification
+    is temporarily misconfigured on the backend.
     """
     email: Optional[str] = None
 
-    # 1) Try strong auth via JWT (if header present)
-    if credentials and credentials.credentials:
+    # 1) Prefer explicit email_param when present (frontend passes it from Supabase session)
+    if email_param and "@" in email_param:
+        email = email_param.strip().lower()
+
+    # 2) Otherwise, try strong auth via JWT (if header present)
+    if not email and credentials and credentials.credentials:
         try:
             email = await _require_email_from_auth(credentials)
         except HTTPException:
-            # Don't fail yet – we still allow explicit ?email_param as fallback
             email = None
-
-    # 2) Fallback: use explicit email_param when present
-    if not email and email_param and "@" in email_param:
-        email = email_param.strip().lower()
 
     if not email:
         raise HTTPException(
