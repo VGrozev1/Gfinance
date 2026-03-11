@@ -64,7 +64,7 @@ def _decode_supabase_jwt(token: str) -> dict:
             algorithms=[alg],
         )
 
-    if alg in {"RS256", "RS512"}:
+    if alg in {"RS256", "RS512", "ES256", "ES384", "ES512"}:
         jwks_client = _get_jwks_client()
         signing_key = jwks_client.get_signing_key_from_jwt(token).key
         return jwt.decode(
