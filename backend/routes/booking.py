@@ -51,29 +51,30 @@ def _decode_supabase_jwt(token: str) -> dict:
         raise jwt.InvalidTokenError("Empty token")
 
     header = jwt.get_unverified_header(token) or {}
-    alg = header.get("alg")
+    alg_raw = header.get("alg")
+    alg = str(alg_raw).strip().upper() if alg_raw is not None else None
 
-    if alg == "HS256":
+    if alg in {"HS256", "HS512"}:
         if not SUPABASE_JWT_SECRET:
             raise jwt.InvalidTokenError("SUPABASE_JWT_SECRET not set")
         return jwt.decode(
             token,
             SUPABASE_JWT_SECRET,
             audience="authenticated",
-            algorithms=["HS256"],
+            algorithms=[alg],
         )
 
-    if alg == "RS256":
+    if alg in {"RS256", "RS512"}:
         jwks_client = _get_jwks_client()
         signing_key = jwks_client.get_signing_key_from_jwt(token).key
         return jwt.decode(
             token,
             signing_key,
             audience="authenticated",
-            algorithms=["RS256"],
+            algorithms=[alg],
         )
 
-    raise jwt.InvalidAlgorithmError(f"The specified alg value is not allowed: {alg}")
+    raise jwt.InvalidAlgorithmError(f"The specified alg value is not allowed: {alg_raw}")
 
 
 class BookRequest(BaseModel):
@@ -248,7 +249,7 @@ async def _require_email_from_auth(credentials: Optional[HTTPAuthorizationCreden
     except jwt.InvalidAlgorithmError:
         raise HTTPException(
             status_code=401,
-            detail="Невалиден токен: неподдържан алгоритъм. Ако Supabase е на RS256, уверете се че SUPABASE_URL е зададен и бекендът може да достъпи /auth/v1/keys.",
+            detail="Невалиден токен: неподдържан алгоритъм (alg). Ако Supabase е на RS256/RS512, уверете се че SUPABASE_URL е зададен и бекендът може да достъпи /auth/v1/keys.",
         )
     except RuntimeError as e:
         raise HTTPException(status_code=503, detail=str(e))
