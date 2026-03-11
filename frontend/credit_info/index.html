@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gfinance Credit Services</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<link rel="stylesheet" href="../assets/css/main.css"/>
+<style>
+        body { min-height: max(884px, 100dvh); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
+<nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
+  <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="py-4">
+    <a href="/">Начало</a>
+    <a href="/consultants_info">Експерти</a>
+    <a href="/credit_info">Информация за кредити</a>
+    <a href="/credit_calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment">Запис на час</a>
+    <a href="/login" data-nav-login>Вход</a>
+  </div>
+</nav>
+<header class="flex items-center bg-background-light dark:bg-background-dark p-4 sticky top-0 z-50 border-b border-primary/10">
+<button type="button" data-nav-toggle class="text-primary flex size-10 shrink-0 items-center justify-center cursor-pointer" aria-label="Отвори меню">
+  <span class="material-symbols-outlined text-2xl">menu</span>
+</button>
+<a href="/" class="flex items-center flex-1 ml-2 gap-2">
+<img alt="Gfinance Logo" class="h-8 w-auto mix-blend-multiply" src="/assets/images/logo.png"/>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight">Gfinance Кредитни Услуги</h2>
+</a>
+</header>
+<main class="flex-1">
+<!-- Hero Section -->
+<div class="@container">
+<div class="@[480px]:px-4 @[480px]:py-6">
+<div class="bg-cover bg-center flex flex-col justify-end overflow-hidden bg-primary/20 @[480px]:rounded-xl min-h-[280px] relative" data-alt="Modern high-rise glass building reflecting a blue sky" style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 60%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuC3IYw4-xVlIAwZ9MTuABmNtJF9CmPXfprD4SogmLe21dwYUPYjvs4z6H7KwqeLVkz1yKNUsTI3NNCcK_7NBnnNRcFJqV0mB1QPPFW8Goh2H4CGoTah8V1XWgllvyYtswrFOQ07MY5yoGJwgymt5Ya9iTGiizx60i9eFIThkZvVKLRz7wuNRcznO_kt-CoiY0cnXxDiZ9Ky2ZqY0epmzD4bk0BfXu6OX6SLQFAi1_pxS9B07BuT6TXEHFtc2NIP0qgc_GmzfpeKt1kL");'>
+<div class="flex flex-col p-6 gap-2">
+<h1 class="text-white text-3xl font-extrabold leading-tight">Гъвкави кредитни решения</h1>
+<p class="text-white/90 text-sm max-w-md">Осигуряваме вашето финансово бъдеще с персонализирани кредитни опции за всеки етап от живота.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Intro Text -->
+<div class="px-4 py-8 text-center max-w-2xl mx-auto">
+<h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight mb-3">Подсигурете финансовото си бъдеще</h2>
+<p class="text-slate-600 dark:text-slate-400 text-base">Разгледайте нашата широка гама от кредитни продукти, създадени да ви помогнат да постигнете целите си по-бързо и ефективно.</p>
+</div>
+<!-- Service Sections -->
+<div class="space-y-8 pb-12">
+<!-- Home Loans -->
+<section class="px-4">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">home</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold tracking-tight">Жилищни кредити</h2>
+</div>
+<div class="bg-white dark:bg-slate-800/50 rounded-xl overflow-hidden shadow-sm border border-primary/5">
+<div class="flex flex-col @xl:flex-row">
+<div class="w-full @xl:w-1/3 aspect-video bg-cover bg-center" data-alt="Luxurious modern family home with green lawn" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA0sxCxUqS0wlO-_JoQhD5g__XD87kgEm6KZ5TK5p_2XYhJmQ3tPIFb-ae7SE6jsPXFNdA9BsxWHO9mfhwDZgk2lr7jtwKMpCVLT8BFT3FZJuERIGdpO-Ft8pLZ1Q3avYhDyHbzCTCAV37DyBb4OaXWKtHC-kng07bttiy_B9bLkiySt8thjupPByePUyRgMSBLyBNgm3AlPoCdOKuXoaUZP7Vm_5y2dTKiPFBbirvDNK--oWDj3THLWjVgiEXJul8q044vxPE8lOFY");'></div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div>
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold mb-2">Ипотеки за вашия дом мечта</h3>
+<ul class="space-y-2 mb-6">
+<li class="flex items-start gap-2 text-slate-600 dark:text-slate-400 text-sm"><span class="material-symbols-outlined text-primary text-xs mt-0.5">check_circle</span> Конкурентни фиксирани и променливи лихви, съобразени с вашия бюджет.</li>
+<li class="flex items-start gap-2 text-slate-600 dark:text-slate-400 text-sm"><span class="material-symbols-outlined text-primary text-xs mt-0.5">check_circle</span> Бързо цифрово предварително одобрение за под 24 часа.</li>
+</ul>
+</div>
+<div class="flex flex-wrap gap-3 items-center justify-between">
+<span class="text-primary font-bold">Лихви от 3.25% ГПР</span>
+<button class="bg-primary hover:bg-black/80 text-white px-6 py-2 rounded-lg font-medium text-sm transition-colors flex items-center gap-2">Запазете консултация <span class="material-symbols-outlined text-sm">calendar_month</span></button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Consumer Loans -->
+<section class="px-4">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">shopping_cart</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold tracking-tight">Потребителски кредити</h2>
+</div>
+<div class="bg-white dark:bg-slate-800/50 rounded-xl overflow-hidden shadow-sm border border-primary/5">
+<div class="flex flex-col @xl:flex-row">
+<div class="w-full @xl:w-1/3 aspect-video bg-cover bg-center" data-alt="Person holding credit card and using laptop" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCWOlyogNo962x_PjO5Lx-0dosiBWIfsmmD7L0V_7S3rfTh8n_z6e2MBOmXhUrkZAZp2y609x9jYJry4XdhVG9RY4Nf18x9ZEQwB0lzpQ4LNgBZGhGcrJShAdC4_GxDrMQkTqHcHXF4EtOsf3WxpNi_OZjs4zUqlj6zJ0Ul9KDievmfLLmsToJag7DuU51Bug8jr9sJ8gzu6HT4GXIaK-4lp6hh2V3V3wDhQ6swm8DCSDrk0A7DZ2IrymhR7q7317jgQCJideSTeCvZ");'></div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div>
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold mb-2">Лично и авто финансиране</h3>
+<ul class="space-y-2 mb-6">
+<li class="flex items-start gap-2 text-slate-600 dark:text-slate-400 text-sm"><span class="material-symbols-outlined text-primary text-xs mt-0.5">check_circle</span> Необезпечени потребителски кредити за пътуване, образование или ремонт.</li>
+<li class="flex items-start gap-2 text-slate-600 dark:text-slate-400 text-sm"><span class="material-symbols-outlined text-primary text-xs mt-0.5">check_circle</span> Гъвкави срокове за погасяване до 84 месеца.</li>
+</ul>
+</div>
+<div class="flex flex-wrap gap-3 items-center justify-between">
+<span class="text-primary font-bold">Без скрити такси</span>
+<button class="bg-primary hover:bg-black/80 text-white px-6 py-2 rounded-lg font-medium text-sm transition-colors">Научете повече</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Business Financing -->
+<section class="px-4">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">business_center</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold tracking-tight">Бизнес финансиране</h2>
+</div>
+<div class="bg-white dark:bg-slate-800/50 rounded-xl overflow-hidden shadow-sm border border-primary/5">
+<div class="flex flex-col @xl:flex-row">
+<div class="w-full @xl:w-1/3 aspect-video bg-cover bg-center" data-alt="Business professionals looking at growth charts" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBIZD53NMlIq_1WcHGStVOxhQcfJ2deXXDqFJSI3-kEQoztSM_T49CR1h9GJPc6hG22UJQNzuJ2kg9yBzboPVyTu7a99fbK5mZ1arecDpF6p0mAV1PUaB_rulpwGbPvV8L_naqqkhY3JxVgtHu37l1bOiWlOtqP3kdtiAlekznDOucjlVT_5TWsz-G74dEvd2m_nqqnUXuSzzuv9_VO9ecBOvoBSD_Mjd_AFeHC7JUuk9LxUZNBG_jIV0KgNR7HamzLVWAjQxJREwZg");'></div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div>
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold mb-2">Стимулираме растежа на вашата компания</h3>
+<ul class="space-y-2 mb-6">
+<li class="flex items-start gap-2 text-slate-600 dark:text-slate-400 text-sm"><span class="material-symbols-outlined text-primary text-xs mt-0.5">check_circle</span> Оборотни средства и финансиране на оборудване за малки и средни предприятия.</li>
+<li class="flex items-start gap-2 text-slate-600 dark:text-slate-400 text-sm"><span class="material-symbols-outlined text-primary text-xs mt-0.5">check_circle</span> Специализиран корпоративен съветник за вашия бизнес профил.</li>
+</ul>
+</div>
+<div class="flex flex-wrap gap-3 items-center justify-between">
+<span class="text-primary font-bold">Кредитна линия до 5 млн. eur.</span>
+<button class="bg-primary hover:bg-black/80 text-white px-6 py-2 rounded-lg font-medium text-sm transition-colors flex items-center gap-2">Запазете консултация <span class="material-symbols-outlined text-sm">trending_up</span></button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer-like Info -->
+<div class="bg-primary/5 dark:bg-slate-800/30 p-8 text-center border-t border-primary/10">
+<p class="text-slate-500 dark:text-slate-400 text-xs mb-4 uppercase tracking-widest font-bold">ГОТОВИ ЛИ СТЕ ЗА СЛЕДВАЩАТА СТЪПКА?</p>
+<div class="flex justify-center gap-4">
+<div class="flex flex-col items-center">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2">
+<span class="material-symbols-outlined">call</span>
+</div>
+<span class="text-sm font-semibold">1-800-GFINANCE</span>
+</div>
+<div class="w-px h-12 bg-primary/20"></div>
+<div class="flex flex-col items-center">
+<div class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2">
+<span class="material-symbols-outlined">mail</span>
+</div>
+<span class="text-sm font-semibold">ggrozev@gfinance.bg</span>
+</div>
+</div>
+<p class="mt-8 text-slate-400 dark:text-slate-500 text-[10px] leading-relaxed">© 2024 Gfinance Кредитни Услуги. Всички кредити подлежат на кредитно одобрение. Важат правила и условия. Лихвените проценти подлежат на промяна въз основа на пазарните условия и кредитния профил на кандидата.</p>
+</div>
+</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script>if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) { window.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY); }</script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/api.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+</body></html>

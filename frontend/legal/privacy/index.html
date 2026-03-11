@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Политика за поверителност - Gfinance</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: { "primary": "#000000", "background-light": "#f6f6f8", "background-dark": "#101622" },
+          fontFamily: { "display": ["Manrope", "sans-serif"] }
+        }
+      }
+    };
+  </script>
+  <link rel="stylesheet" href="../../assets/css/main.css"/>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased min-h-screen flex flex-col">
+  <div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
+  <nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
+    <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+      <span class="font-bold">Меню</span>
+      <button type="button" data-nav-toggle class="p-2" aria-label="Затвори"><span class="material-symbols-outlined">close</span></button>
+    </div>
+    <div class="py-4">
+      <a href="/">Начало</a>
+      <a href="/consultants_info">Експерти</a>
+      <a href="/credit_info">Информация за кредити</a>
+      <a href="/credit_calculator">Кредитен калкулатор</a>
+      <a href="/booking_appointment">Запис на час</a>
+      <a href="/login" data-nav-login>Вход</a>
+    </div>
+  </nav>
+  <header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+    <div class="flex items-center p-4 max-w-3xl mx-auto">
+      <a href="/" class="flex items-center gap-2 text-primary">
+        <span class="material-symbols-outlined">arrow_back</span>
+        <span>Назад</span>
+      </a>
+      <a href="/" class="flex-1 flex justify-center">
+        <span class="text-xl font-bold">Gfinance</span>
+      </a>
+      <button type="button" data-nav-toggle class="p-2" aria-label="Меню"><span class="material-symbols-outlined">menu</span></button>
+    </div>
+  </header>
+  <main class="flex-1 max-w-3xl mx-auto w-full px-4 py-8">
+    <h1 class="text-2xl font-extrabold mb-6">Политика за поверителност</h1>
+    <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Последна актуализация: Март 2025</p>
+    <div class="prose prose-slate dark:prose-invert max-w-none space-y-6 text-sm leading-relaxed">
+      <section>
+        <h2 class="text-lg font-bold mt-6 mb-2">1. Администратор на данни</h2>
+        <p>Gfinance („ние“, „нас“) обработваме вашите лични данни в съответствие с Регламент (ЕС) 2016/679 (GDPR) и българското законодателство за защита на личните данни.</p>
+      </section>
+      <section>
+        <h2 class="text-lg font-bold mt-6 mb-2">2. Какви данни събираме</h2>
+        <ul class="list-disc pl-6 space-y-1">
+          <li><strong>При регистрация:</strong> име, имейл, телефон, парола (хеширана)</li>
+          <li><strong>При резервация:</strong> име, имейл, дата и час, избран консултант, бележки</li>
+          <li><strong>Технически данни:</strong> IP адрес, тип браузър, логове при достъп (ако прилагаме)</li>
+        </ul>
+      </section>
+      <section>
+        <h2 class="text-lg font-bold mt-6 mb-2">3. Цели на обработката</h2>
+        <p>Данните се използват за: създаване и поддръжка на акаунт; обработка на заявки за консултация; изпращане на потвърждения по имейл; подобряване на услугите; спазване на законови изисквания.</p>
+      </section>
+      <section>
+        <h2 class="text-lg font-bold mt-6 mb-2">4. Правно основание</h2>
+        <p>Обработваме данни на основание: изпълнение на договор; законови задължения; легитимен интерес. При маркетинг комуникации изискваме изрично съгласие.</p>
+      </section>
+      <section>
+        <h2 class="text-lg font-bold mt-6 mb-2">5. Вашите права (GDPR)</h2>
+        <p>Имате право на: достъп; коригиране; изтриване; ограничаване; преносимост; възражение; жалба до КЗЛД (кзд.бг). За упражняване: ggrozev@gfinance.bg.</p>
+      </section>
+      <section>
+        <h2 class="text-lg font-bold mt-6 mb-2">6. Съхранение и сигурност</h2>
+        <p>Съхраняваме данните толкова дълго, колкото е необходимо. Прилагаме подходящи мерки за защита.</p>
+      </section>
+      <section>
+        <h2 class="text-lg font-bold mt-6 mb-2">7. Контакт</h2>
+        <p>За въпроси: ggrozev@gfinance.bg; +359 888 152181; Burgas, str. Pop Gruyo 68.</p>
+      </section>
+    </div>
+    <div class="mt-10">
+      <a href="/" class="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+        <span class="material-symbols-outlined text-lg">arrow_back</span>
+        Към начало
+      </a>
+    </div>
+  </main>
+  <footer class="border-t border-slate-200 dark:border-slate-700 py-4 px-4 text-center text-sm text-slate-500">
+    <a href="/legal/terms" class="hover:text-primary">Общи условия</a>
+    <span class="mx-2">|</span>
+    <a href="/legal/privacy" class="hover:text-primary">Политика за поверителност</a>
+    <p class="mt-2">© 2025 Gfinance. Всички права запазени.</p>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../assets/js/supabase-config.js"></script>
+  <script>if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) { window.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY); }</script>
+  <script src="../../assets/js/auth.js"></script>
+  <script src="../../assets/js/api.js" defer></script>
+  <script src="../../assets/js/main.js" defer></script>
+</body>
+</html>

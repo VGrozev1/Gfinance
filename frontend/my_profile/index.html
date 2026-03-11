@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html lang="bg"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<title>Gfinance Profile</title>
+<link rel="stylesheet" href="../assets/css/main.css"/>
+<style>
+        body { min-height: max(884px, 100dvh); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
+<nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
+  <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="py-4">
+    <a href="/">Начало</a>
+    <a href="/consultants_info">Експерти</a>
+    <a href="/credit_info">Информация за кредити</a>
+    <a href="/credit_calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment">Запис на час</a>
+    <a href="/my_profile">Моят профил</a>
+    <a href="/my_appointments">Моите срещи</a>
+    <a href="/login" data-nav-login>Вход</a>
+  </div>
+</nav>
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800">
+<button type="button" data-nav-toggle class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center cursor-pointer" aria-label="Отвори меню">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</button>
+<a href="/" class="flex-1 flex justify-center items-center gap-2">
+<img alt="Gfinance Logo" class="h-8 w-auto mix-blend-multiply" src="/assets/images/logo.png"/>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em]">Gfinance</h2>
+</a>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-slate-900 dark:text-slate-100 gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+</button>
+</div>
+</div>
+<!-- Profile Header -->
+<div class="flex p-6 @container">
+<div class="flex w-full flex-col gap-4 items-center">
+<div class="flex gap-4 flex-col items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32 border-4 border-white dark:border-slate-800 shadow-sm" data-alt="User profile portrait of a professional man" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB4E81oa_yAUrO2s_hgYWSLuiHHlPSLtFTlGy4b5aGs2JG0NnchUY9Hc2hoF769tRyfngSstmVyc3VlfSdYsDEm8U0E76L3yWSMlyFCkz7MODfBWKetIDdaLMLjv4iB43TWLsyjdE4c0khoWTQVUc_tF6qw10e7C4lIUWO5Cl5uas_1SlQP1TkbQM8xIfAlU6IPw6pO43oS-4lc1GTEEZLVbnv-42CoWx4yt59iHMOIHc_fy9Qk8GgMolgdcMVCqGHIahGd06JlK3-k");'>
+</div>
+<div class="flex flex-col items-center justify-center">
+<p id="profile-name" class="text-slate-900 dark:text-slate-100 text-[22px] font-bold leading-tight tracking-[-0.015em] text-center">—</p>
+<p id="profile-member-since" class="text-slate-500 dark:text-slate-400 text-base font-normal leading-normal text-center">—</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Personal Info Section -->
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Лична информация</h3>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="text-primary dark:text-slate-100 flex items-center justify-center rounded-lg bg-primary/10 dark:bg-white/10 shrink-0 size-12">
+<span class="material-symbols-outlined text-2xl">person</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal line-clamp-1">Име</p>
+<p id="profile-field-name" class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">—</p>
+</div>
+</div>
+<div class="shrink-0">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-4 bg-primary/10 dark:bg-white/10 text-primary dark:text-slate-100 text-sm font-medium leading-normal w-fit">
+<span class="truncate">Редактирай</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="text-primary dark:text-slate-100 flex items-center justify-center rounded-lg bg-primary/10 dark:bg-white/10 shrink-0 size-12">
+<span class="material-symbols-outlined text-2xl">mail</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal line-clamp-1">Имейл</p>
+<p id="profile-field-email" class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">—</p>
+</div>
+</div>
+<div class="shrink-0">
+<button type="button" data-edit="email" class="edit-btn flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-4 bg-primary/10 dark:bg-white/10 text-primary dark:text-slate-100 text-sm font-medium leading-normal w-fit">
+<span class="truncate">Редактирай</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="text-primary dark:text-slate-100 flex items-center justify-center rounded-lg bg-primary/10 dark:bg-white/10 shrink-0 size-12">
+<span class="material-symbols-outlined text-2xl">call</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal line-clamp-1">Телефон</p>
+<p id="profile-field-phone" class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal line-clamp-2">—</p>
+</div>
+</div>
+<div class="shrink-0">
+<button type="button" data-edit="phone" class="edit-btn flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-8 px-4 bg-primary/10 dark:bg-white/10 text-primary dark:text-slate-100 text-sm font-medium leading-normal w-fit">
+<span class="truncate">Редактирай</span>
+</button>
+</div>
+</div>
+<!-- Security Section -->
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-6">Сигурност</h3>
+<div id="password-change-row" class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between border-b border-slate-100 dark:border-slate-800 cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="text-primary dark:text-slate-100 flex items-center justify-center rounded-lg bg-primary/10 dark:bg-white/10 shrink-0 size-12">
+<span class="material-symbols-outlined text-2xl">lock</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Промяна на паролата</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Последна промяна преди 3 месеца</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+<!-- My Consultations Section -->
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-6">Моите консултации</h3>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between border-b border-slate-100 dark:border-slate-800 cursor-pointer">
+<div class="flex items-center gap-4">
+<div class="text-primary dark:text-slate-100 flex items-center justify-center rounded-lg bg-primary/10 dark:bg-white/10 shrink-0 size-12">
+<span class="material-symbols-outlined text-2xl">calendar_today</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Планирани срещи</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Вижте графика си</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="bg-primary dark:bg-slate-100 text-white dark:text-black text-[10px] font-bold px-2 py-0.5 rounded-full">2 нови</span>
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+</div>
+<!-- Preferences Section -->
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-6">Предпочитания</h3>
+<div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<div class="text-primary dark:text-slate-100 flex items-center justify-center rounded-lg bg-primary/10 dark:bg-white/10 shrink-0 size-12">
+<span class="material-symbols-outlined text-2xl">notifications_active</span>
+</div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Известия</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Push и имейл известия</p>
+</div>
+</div>
+<div class="flex items-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary dark:peer-checked:bg-slate-100"></div>
+</label>
+</div>
+</div>
+<!-- Logout Section -->
+<div class="p-6 mt-4">
+<button id="logout-btn" class="w-full flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800 text-red-500 font-bold py-4 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-transparent">
+<span class="material-symbols-outlined">logout</span>
+                Изход
+            </button>
+</div>
+<!-- Footer spacing -->
+<div class="h-10"></div>
+</div>
+
+<!-- Edit Modals -->
+<div id="modal-backdrop" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden" aria-hidden="true">
+<div id="modal-edit" class="bg-white dark:bg-slate-800 rounded-xl shadow-xl max-w-md w-full p-6 hidden">
+  <h3 id="modal-title" class="text-lg font-bold mb-4 text-slate-900 dark:text-slate-100">Редактиране</h3>
+  <input id="modal-input" type="text" class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 mb-4" placeholder=""/>
+  <div id="modal-password-fields" class="hidden space-y-3 mb-4">
+    <input id="modal-password-new" type="password" class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" placeholder="Нова парола" minlength="8"/>
+    <input id="modal-password-confirm" type="password" class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100" placeholder="Потвърди парола" minlength="8"/>
+  </div>
+  <p id="modal-hint" class="text-sm text-slate-500 dark:text-slate-400 mb-4 hidden"></p>
+  <div class="flex gap-3 justify-end">
+    <button type="button" id="modal-cancel" class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-medium">Отказ</button>
+    <button type="button" id="modal-save" class="px-4 py-2 rounded-lg bg-primary text-white font-medium">Запази</button>
+  </div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script>
+(function() {
+  if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) return;
+  window.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+})();
+</script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/api.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+(function() {
+  var currentUser = null;
+  function renderProfile(user) {
+    currentUser = user;
+    var meta = user.user_metadata || {};
+    var name = meta.full_name || (user.email ? user.email.split('@')[0] : '') || 'Потребител';
+    var email = user.email || '—';
+    var phone = meta.phone || '—';
+    var year = user.created_at ? new Date(user.created_at).getFullYear() : new Date().getFullYear();
+    document.getElementById('profile-name').textContent = name;
+    document.getElementById('profile-member-since').textContent = 'Потребител от ' + year;
+    document.getElementById('profile-field-name').textContent = name;
+    document.getElementById('profile-field-email').textContent = email;
+    document.getElementById('profile-field-phone').textContent = phone;
+  }
+  function goToLogin() {
+    window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+  }
+  function showModal(title, value, field, options) {
+    options = options || {};
+    var backdrop = document.getElementById('modal-backdrop');
+    var modal = document.getElementById('modal-edit');
+    var input = document.getElementById('modal-input');
+    var pwFields = document.getElementById('modal-password-fields');
+    var hint = document.getElementById('modal-hint');
+    document.getElementById('modal-title').textContent = title;
+    input.type = options.type || 'text';
+    input.value = value || '';
+    input.placeholder = options.placeholder || '';
+    input.style.display = options.hideInput ? 'none' : '';
+    pwFields.classList.toggle('hidden', field !== 'password');
+    hint.classList.toggle('hidden', !options.hint);
+    hint.textContent = options.hint || '';
+    if (field === 'password') {
+      document.getElementById('modal-password-new').value = '';
+      document.getElementById('modal-password-confirm').value = '';
+    }
+    backdrop.classList.remove('hidden');
+    modal.classList.remove('hidden');
+    backdrop.setAttribute('aria-hidden', 'false');
+    if (field !== 'password') setTimeout(function() { input.focus(); }, 50);
+  }
+  function closeModal() {
+    document.getElementById('modal-backdrop').classList.add('hidden');
+    document.getElementById('modal-edit').classList.add('hidden');
+    document.getElementById('modal-backdrop').setAttribute('aria-hidden', 'true');
+  }
+  function doSave(field, value) {
+    if (!window.supabase || !currentUser) return Promise.reject(new Error('No session'));
+    if (field === 'name') {
+      return window.supabase.auth.updateUser({ data: { full_name: value } });
+    }
+    if (field === 'phone') {
+      return window.supabase.auth.updateUser({ data: { phone: value } });
+    }
+    if (field === 'email') {
+      return window.supabase.auth.updateUser({ email: value });
+    }
+    if (field === 'password') {
+      return window.supabase.auth.updateUser({ password: value });
+    }
+    return Promise.reject(new Error('Unknown field'));
+  }
+  document.getElementById('modal-cancel').addEventListener('click', closeModal);
+  document.getElementById('modal-backdrop').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+  document.getElementById('modal-save').addEventListener('click', function() {
+    var field = this.getAttribute('data-save-field');
+    if (!field) return;
+    var value, newPw, confirmPw;
+    if (field === 'password') {
+      newPw = document.getElementById('modal-password-new').value;
+      confirmPw = document.getElementById('modal-password-confirm').value;
+      if (newPw.length < 8) {
+        alert('Паролата трябва да е поне 8 символа.');
+        return;
+      }
+      if (newPw !== confirmPw) {
+        alert('Паролите не съвпадат.');
+        return;
+      }
+      value = newPw;
+    } else {
+      value = document.getElementById('modal-input').value.trim();
+      if (!value && field !== 'phone') {
+        alert('Моля въведете стойност.');
+        return;
+      }
+    }
+    this.disabled = true;
+    this.textContent = 'Запазване...';
+    doSave(field, value).then(function(r) {
+      if (r.error) throw new Error(r.error.message);
+      closeModal();
+      if (field === 'email') {
+        alert('Изпратено е писмо за потвърждение на новия имейл. Моля проверете пощата си.');
+      } else if (r.data && r.data.user) {
+        renderProfile(r.data.user);
+        if (typeof window.updateNavLoginVisibility === 'function') window.updateNavLoginVisibility();
+      }
+    }).catch(function(err) {
+      alert(err.message || 'Грешка при запазване');
+    }).finally(function() {
+      var btn = document.getElementById('modal-save');
+      btn.disabled = false;
+      btn.textContent = 'Запази';
+      btn.removeAttribute('data-save-field');
+    });
+  });
+  document.querySelectorAll('.edit-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var field = this.getAttribute('data-edit');
+      var meta = (currentUser && currentUser.user_metadata) || {};
+      var titles = { name: 'Редактиране на име', email: 'Редактиране на имейл', phone: 'Редактиране на телефон' };
+      var placeholders = { name: 'Име и фамилия', email: 'имейл@пример.com', phone: '+359 888 000 000' };
+      var values = {
+        name: meta.full_name || (currentUser && currentUser.email ? currentUser.email.split('@')[0] : '') || '',
+        email: (currentUser && currentUser.email) || '',
+        phone: meta.phone || ''
+      };
+      showModal(titles[field], values[field], field, { placeholder: placeholders[field] });
+      document.getElementById('modal-save').setAttribute('data-save-field', field);
+    });
+  });
+  document.getElementById('password-change-row').addEventListener('click', function() {
+    showModal('Промяна на паролата', '', 'password', {
+      hint: 'Въведете нова парола (минимум 8 символа).',
+      hideInput: true
+    });
+    document.getElementById('modal-save').setAttribute('data-save-field', 'password');
+  });
+  if (!window.supabase || !window.auth) {
+    goToLogin();
+    return;
+  }
+  window.auth.getUser().then(function(r) {
+    if (r.error || !r.data || !r.data.user) {
+      goToLogin();
+      return;
+    }
+    renderProfile(r.data.user);
+  });
+  document.getElementById('logout-btn').addEventListener('click', function() {
+    if (!window.auth) return;
+    window.auth.signOut().then(function() {
+      window.location.href = '/';
+    });
+  });
+})();
+</script>
+</body></html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+
+<html lang="bg"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Gfinance - Регистрация</title>
+<link rel="stylesheet" href="../assets/css/main.css"/>
+<style>
+        body { font-family: 'Manrope', sans-serif; min-height: max(884px, 100dvh); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex flex-col antialiased">
+<div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
+<nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
+  <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="py-4">
+    <a href="/">Начало</a>
+    <a href="/consultants_info">Експерти</a>
+    <a href="/credit_info">Информация за кредити</a>
+    <a href="/credit_calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment">Запис на час</a>
+    <a href="/login" data-nav-login>Вход</a>
+    <a href="/signup">Регистрация</a>
+  </div>
+</nav>
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+  <div class="flex items-center p-4 justify-between max-w-7xl mx-auto">
+    <a href="/" class="flex items-center gap-2">
+      <img alt="Gfinance Logo" class="h-10 w-auto object-contain mix-blend-multiply" src="/assets/images/logo.png"/>
+      <h2 class="text-slate-900 dark:text-slate-100 text-xl font-extrabold">Gfinance</h2>
+    </a>
+    <button type="button" data-nav-toggle class="p-2" aria-label="Отвори меню"><span class="material-symbols-outlined text-2xl">menu</span></button>
+  </div>
+</header>
+<div class="flex flex-col items-center justify-center px-4 py-8 max-w-[480px] mx-auto w-full flex-1">
+<div class="w-full mb-8 text-center">
+<h1 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-2">Регистрация</h1>
+<p class="text-slate-600 dark:text-slate-400">Станете част от Gfinance и управлявайте вашите кредити професионално.</p>
+</div>
+<div id="signup-form" class="w-full space-y-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Име и фамилия</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 group-focus-within:text-primary transition-colors">person</span>
+<input id="signup-name" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 py-4 pl-12 pr-4 text-slate-900 dark:text-white outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Вашите две имена" type="text"/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Имейл</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 group-focus-within:text-primary transition-colors">mail</span>
+<input id="signup-email" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 py-4 pl-12 pr-4 text-slate-900 dark:text-white outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" placeholder="example@mail.com" type="email" required/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Телефон</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 group-focus-within:text-primary transition-colors">call</span>
+<input id="signup-phone" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 py-4 pl-12 pr-4 text-slate-900 dark:text-white outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" placeholder="+359 88 000 0000" type="tel"/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Парола</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 group-focus-within:text-primary transition-colors">lock</span>
+<input id="signup-password" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 py-4 pl-12 pr-12 text-slate-900 dark:text-white outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Минимум 8 знака" type="password" required minlength="8"/>
+<button type="button" id="toggle-signup-password" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Покажи парола"><span class="material-symbols-outlined">visibility</span></button>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Потвърди парола</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400 group-focus-within:text-primary transition-colors">lock_reset</span>
+<input id="signup-confirm" class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 py-4 pl-12 pr-12 text-slate-900 dark:text-white outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Повторете паролата" type="password" required/>
+<button type="button" id="toggle-signup-confirm" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 dark:hover:text-white transition-colors cursor-pointer p-0 bg-transparent border-0" aria-label="Покажи парола"><span class="material-symbols-outlined">visibility</span></button>
+</div>
+</div>
+<label class="flex items-start gap-3 cursor-pointer py-2">
+  <input id="accept-terms" type="checkbox" class="mt-1 h-4 w-4 rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-primary focus:ring-primary"/>
+  <span class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+    Съгласен съм с <a class="text-primary font-semibold hover:underline" href="/legal/terms" target="_blank">Общите условия</a> и <a class="text-primary font-semibold hover:underline" href="/legal/privacy" target="_blank">Политиката за поверителност</a>.
+  </span>
+</label>
+<button id="signup-btn" type="button" class="w-full bg-primary hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg transition-all active:scale-[0.98] mt-4">Създай профил</button>
+<div class="text-center pt-6">
+<p class="text-slate-600 dark:text-slate-400">Вече имате профил? <a class="text-primary font-bold hover:underline" href="/login">Влезте тук</a></p>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script>
+(function() {
+  if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) return;
+  window.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+})();
+</script>
+<script src="../assets/js/auth.js"></script>
+<script>
+(function() {
+  var btn = document.getElementById('signup-btn');
+  if (!btn || !window.auth) return;
+  btn.addEventListener('click', function() {
+    var email = document.getElementById('signup-email').value.trim();
+    var password = document.getElementById('signup-password').value;
+    var confirm = document.getElementById('signup-confirm').value;
+    var name = document.getElementById('signup-name').value.trim();
+    var phone = document.getElementById('signup-phone').value.trim();
+    if (!email || !password) {
+      alert('Моля въведете имейл и парола.');
+      return;
+    }
+    if (password.length < 8) {
+      alert('Паролата трябва да е поне 8 символа.');
+      return;
+    }
+    if (password !== confirm) {
+      alert('Паролите не съвпадат.');
+      return;
+    }
+    var acceptCheckbox = document.getElementById('accept-terms');
+    if (!acceptCheckbox || !acceptCheckbox.checked) {
+      alert('Моля, приетете Общите условия и Политиката за поверителност, за да продължите.');
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Регистрация...';
+    window.auth.signUp(email, password, {
+      data: { full_name: name || undefined, phone: phone || undefined }
+    })
+      .then(function(r) {
+        if (r.error) throw new Error(r.error.message);
+        alert('Профилът е създаден. Можете да влезете.');
+        window.location.href = '/login';
+      })
+      .catch(function(err) {
+        alert(err.message || 'Грешка при регистрация');
+        btn.disabled = false;
+        btn.textContent = 'Създай профил';
+      });
+  });
+})();
+(function() {
+  function setupToggle(btnId, inputId) {
+    var btn = document.getElementById(btnId);
+    var input = document.getElementById(inputId);
+    if (!btn || !input) return;
+    btn.addEventListener('click', function() {
+      var isPass = input.type === 'password';
+      input.type = isPass ? 'text' : 'password';
+      btn.querySelector('span').textContent = isPass ? 'visibility_off' : 'visibility';
+    });
+  }
+  setupToggle('toggle-signup-password', 'signup-password');
+  setupToggle('toggle-signup-confirm', 'signup-confirm');
+})();
+</script>
+<script src="../assets/js/main.js" defer></script>
+</div>
+</body></html>

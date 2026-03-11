@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html lang="bg"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Моите срещи - Gfinance</title>
+<link rel="stylesheet" href="../assets/css/main.css"/>
+<style>
+        body { min-height: max(884px, 100dvh); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
+<nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
+  <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="py-4">
+    <a href="/">Начало</a>
+    <a href="/consultants_info">Експерти</a>
+    <a href="/credit_info">Информация за кредити</a>
+    <a href="/credit_calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment">Запис на час</a>
+    <a href="/my_profile">Моят профил</a>
+    <a href="/my_appointments">Моите срещи</a>
+    <a href="/login" data-nav-login>Вход</a>
+  </div>
+</nav>
+<div class="flex items-center bg-white dark:bg-slate-900 p-4 pb-2 justify-between border-b border-slate-200 dark:border-slate-800">
+<a class="text-primary flex size-12 shrink-0 items-center justify-start transition-colors hover:text-primary/70" href="/my_profile">
+<span class="material-symbols-outlined" style="font-size: 28px;">arrow_back</span>
+</a>
+<a href="/" class="flex-1 flex justify-center">
+<img alt="GFinance Logo" class="h-8 w-auto object-contain mix-blend-multiply" src="/assets/images/logo.png"/>
+</a>
+<button type="button" data-nav-toggle class="size-12 shrink-0 flex items-center justify-center cursor-pointer" aria-label="Отвори меню">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<!-- Tabs -->
+<div class="bg-white dark:bg-slate-900 pb-1">
+<div class="flex border-b border-slate-200 dark:border-slate-800 px-4 gap-8">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-primary text-primary pb-[13px] pt-4" href="#">
+<p class="text-sm font-bold leading-normal tracking-wide">Предстоящи</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-slate-500 dark:text-slate-400 pb-[13px] pt-4 hover:text-primary transition-colors" href="#">
+<p class="text-sm font-bold leading-normal tracking-wide">Минали</p>
+</a>
+</div>
+</div>
+<!-- Section Title -->
+<div class="px-4 pb-2 pt-6">
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight mb-2">Моите срещи</h2>
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-extrabold leading-tight tracking-tight">Следващи консултации</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Управлявайте вашите запазени часове с финансови експерти</p>
+</div>
+<!-- Meetings List -->
+<div class="flex flex-col gap-3 p-4">
+<div id="bookings-list" class="flex flex-col gap-3"></div>
+<div id="bookings-login-prompt" class="hidden flex-col items-center justify-center p-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl text-center">
+<p class="text-slate-700 dark:text-slate-300 font-medium mb-2">Влезте в профила си за да видите вашите срещи</p>
+<a href="/login" class="text-primary font-bold hover:underline">Вход</a>
+</div>
+<!-- Empty State / Add New CTA -->
+<div class="mt-4 flex flex-col items-center justify-center p-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl">
+<div class="bg-primary/10 p-3 rounded-full mb-3">
+<span class="material-symbols-outlined text-primary" style="font-size: 32px;">add_task</span>
+</div>
+<p class="text-slate-900 dark:text-slate-100 font-bold text-center">Нуждаете се от още помощ?</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm text-center mb-4">Нашите експерти са на разположение за нова консултация.</p>
+<a href="/booking_appointment" class="px-6 py-2 bg-primary text-white font-bold rounded-full text-sm hover:scale-105 transition-transform inline-block">
+                Запази нов час
+            </a>
+</div>
+</div>
+<div class="h-10 bg-background-light dark:bg-background-dark"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script>if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) { window.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY); }</script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/api.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+(function() {
+  var CONSULTANTS = {
+    georgi_grozev: { name: 'Georgi Grozev', title: 'Специалист в банкирането', img: '../assets/images/georgi-grozev.png' },
+    petya_grozeva: { name: 'Petya Grozeva', title: 'Специалист мама', img: '../assets/images/petya-grozeva.png' }
+  };
+  var MONTHS_BG = ['Януари','Февруари','Март','Април','Май','Юни','Юли','Август','Септември','Октомври','Ноември','Декември'];
+  function formatDate(dateStr) {
+    var d = new Date(dateStr + 'T12:00:00');
+    return d.getDate() + ' ' + MONTHS_BG[d.getMonth()] + ', ' + d.getFullYear();
+  }
+  function formatTime(t) {
+    if (!t) return '';
+    var s = String(t);
+    return s.length >= 5 ? s.substring(0, 5) : s;
+  }
+  function statusBadge(status) {
+    if (status === 'confirmed') {
+      return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"><span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span>Потвърдена</span>';
+    }
+    if (status === 'declined') {
+      return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"><span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-1.5"></span>Отхвърлена</span>';
+    }
+    return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5"></span>Очаква потвърждение</span>';
+  }
+  function renderCard(b) {
+    var c = CONSULTANTS[b.consultant_id] || { name: b.consultant_id, title: '', img: '' };
+    return '<div class="flex flex-col gap-4 bg-white dark:bg-slate-900 p-4 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">' +
+      '<div class="flex items-center gap-4">' +
+      '<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14 border-2 border-primary/10" style="background-image: url(\'' + c.img + '\');"></div>' +
+      '<div class="flex flex-1 flex-col justify-center"><p class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight">' + c.name + '</p>' +
+      '<p class="text-slate-500 dark:text-slate-400 text-xs font-medium uppercase tracking-wider mt-0.5">' + c.title + '</p></div>' +
+      '<div class="shrink-0">' + statusBadge(b.status) + '</div></div>' +
+      '<div class="flex items-center justify-between pt-3 border-t border-slate-50 dark:border-slate-800">' +
+      '<div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-xl">calendar_today</span>' +
+      '<p class="text-slate-700 dark:text-slate-300 text-sm font-semibold">' + formatDate(b.booking_date) + '</p></div>' +
+      '<div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary text-xl">schedule</span>' +
+      '<p class="text-slate-700 dark:text-slate-300 text-sm font-semibold">' + formatTime(b.booking_time) + ' ч.</p></div></div>' +
+      '<a href="/booking_appointment" class="w-full block text-center bg-primary/10 hover:bg-primary/20 text-primary font-bold py-2.5 rounded-lg transition-colors text-sm">Детайли за срещата</a>' +
+      '</div>';
+  }
+  function loadBookings() {
+    var list = document.getElementById('bookings-list');
+    var prompt = document.getElementById('bookings-login-prompt');
+    if (!list) return;
+    var url = '/api/book/list';
+    if (window.supabase && window.supabase.auth) {
+      window.supabase.auth.getSession().then(function(sess) {
+        var email = sess.data?.session?.user?.email;
+        if (email) url += '?email_param=' + encodeURIComponent(email);
+        return fetchAppointments(url);
+      }).catch(function() { fetchAppointments(url); });
+    } else {
+      fetchAppointments(url);
+    }
+  }
+  function fetchAppointments(url) {
+    var list = document.getElementById('bookings-list');
+    var prompt = document.getElementById('bookings-login-prompt');
+    window.api.get(url).then(function(r) {
+      if (r.status === 401) {
+        list.classList.add('hidden');
+        if (prompt) { prompt.classList.remove('hidden'); prompt.classList.add('flex'); }
+        return;
+      }
+      return r.json();
+    }).then(function(data) {
+      if (!data) return;
+      if (prompt) prompt.classList.add('hidden');
+      list.classList.remove('hidden');
+      list.innerHTML = '';
+      var bookings = data.bookings || [];
+      var upcoming = bookings.filter(function(b) { return new Date(b.booking_date + 'T' + (b.booking_time || '23:59:59')) >= new Date(); });
+      (upcoming.length ? upcoming : bookings).forEach(function(b) {
+        list.insertAdjacentHTML('beforeend', renderCard(b));
+      });
+    }).catch(function() {
+      list.classList.add('hidden');
+      if (prompt) { prompt.classList.remove('hidden'); prompt.classList.add('flex'); }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadBookings);
+  } else {
+    loadBookings();
+  }
+})();
+</script>
+</body></html>

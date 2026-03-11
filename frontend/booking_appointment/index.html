@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html lang="bg"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Gfinance - Записване на час</title>
+<link rel="stylesheet" href="../assets/css/main.css"/>
+<style>
+        body { min-height: max(884px, 100dvh); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative mx-auto max-w-md bg-white dark:bg-slate-900 min-h-screen flex flex-col shadow-xl">
+<div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
+<nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
+  <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="py-4">
+    <a href="/">Начало</a>
+    <a href="/consultants_info">Експерти</a>
+    <a href="/credit_info">Информация за кредити</a>
+    <a href="/credit_calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment">Запис на час</a>
+    <a href="/login" data-nav-login>Вход</a>
+  </div>
+</nav>
+<header class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-10">
+<a href="/" class="flex items-center justify-center size-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<a href="/" class="flex flex-col items-center">
+<img alt="Gfinance Logo" class="h-8 w-auto mix-blend-multiply" src="/assets/images/logo.png"/>
+</a>
+<button type="button" data-nav-toggle class="flex items-center justify-center size-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Отвори меню">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</header>
+<main class="flex-1 overflow-y-auto pb-24">
+<!-- Title Section -->
+<section class="p-6">
+<h1 class="text-2xl font-bold text-slate-900 dark:text-white mb-1">Кредитна консултация</h1>
+<p class="text-sm text-slate-500 dark:text-slate-400">Изберете удобен за вас ден и час за среща с наш експерт.</p>
+</section>
+<!-- Calendar Component -->
+<section class="px-4 mb-8">
+<div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
+<div class="flex items-center justify-between mb-4">
+<button type="button" id="calendar-prev" class="size-10 flex items-center justify-center rounded-lg hover:bg-white dark:hover:bg-slate-700 shadow-sm transition-all" aria-label="Предишен месец">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">chevron_left</span>
+</button>
+<h2 id="calendar-month" class="text-lg font-bold text-slate-900 dark:text-white"></h2>
+<button type="button" id="calendar-next" class="size-10 flex items-center justify-center rounded-lg hover:bg-white dark:hover:bg-slate-700 shadow-sm transition-all" aria-label="Следващ месец">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">chevron_right</span>
+</button>
+</div>
+<div class="grid grid-cols-7 text-center mb-2">
+<div class="text-[11px] font-bold text-slate-400 uppercase py-2">Пн</div>
+<div class="text-[11px] font-bold text-slate-400 uppercase py-2">Вт</div>
+<div class="text-[11px] font-bold text-slate-400 uppercase py-2">Ср</div>
+<div class="text-[11px] font-bold text-slate-400 uppercase py-2">Чт</div>
+<div class="text-[11px] font-bold text-slate-400 uppercase py-2">Пт</div>
+<div class="text-[11px] font-bold text-primary uppercase py-2">Сб</div>
+<div class="text-[11px] font-bold text-primary uppercase py-2">Нд</div>
+</div>
+<div id="calendar-grid" class="grid grid-cols-7 gap-1">
+</div>
+</div>
+</section>
+<!-- Time Slots -->
+<section class="px-6">
+<div class="flex items-center justify-between mb-4">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white">Свободни часове</h3>
+<span id="time-slot-date" class="text-xs font-medium px-2.5 py-1 bg-primary/10 text-primary rounded-full"></span>
+</div>
+<div id="time-slots" class="grid grid-cols-3 gap-3">
+<button type="button" class="booking-time py-3 px-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold hover:border-primary hover:text-primary dark:hover:text-primary transition-all text-slate-700 dark:text-slate-300" data-time="09:00">09:00</button>
+<button type="button" class="booking-time py-3 px-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold hover:border-primary hover:text-primary dark:hover:text-primary transition-all text-slate-700 dark:text-slate-300" data-time="10:00">10:00</button>
+<button type="button" class="booking-time py-3 px-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold hover:border-primary hover:text-primary dark:hover:text-primary transition-all text-slate-700 dark:text-slate-300" data-time="11:00">11:00</button>
+<button type="button" class="booking-time py-3 px-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold hover:border-primary hover:text-primary dark:hover:text-primary transition-all text-slate-700 dark:text-slate-300" data-time="12:00">12:00</button>
+<button type="button" class="booking-time py-3 px-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold hover:border-primary hover:text-primary dark:hover:text-primary transition-all text-slate-700 dark:text-slate-300" data-time="13:00">13:00</button>
+<button type="button" class="booking-time py-3 px-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold hover:border-primary hover:text-primary dark:hover:text-primary transition-all text-slate-700 dark:text-slate-300" data-time="14:00">14:00</button>
+<button type="button" class="booking-time py-3 px-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold hover:border-primary hover:text-primary dark:hover:text-primary transition-all text-slate-700 dark:text-slate-300" data-time="15:00">15:00</button>
+<button type="button" class="booking-time py-3 px-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold hover:border-primary hover:text-primary dark:hover:text-primary transition-all text-slate-700 dark:text-slate-300" data-time="16:00">16:00</button>
+<button type="button" class="booking-time py-3 px-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold hover:border-primary hover:text-primary dark:hover:text-primary transition-all text-slate-700 dark:text-slate-300" data-time="17:00">17:00</button>
+</div>
+<!-- Client info form -->
+<div class="mt-6 space-y-4" id="booking-form-section">
+<label class="block"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Име и фамилия</span><input type="text" id="booking-name" required class="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-900 dark:text-slate-100" placeholder="Вашето име"/></label>
+<label class="block"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Имейл</span><input type="email" id="booking-email" required class="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-900 dark:text-slate-100" placeholder="ваш@имейл.com"/></label>
+<label class="block"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Бележки (незадължително)</span><textarea id="booking-notes" rows="2" class="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-900 dark:text-slate-100" placeholder="Допълнителна информация..."></textarea></label>
+</div>
+<!-- Consultant Selection -->
+<div class="mt-8">
+<p class="text-sm font-bold text-slate-900 dark:text-white mb-3">Изберете консултант</p>
+<div class="flex flex-col gap-3">
+<button type="button" class="consultant-option flex gap-4 items-center p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all text-left" data-consultant-id="georgi_grozev">
+<div class="relative size-12 shrink-0">
+<img alt="" class="size-full rounded-full object-cover" src="../assets/images/georgi-grozev.png"/>
+<div class="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full"></div>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-slate-900 dark:text-white">Georgi Grozev</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Специалист в банкирането от 20г.</p>
+</div>
+<span class="consultant-check material-symbols-outlined text-primary text-xl opacity-0">check_circle</span>
+</button>
+<button type="button" class="consultant-option flex gap-4 items-center p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all text-left" data-consultant-id="petya_grozeva">
+<div class="relative size-12 shrink-0">
+<img alt="" class="size-full rounded-full object-cover" src="../assets/images/petya-grozeva.png"/>
+<div class="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full"></div>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-slate-900 dark:text-white">Petya Grozeva</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Специалист мама. Най-голямата машина</p>
+</div>
+<span class="consultant-check material-symbols-outlined text-primary text-xl opacity-0">check_circle</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Fixed Footer Action -->
+<div class="fixed bottom-0 left-0 right-0 mx-auto max-w-md p-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+<button type="button" id="booking-submit" class="w-full bg-primary text-white py-4 rounded-xl font-bold text-lg shadow-xl shadow-primary/20 active:scale-95 transition-transform">
+                Потвърди часа
+            </button>
+</div>
+<!-- Bottom Navigation Bar (Matching component list) -->
+<div class="fixed bottom-0 hidden">
+<div class="flex gap-2 border-t border-slate-200 bg-background-light px-4 pb-3 pt-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-xs font-medium leading-normal">Начало</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<p class="text-xs font-medium leading-normal">Услуги</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">schedule</span>
+<p class="text-xs font-medium leading-normal">Часове</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-xs font-medium leading-normal">Профил</p>
+</a>
+</div>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script>if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) { window.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY); }</script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/api.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+(function() {
+  var MONTHS_BG = ['Януари','Февруари','Март','Април','Май','Юни','Юли','Август','Септември','Октомври','Ноември','Декември'];
+  var DAYS_BG = ['Нд','Пн','Вт','Ср','Чт','Пт','Сб'];
+  var today = new Date();
+  today.setHours(0,0,0,0);
+
+  var viewYear = today.getFullYear();
+  var viewMonth = today.getMonth();
+  var selectedDate = null;
+  var selectedTime = null;
+  var consultantId = 'georgi_grozev';
+  var takenSlots = [];
+
+  function pad(n) { return n < 10 ? '0' + n : '' + n; }
+  function dateStr(y,m,d) { return y + '-' + pad(m+1) + '-' + pad(d); }
+  function isPast(y,m,d) {
+    var d0 = new Date(y,m,d); d0.setHours(0,0,0,0);
+    return d0 < today;
+  }
+
+  function renderCalendar() {
+    var grid = document.getElementById('calendar-grid');
+    var header = document.getElementById('calendar-month');
+    header.textContent = MONTHS_BG[viewMonth] + ' ' + viewYear;
+
+    var first = new Date(viewYear, viewMonth, 1);
+    var last = new Date(viewYear, viewMonth + 1, 0);
+    var startPad = (first.getDay() + 6) % 7;
+    var days = last.getDate();
+    var html = '';
+
+    for (var i = 0; i < startPad; i++) html += '<div class="h-10"></div>';
+    for (var d = 1; d <= days; d++) {
+      var past = isPast(viewYear, viewMonth, d);
+      var ds = dateStr(viewYear, viewMonth, d);
+      var cls = 'h-10 w-full flex items-center justify-center rounded-lg text-sm font-medium ';
+      if (past) {
+        cls += 'text-slate-400 cursor-not-allowed';
+        html += '<div class="' + cls + '">' + d + '</div>';
+      } else {
+        cls += 'booking-day hover:bg-primary/10 ';
+        if (selectedDate === ds) {
+          cls += 'bg-primary text-white font-bold shadow-lg shadow-primary/30';
+        } else {
+          cls += 'text-slate-800 dark:text-slate-200';
+        }
+        html += '<button type="button" class="' + cls + '" data-date="' + ds + '">' + d + '</button>';
+      }
+    }
+    grid.innerHTML = html;
+
+    if (!selectedDate) selectedDate = dateStr(today.getFullYear(), today.getMonth(), today.getDate());
+    updateDateLabel();
+    attachDayListeners();
+  }
+
+  function updateDateLabel() {
+    var el = document.getElementById('time-slot-date');
+    if (!selectedDate) return;
+    var p = selectedDate.split('-');
+    var d = new Date(parseInt(p[0],10), parseInt(p[1],10)-1, parseInt(p[2],10));
+    var dayNames = ['Неделя','Понеделник','Вторник','Сряда','Четвъртък','Петък','Събота'];
+    el.textContent = dayNames[d.getDay()] + ', ' + d.getDate() + ' ' + MONTHS_BG[d.getMonth()];
+  }
+
+  function fetchTakenSlots() {
+    if (!selectedDate || !consultantId) return;
+    var url = '/api/book/taken?consultant_id=' + encodeURIComponent(consultantId) + '&date=' + encodeURIComponent(selectedDate);
+    window.api.get(url).then(function(r) { return r.json(); }).then(function(data) {
+      takenSlots = data.taken || [];
+      updateTimeSlotsUI();
+    }).catch(function() { takenSlots = []; updateTimeSlotsUI(); });
+  }
+
+  function updateTimeSlotsUI() {
+    document.querySelectorAll('.booking-time').forEach(function(btn) {
+      var t = btn.getAttribute('data-time');
+      var taken = takenSlots.indexOf(t) >= 0;
+      btn.disabled = taken;
+      btn.classList.remove('border-2','border-primary','bg-primary/5','text-primary','font-bold','shadow-sm');
+      btn.classList.remove('line-through','opacity-60','cursor-not-allowed','bg-slate-100','dark:bg-slate-800');
+      if (taken) {
+        btn.classList.add('line-through','opacity-60','cursor-not-allowed','bg-slate-100','dark:bg-slate-800','text-slate-400');
+        btn.classList.remove('hover:border-primary','hover:text-primary');
+      } else {
+        btn.classList.add('border','border-slate-200','dark:border-slate-700','text-slate-700','dark:text-slate-300');
+        btn.classList.add('hover:border-primary','hover:text-primary');
+      }
+      if (taken && selectedTime === t) selectedTime = null;
+    });
+    if (selectedTime && takenSlots.indexOf(selectedTime) >= 0) {
+      selectedTime = null;
+    } else if (selectedTime) {
+      var sel = document.querySelector('.booking-time[data-time="' + selectedTime + '"]');
+      if (sel && !sel.disabled) {
+        sel.classList.add('border-2','border-primary','bg-primary/5','text-primary','font-bold','shadow-sm');
+      }
+    }
+  }
+
+  function attachDayListeners() {
+    document.querySelectorAll('.booking-day').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        selectedDate = this.getAttribute('data-date');
+        renderCalendar();
+        fetchTakenSlots();
+      });
+    });
+  }
+
+  document.getElementById('calendar-prev').addEventListener('click', function() {
+    viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+    renderCalendar();
+  });
+  document.getElementById('calendar-next').addEventListener('click', function() {
+    viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+    renderCalendar();
+  });
+
+  document.querySelectorAll('.booking-time').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (this.disabled) return;
+      document.querySelectorAll('.booking-time').forEach(function(b) {
+        if (!b.disabled) {
+          b.classList.remove('border-2','border-primary','bg-primary/5','text-primary','font-bold','shadow-sm');
+          b.classList.add('border','border-slate-200','dark:border-slate-700','font-semibold');
+        }
+      });
+      this.classList.add('border-2','border-primary','bg-primary/5','text-primary','font-bold','shadow-sm');
+      this.classList.remove('border','font-semibold');
+      selectedTime = this.getAttribute('data-time');
+    });
+  });
+
+  document.querySelectorAll('.consultant-option').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      consultantId = this.getAttribute('data-consultant-id');
+      document.querySelectorAll('.consultant-option').forEach(function(b) {
+        b.classList.remove('border-primary','bg-primary/5');
+        b.classList.add('border-slate-200','dark:border-slate-700');
+        b.querySelector('.consultant-check').classList.add('opacity-0');
+      });
+      this.classList.add('border-primary','bg-primary/5');
+      this.classList.remove('border-slate-200','dark:border-slate-700');
+      this.querySelector('.consultant-check').classList.remove('opacity-0');
+      fetchTakenSlots();
+    });
+  });
+
+  renderCalendar();
+  fetchTakenSlots();
+  selectedTime = '09:00';
+  document.querySelector('.booking-time[data-time="09:00"]').classList.add('border-2','border-primary','bg-primary/5','text-primary','font-bold','shadow-sm');
+  document.querySelector('.consultant-option[data-consultant-id="georgi_grozev"]').classList.add('border-primary','bg-primary/5');
+  document.querySelector('.consultant-option[data-consultant-id="georgi_grozev"] .consultant-check').classList.remove('opacity-0');
+
+  document.getElementById('booking-submit').addEventListener('click', function() {
+    var name = document.getElementById('booking-name').value.trim();
+    var email = document.getElementById('booking-email').value.trim();
+    var notes = document.getElementById('booking-notes').value.trim();
+    if (!name || !email) {
+      if (typeof showMessage === 'function') showMessage('Моля въведете име и имейл.', 'error');
+      else alert('Моля въведете име и имейл.');
+      return;
+    }
+    if (!selectedDate || !selectedTime) {
+      if (typeof showMessage === 'function') showMessage('Моля изберете дата и час.', 'error');
+      else alert('Моля изберете дата и час.');
+      return;
+    }
+    var btn = this;
+    btn.disabled = true;
+    btn.textContent = 'Изпращане...';
+    var payload = {
+      client_name: name,
+      client_email: email,
+      consultant_id: consultantId,
+      date: selectedDate,
+      time: selectedTime,
+      service: 'Кредитна консултация',
+      notes: notes
+    };
+    window.api.post('/api/book', payload)
+      .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+      .then(function(res) {
+        if (res.ok) {
+          var names = { georgi_grozev: 'Georgi Grozev', petya_grozeva: 'Petya Grozeva' };
+          sessionStorage.setItem('lastBooking', JSON.stringify({
+            consultant_id: consultantId,
+            consultant_name: names[consultantId] || consultantId,
+            date: selectedDate,
+            time: selectedTime
+          }));
+          window.location.href = '/booking_confirmed';
+        } else {
+          if (typeof showMessage === 'function') showMessage(res.data.detail || 'Грешка при изпращане.', 'error');
+          else alert(res.data.detail || 'Грешка при изпращане.');
+          btn.disabled = false;
+          btn.textContent = 'Потвърди часа';
+        }
+      })
+      .catch(function(err) {
+        if (typeof showMessage === 'function') showMessage('Неуспешно свързване. Опитайте отново.', 'error');
+        else alert('Неуспешно свързване. Опитайте отново.');
+        btn.disabled = false;
+        btn.textContent = 'Потвърди часа';
+      });
+  });
+})();
+</script>
+</body></html>

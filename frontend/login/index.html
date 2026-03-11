@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html lang="bg"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#000000",
+              "background-light": "#f6f6f8",
+              "background-dark": "#101622",
+            },
+            fontFamily: {
+              "display": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<link rel="stylesheet" href="../assets/css/main.css"/>
+<style>
+        body { font-family: 'Manrope', sans-serif; min-height: max(884px, 100dvh); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col antialiased">
+<div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
+<nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
+  <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="py-4">
+    <a href="/">Начало</a>
+    <a href="/consultants_info">Експерти</a>
+    <a href="/credit_info">Информация за кредити</a>
+    <a href="/credit_calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment">Запис на час</a>
+    <a href="/signup">Регистрация</a>
+    <a href="/login" data-nav-login>Вход</a>
+  </div>
+</nav>
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+  <div class="flex items-center p-4 justify-between max-w-7xl mx-auto">
+    <a href="/" class="flex items-center gap-2">
+      <img alt="Gfinance Logo" class="h-10 w-auto object-contain mix-blend-multiply" src="/assets/images/logo.png"/>
+      <h2 class="text-slate-900 dark:text-slate-100 text-xl font-extrabold">Gfinance</h2>
+    </a>
+    <button type="button" data-nav-toggle class="p-2" aria-label="Отвори меню"><span class="material-symbols-outlined text-2xl">menu</span></button>
+  </div>
+</header>
+<div class="flex-1 flex flex-col items-center justify-center p-4">
+<div class="w-full max-w-[440px] bg-white dark:bg-slate-800/50 rounded-xl shadow-lg p-8 border border-slate-200 dark:border-slate-700">
+<div class="flex flex-col items-center mb-10">
+<div class="mb-6">
+<a href="/"><img alt="Gfinance logo" class="h-16 w-auto mix-blend-multiply" src="/assets/images/logo.png"/></a>
+</div>
+<h1 class="text-3xl font-bold tracking-tight text-center text-slate-900 dark:text-slate-100">
+                Вход в профила
+            </h1>
+<p class="text-slate-600 dark:text-slate-400 mt-2 text-sm text-center">
+                Добре дошли в портала на Gfinance
+            </p>
+</div>
+<form id="login-form" class="space-y-6">
+<div>
+<label class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2" for="email">
+                    Имейл
+                </label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 dark:text-slate-400 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</div>
+<input class="block w-full pl-11 pr-4 py-3.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary text-slate-900 dark:text-slate-100 placeholder:text-slate-500 transition-all outline-none" id="email" name="email" placeholder="Въведете вашия имейл" required="" type="email"/>
+</div>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300" for="password">
+                        Парола
+                    </label>
+<button type="button" id="forgot-password-btn" class="text-sm font-medium text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors bg-transparent border-0 p-0 cursor-pointer">
+                        Забравена парола?
+                    </button>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-500 dark:text-slate-400 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<input class="block w-full pl-11 pr-12 py-3.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary text-slate-900 dark:text-slate-100 placeholder:text-slate-500 transition-all outline-none" id="password" name="password" placeholder="Въведете вашата парола" required="" type="password"/>
+<button id="toggle-password" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-200" type="button" aria-label="Покажи парола">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center">
+<input class="h-4 w-4 text-primary focus:ring-primary border-slate-300 dark:border-slate-600 rounded bg-white dark:bg-slate-800" id="remember-me" name="remember-me" type="checkbox"/>
+<label class="ml-2 block text-sm text-slate-600 dark:text-slate-400" for="remember-me">
+                    Запомни ме на това устройство
+                </label>
+</div>
+<button class="w-full flex justify-center items-center py-4 px-4 rounded-lg shadow-sm text-base font-bold text-white bg-primary hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all transform active:scale-[0.98]" type="submit">
+                Вход
+            </button>
+</form>
+<div class="mt-10 pt-6 border-t border-slate-200 dark:border-slate-700 text-center">
+<p class="text-sm text-slate-600 dark:text-slate-400">
+                Нямате профил? 
+                <a class="font-bold text-primary hover:underline ml-1" href="/signup">Регистрирайте се</a>
+</p>
+</div>
+</div>
+<div class="mt-8 text-center space-y-4">
+<p class="text-slate-500 dark:text-slate-400 text-sm"><a class="hover:text-primary transition-colors" href="/">← Назад</a></p>
+<div class="flex justify-center gap-6 text-slate-500 dark:text-slate-400 text-xs">
+<a class="hover:text-primary transition-colors" href="/legal/privacy">Политика за поверителност</a>
+<a class="hover:text-primary transition-colors" href="/legal/terms">Условия за ползване</a>
+<a class="hover:text-primary transition-colors" href="/consultants_info">Контакти</a>
+</div>
+<p class="text-[10px] text-slate-500 dark:text-slate-500 uppercase tracking-widest font-medium">
+            © 2024 Gfinance Credit Consulting. Всички права запазени.
+        </p>
+</div>
+</div>
+
+<!-- Forgot password modal -->
+<div id="forgot-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
+  <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl max-w-md w-full p-6">
+    <h3 class="text-lg font-bold mb-2 text-slate-900 dark:text-slate-100">Забравена парола</h3>
+    <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Въведете имейла си и ще ви изпратим линк за възстановяване.</p>
+    <input id="forgot-email" type="email" class="w-full px-4 py-3 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 mb-4" placeholder="ваш@имейл.com"/>
+    <div class="flex gap-3 justify-end">
+      <button type="button" id="forgot-cancel" class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 font-medium">Отказ</button>
+      <button type="button" id="forgot-send" class="px-4 py-2 rounded-lg bg-primary text-white font-medium">Изпрати линк</button>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script>
+(function() {
+  if (!window.SUPABASE_URL || !window.SUPABASE_ANON_KEY) return;
+  window.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+})();
+</script>
+<script src="../assets/js/auth.js"></script>
+<script>
+(function() {
+  if (window.location.hash && window.supabase) {
+    window.supabase.auth.onAuthStateChange(function(event) {
+      if (event === 'PASSWORD_RECOVERY') {
+        var newPassword = prompt('Въведете новата парола (минимум 8 символа):');
+        if (newPassword && newPassword.length >= 8) {
+          window.supabase.auth.updateUser({ password: newPassword }).then(function(r) {
+            if (r.error) alert(r.error.message);
+            else {
+              alert('Паролата е променена успешно.');
+              window.location.hash = '';
+              window.location.reload();
+            }
+          });
+        }
+      }
+    });
+  }
+  var form = document.getElementById('login-form');
+  var pw = document.getElementById('password');
+  var toggle = document.getElementById('toggle-password');
+  if (toggle && pw) {
+    toggle.addEventListener('click', function() {
+      var isPass = pw.type === 'password';
+      pw.type = isPass ? 'text' : 'password';
+      toggle.querySelector('span').textContent = isPass ? 'visibility_off' : 'visibility';
+    });
+  }
+  var forgotBtn = document.getElementById('forgot-password-btn');
+  var forgotModal = document.getElementById('forgot-modal');
+  var forgotCancel = document.getElementById('forgot-cancel');
+  var forgotSend = document.getElementById('forgot-send');
+  if (forgotBtn && forgotModal) {
+    forgotBtn.addEventListener('click', function() {
+      document.getElementById('forgot-email').value = document.getElementById('email').value.trim();
+      forgotModal.classList.remove('hidden');
+    });
+  }
+  if (forgotCancel && forgotModal) {
+    forgotCancel.addEventListener('click', function() { forgotModal.classList.add('hidden'); });
+  }
+  if (forgotSend && forgotModal && window.supabase) {
+    forgotSend.addEventListener('click', function() {
+      var email = document.getElementById('forgot-email').value.trim();
+      if (!email) {
+        alert('Моля въведете имейл.');
+        return;
+      }
+      var btn = this;
+      btn.disabled = true;
+      btn.textContent = 'Изпращане...';
+      var redirectUrl = window.location.origin + '/login';
+      window.supabase.auth.resetPasswordForEmail(email, { redirectTo: redirectUrl })
+        .then(function(r) {
+          if (r.error) throw new Error(r.error.message);
+          alert('Изпратихме ви имейл с линк за възстановяване на паролата. Проверете пощата си.');
+          forgotModal.classList.add('hidden');
+        })
+        .catch(function(err) {
+          alert(err.message || 'Грешка при изпращане');
+        })
+        .finally(function() {
+          btn.disabled = false;
+          btn.textContent = 'Изпрати линк';
+        });
+    });
+  }
+  if (form && window.auth) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var email = document.getElementById('email').value.trim();
+      var password = pw.value;
+      var btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = 'Вход...';
+      window.auth.signIn(email, password)
+        .then(function(r) {
+          if (r.error) throw new Error(r.error.message);
+          var params = new URLSearchParams(window.location.search);
+          var redirect = params.get('redirect');
+          window.location.href = redirect ? (redirect.startsWith('/') ? redirect : '/' + redirect) : '/';
+        })
+        .catch(function(err) {
+          alert(err.message || 'Грешка при вход');
+          btn.disabled = false;
+          btn.textContent = 'Вход';
+        });
+    });
+  }
+})();
+</script>
+<script src="../assets/js/main.js" defer></script>
+</body></html>

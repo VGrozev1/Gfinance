@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Gfinance Consultants</title>
+<link rel="stylesheet" href="../assets/css/main.css"/>
+<style>
+        body { min-height: max(884px, 100dvh); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
+<nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
+  <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="py-4">
+    <a href="/">Начало</a>
+    <a href="/consultants_info">Експерти</a>
+    <a href="/credit_info">Информация за кредити</a>
+    <a href="/credit_calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment">Запис на час</a>
+    <a href="/login" data-nav-login>Вход</a>
+  </div>
+</nav>
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+<div class="max-w-4xl mx-auto flex items-center justify-between p-4">
+<button type="button" data-nav-toggle class="text-primary flex size-12 shrink-0 items-center justify-start cursor-pointer" aria-label="Отвори меню">
+  <span class="material-symbols-outlined text-3xl font-bold">menu</span>
+</button>
+<a href="/" class="flex items-center gap-2">
+<img alt="Gfinance Logo" class="h-8 w-auto object-contain mix-blend-multiply" src="/assets/images/logo.png"/>
+<h1 class="text-lg font-bold tracking-tight">Gfinance Consultants</h1>
+</a>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">share</span>
+</div>
+</div>
+</header>
+<main class="max-w-4xl mx-auto px-4 pb-12">
+<!-- Hero Section -->
+<section class="py-8">
+<h2 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">Запознайте се с нашите експерти</h2>
+<p class="mt-2 text-slate-600 dark:text-slate-400">Професионални насоки за вашето финансово бъдеще.</p>
+</section>
+<!-- Consultants Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+<!-- Consultant 1 -->
+<div class="bg-white dark:bg-slate-800/50 p-6 rounded-xl border border-primary/5 shadow-sm flex flex-col items-center text-center">
+<div class="relative mb-6">
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-primary/20 bg-cover bg-center" data-alt="Georgi Grozev – специалист в банкирането" style="background-image: url('../assets/images/georgi-grozev.png')">
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-white p-1 rounded-full border-2 border-white dark:border-slate-800">
+<span class="material-symbols-outlined text-xs">verified</span>
+</div>
+</div>
+<h3 class="text-xl font-bold">Georgi Grozev</h3>
+<p class="text-primary font-semibold text-sm mb-4">Специалист в банкирането</p>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Специалист в банкирането от 20г. ЧЕСТИТ РОЖДЕН ДЕН!</p>
+<div class="mt-6 flex gap-3">
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-semibold text-sm">Свържете се с Георги</button>
+</div>
+</div>
+<!-- Consultant 2 -->
+<div class="bg-white dark:bg-slate-800/50 p-6 rounded-xl border border-primary/5 shadow-sm flex flex-col items-center text-center">
+<div class="relative mb-6">
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-primary/20 bg-cover bg-center" data-alt="Petya Grozeva" style="background-image: url('../assets/images/petya-grozeva.png')">
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-white p-1 rounded-full border-2 border-white dark:border-slate-800">
+<span class="material-symbols-outlined text-xs">verified</span>
+</div>
+</div>
+<h3 class="text-xl font-bold">Petya Grozeva</h3>
+<p class="text-primary font-semibold text-sm mb-4">Специалист</p>
+<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Специалист мама. Най-голямата машина</p>
+<div class="mt-6 flex gap-3">
+<button class="bg-primary text-white px-4 py-2 rounded-lg font-semibold text-sm">Свържете се с Петя</button>
+</div>
+</div>
+</section>
+<!-- Contact Information Section -->
+<section class="bg-primary/5 dark:bg-primary/10 rounded-2xl p-8 border border-primary/10">
+<h2 class="text-2xl font-bold mb-8 flex items-center gap-2"><span class="material-symbols-outlined text-primary">contact_support</span> Информация за контакт</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Address -->
+<div class="flex items-start gap-4">
+<div class="bg-primary/10 p-3 rounded-lg text-primary">
+<span class="material-symbols-outlined">location_on</span>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-slate-100">Адрес</h4>
+<p class="text-slate-600 dark:text-slate-400 text-sm mt-1">
+                        Burgas, str. Pop Gruyo 68
+                    </p>
+</div>
+</div>
+<!-- Phone -->
+<div class="flex items-start gap-4">
+<div class="bg-primary/10 p-3 rounded-lg text-primary">
+<span class="material-symbols-outlined">call</span>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-slate-100">Телефон</h4>
+<p class="text-slate-600 dark:text-slate-400 text-sm mt-1">
+                        +359 888 152181
+                    </p>
+</div>
+</div>
+<!-- Email -->
+<div class="flex items-start gap-4">
+<div class="bg-primary/10 p-3 rounded-lg text-primary">
+<span class="material-symbols-outlined">mail</span>
+</div>
+<div>
+<h4 class="font-bold text-slate-900 dark:text-slate-100">Имейл</h4>
+<p class="text-slate-600 dark:text-slate-400 text-sm mt-1">
+                        ggrozev@gfinance.bg
+                    </p>
+</div>
+</div>
+</div>
+<!-- Map - opens Google Maps -->
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Burgas%2C+str.+Pop+Gruyo+68" target="_blank" rel="noopener noreferrer" class="mt-10 block h-48 w-full rounded-xl overflow-hidden bg-slate-200 dark:bg-slate-700 relative cursor-pointer hover:opacity-90 transition-opacity group">
+<img class="w-full h-full object-cover opacity-60 mix-blend-multiply group-hover:opacity-70" alt="Показване на местоположението в Google Maps" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwQt_Nys32fcLbn-1qewEItSH4BaJD_lvSprUVWdIKYo74V3ZGAalPM_zwj_L5KJLutkebMhifjHd5i0p9u9KgitypY5Y23_6_XvKiJAZKNCLl5zVqq9ojNWR2ggp0HMOh6y8jvWVNvGQeVWMR4oTqa3qvodGtKEGpeWvG1lhCSz8-i5qNqd87CjR3UQ4knJ7m5arw5KvD6LNRNmKJiWL-zmrUPMGeZN88QsjNizQIPZsD9HiyAMJPBStF6431gXENe9HtOrNQn0hv"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="bg-white dark:bg-slate-800 px-4 py-2 rounded-full shadow-lg flex items-center gap-2 group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:text-white text-sm">location_on</span>
+<span class="text-xs font-bold">Намерете ни в Бургас – отвори в Google Maps</span>
+</div>
+</div>
+</a>
+</section>
+<!-- Footer Footer -->
+<footer class="mt-12 text-center text-slate-500 dark:text-slate-500 text-xs">
+<p>© 2024 Gfinance Consultants. Всички права запазени.</p>
+</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script>if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) { window.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY); }</script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/api.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+</body></html>

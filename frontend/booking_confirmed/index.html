@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="bg"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>Потвърждение - Gfinance</title>
+<link rel="stylesheet" href="../assets/css/main.css"/>
+<style>
+        body { min-height: max(884px, 100dvh); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-h-screen w-full max-w-md mx-auto flex-col bg-background-light dark:bg-background-dark overflow-x-hidden border-x border-slate-200 dark:border-slate-800">
+<div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
+<nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
+  <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="py-4">
+    <a href="/">Начало</a>
+    <a href="/consultants_info">Експерти</a>
+    <a href="/credit_info">Информация за кредити</a>
+    <a href="/credit_calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment">Запис на час</a>
+    <a href="/login" data-nav-login>Вход</a>
+  </div>
+</nav>
+<div class="flex items-center p-4 pb-2 justify-between border-b border-slate-200 dark:border-slate-800">
+<a href="/" class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center">
+<span class="material-symbols-outlined">arrow_back</span>
+</a>
+<a href="/" class="flex-1 flex justify-center">
+<img alt="Gfinance Logo" class="h-8 w-auto object-contain mix-blend-multiply" src="/assets/images/logo.png"/>
+</a>
+<button type="button" data-nav-toggle class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center" aria-label="Отвори меню">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+<!-- Success Content -->
+<div class="flex flex-col px-4 py-8">
+<div class="flex flex-col items-center gap-6">
+<!-- Success Illustration/Icon -->
+<div class="relative flex items-center justify-center w-24 h-24 bg-primary/10 rounded-full">
+<span class="material-symbols-outlined text-primary text-5xl">check_circle</span>
+</div>
+<div class="flex flex-col items-center gap-2 text-center">
+<h1 class="text-2xl font-extrabold text-slate-900 dark:text-white">Вашата заявка е изпратена за потвърждение!</h1>
+<p class="text-slate-600 dark:text-slate-400 text-sm font-normal max-w-[320px]">
+                        Вашата резервация е изпратена на консултанта. Ще получите потвърждение по имейл, когато бъде одобрена.
+                    </p>
+</div>
+</div>
+</div>
+<!-- Booking Details Card -->
+<div class="px-4 py-2">
+<div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+<h3 class="text-primary text-sm font-bold uppercase tracking-wider mb-4">Детайли за срещата</h3>
+<div class="space-y-4">
+<!-- Consultant -->
+<div class="flex items-center gap-4">
+<div class="bg-slate-100 dark:bg-slate-800 flex items-center justify-center rounded-full h-12 w-12 overflow-hidden border border-slate-200 dark:border-slate-700">
+<img id="booking-consultant-photo" class="h-full w-full object-cover" alt="Портрет на консултант" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7Bx8WSDJRA-tFmTsr4MQTATFRsYLpjIFOtgmGYjb3W7l8y_M2jHZ-BmI250X_1oxxyxJpDpYcJUAJxKBjQm8QCp5fepmJFtQ-jGihCuW4TJ4CC9jSq_-vCJVIGjAzb6UeovHsECtX-wFlp6w1kqtlxo7BK5g2YgQn9O3kwE_U2IAyOzAUJVwWXnO4C9GQLQBQ6CUxBfwmWjPz_8fHJcF1TUfwVJSI8RP-Hu5uZef71mdF8myRO-gtgoaHFT7TQOC0X7alNEk9uhm3"/>
+</div>
+<div class="flex flex-col">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Консултант</p>
+<p id="booking-consultant" class="text-slate-900 dark:text-white text-base font-bold">—</p>
+</div>
+</div>
+<div class="h-px bg-slate-100 dark:bg-slate-800 w-full"></div>
+<!-- Date & Time -->
+<div class="grid grid-cols-2 gap-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary/70">calendar_today</span>
+<div class="flex flex-col">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Дата</p>
+<p id="booking-date" class="text-slate-900 dark:text-white text-sm font-semibold">—</p>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary/70">schedule</span>
+<div class="flex flex-col">
+<p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Час</p>
+<p id="booking-time" class="text-slate-900 dark:text-white text-sm font-semibold">—</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="mt-auto px-4 py-8 flex flex-col gap-3">
+<a href="/" class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm font-bold leading-normal tracking-[0.015em] hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
+<span class="truncate">Към началната страница</span>
+</a>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script>if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) { window.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY); }</script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/api.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+<script>
+(function() {
+  var MONTHS_BG = ['Януари','Февруари','Март','Април','Май','Юни','Юли','Август','Септември','Октомври','Ноември','Декември'];
+  var photo = { georgi_grozev: '../assets/images/georgi-grozev.png', petya_grozeva: '../assets/images/petya-grozeva.png' };
+  try {
+    var raw = sessionStorage.getItem('lastBooking');
+    if (raw) {
+      var b = JSON.parse(raw);
+      document.getElementById('booking-consultant').textContent = b.consultant_name || '—';
+      document.getElementById('booking-time').textContent = (b.time || '—') + ' ч.';
+      if (b.date) {
+        var p = b.date.split('-');
+        var d = new Date(parseInt(p[0],10), parseInt(p[1],10)-1, parseInt(p[2],10));
+        document.getElementById('booking-date').textContent = d.getDate() + ' ' + MONTHS_BG[d.getMonth()] + ', ' + d.getFullYear();
+      }
+      var img = document.getElementById('booking-consultant-photo');
+      if (img && photo[b.consultant_id]) img.src = photo[b.consultant_id];
+    }
+  } catch (e) {}
+})();
+</script>
+</body></html>

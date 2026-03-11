@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html lang="bg"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Gfinance - Кредитен калкулатор</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#000000",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<link rel="stylesheet" href="../assets/css/main.css"/>
+<style>
+        body { min-height: max(884px, 100dvh); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-xl">
+<div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
+<nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
+  <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="py-4">
+    <a href="/">Начало</a>
+    <a href="/consultants_info">Експерти</a>
+    <a href="/credit_info">Информация за кредити</a>
+    <a href="/credit_calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment">Запис на час</a>
+    <a href="/login" data-nav-login>Вход</a>
+  </div>
+</nav>
+<header class="flex items-center p-4 pb-2 justify-between">
+<button type="button" data-nav-toggle aria-label="Отвори меню" class="text-primary flex size-12 shrink-0 items-center justify-start cursor-pointer">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<a href="/" class="flex-1 flex justify-center">
+<img alt="Gfinance Logo" class="h-10 w-auto object-contain mix-blend-multiply" src="/assets/images/logo.png"/>
+</a>
+<div class="size-12"></div>
+</header>
+<main class="flex-1 px-4">
+<div class="py-6">
+<h3 class="text-slate-900 dark:text-slate-100 tracking-tight text-2xl font-extrabold leading-tight">
+                Изчислете вашия кредит
+            </h3>
+<p class="text-slate-500 dark:text-slate-400 mt-2 text-sm">
+                Направете предварително изчисление на вашите месечни вноски с Gfinance.
+            </p>
+</div>
+<!-- Input Section -->
+<div class="space-y-5">
+<div class="flex flex-col gap-2">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold">
+                    Сума на кредита (eur.)
+                </label>
+<div class="relative">
+<input id="calc-sum" class="form-input flex w-full rounded-xl border border-primary/20 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 h-14 px-4 text-lg font-medium" placeholder="5 000" type="number" min="1" step="100" value="10000"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">eur.</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold">
+                    Срок на кредита
+                </label>
+<div class="grid gap-4">
+<div class="relative">
+<input id="calc-months" class="form-input flex w-full rounded-xl border border-primary/20 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 h-14 px-4 text-lg font-medium" placeholder="60" type="number" min="1" step="1" value="60"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium text-xs uppercase">мес.</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-semibold">
+                    Лихвен процент (%)
+                </label>
+<div class="relative">
+<input id="calc-rate" class="form-input flex w-full rounded-xl border border-primary/20 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:border-primary focus:ring-2 focus:ring-primary/20 h-14 px-4 text-lg font-medium" placeholder="5.5" type="number" min="0" step="0.1" value="4.8"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-medium">%</span>
+</div>
+</div>
+</div>
+<!-- Results Section -->
+<div class="mt-10 p-6 rounded-2xl bg-primary text-white shadow-lg shadow-black/30 relative overflow-hidden">
+<!-- Abstract background pattern -->
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="40" id="grid" patternunits="userSpaceOnUse" width="40">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid)" height="100%" width="100%"></rect>
+</svg>
+</div>
+<div class="relative z-10">
+<div class="flex flex-col items-center mb-6">
+<p class="text-white/70 text-sm font-medium mb-1">Месечна вноска</p>
+<p id="result-monthly" class="text-4xl font-extrabold tracking-tight">— eur.</p>
+</div>
+<div class="border-t border-white/20 pt-4 flex justify-between items-center">
+<div class="text-left">
+<p class="text-xs text-white/60 uppercase tracking-wider">Обща сума</p>
+<p id="result-total" class="text-lg font-bold">— eur.</p>
+</div>
+<div class="text-right">
+<p class="text-xs text-white/60 uppercase tracking-wider">Общо лихва</p>
+<p id="result-interest" class="text-lg font-bold text-white/90">— eur.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Promotion / Trust Banner -->
+<div class="mt-8 flex items-start gap-4 p-4 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+<div class="bg-primary/10 p-2 rounded-lg text-primary">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 dark:text-white">Индивидуални условия</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gfinance договаря най-добрите условия за вас спрямо вашия профил.</p>
+</div>
+</div>
+</main>
+<!-- CTA Section -->
+<footer class="p-4 mt-auto">
+<button class="w-full bg-primary hover:bg-slate-900 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-black/20">
+<span class="material-symbols-outlined text-xl">contact_page</span>
+            Заяви консултация
+        </button>
+<p class="text-center text-[10px] text-slate-400 mt-4 leading-relaxed">
+            * Изчисленията са ориентировъчни и не представляват официална оферта. 
+            Gfinance е регистриран кредитен посредник.
+        </p>
+</footer>
+<!-- Spacer for aesthetics -->
+<div class="h-6"></div>
+</div>
+<script>
+(function() {
+  function formatNum(n) {
+    return n.toLocaleString('bg-BG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function calc() {
+    var sum = parseFloat(document.getElementById('calc-sum').value) || 0;
+    var months = parseInt(document.getElementById('calc-months').value, 10) || 0;
+    var rateAnnual = parseFloat(document.getElementById('calc-rate').value) || 0;
+    if (sum <= 0 || months <= 0) {
+      document.getElementById('result-monthly').textContent = '— eur.';
+      document.getElementById('result-total').textContent = '— eur.';
+      document.getElementById('result-interest').textContent = '— eur.';
+      return;
+    }
+    var r = (rateAnnual / 100) / 12;
+    var monthly, total, interest;
+    if (r === 0) {
+      monthly = sum / months;
+      total = sum;
+      interest = 0;
+    } else {
+      var x = Math.pow(1 + r, months);
+      monthly = sum * r * x / (x - 1);
+      total = monthly * months;
+      interest = total - sum;
+    }
+    document.getElementById('result-monthly').textContent = formatNum(monthly) + ' eur.';
+    document.getElementById('result-total').textContent = formatNum(total) + ' eur.';
+    document.getElementById('result-interest').textContent = formatNum(interest) + ' eur.';
+  }
+  ['calc-sum','calc-months','calc-rate'].forEach(function(id) {
+    document.getElementById(id).addEventListener('input', calc);
+  });
+  calc();
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script>if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) { window.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY); }</script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/api.js" defer></script>
+<script src="../assets/js/main.js" defer></script>
+</body></html>
