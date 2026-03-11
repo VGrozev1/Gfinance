@@ -363,13 +363,13 @@
       renderProfile(r.data.user);
       return;
     }
-    return window.supabase.auth.getSession();
-  }).then(function(sess) {
-    if (!sess || !sess.data || !sess.data.session || !sess.data.session.user) {
-      goToLogin();
-      return;
-    }
-    renderProfile(sess.data.session.user);
+    return window.supabase.auth.getSession().then(function(sess) {
+      if (!sess || !sess.data || !sess.data.session || !sess.data.session.user) {
+        goToLogin();
+        return;
+      }
+      renderProfile(sess.data.session.user);
+    });
   }).catch(function() {
     goToLogin();
   });
