@@ -1,7 +1,7 @@
 import logging
 import sys
 from pathlib import Path
-from urllib.parse import unquote
+from urllib.parse import unquote, parse_qsl, urlencode
 
 from fastapi import FastAPI
 from starlette.middleware.gzip import GZipMiddleware
@@ -30,7 +30,7 @@ app.add_middleware(GZipMiddleware, minimum_size=500)
 
 
 class VercelPathMiddleware:
-    """ASGI middleware: rewrite scope path from x-path query (set by Vercel rewrites)."""
+    """Restore path from X-Original-Path header (frontend) or x-path query (e.g. /confirm, /decline GET)."""
 
     def __init__(self, app):
         self.app = app
@@ -39,20 +39,34 @@ class VercelPathMiddleware:
         if scope.get("type") != "http":
             await self.app(scope, receive, send)
             return
-        qs = scope.get("query_string", b"").decode("utf-8")
-        path = scope.get("path", "/")
-        if qs:
+        new_path = None
+        from_header = False
+        headers = list(scope.get("headers") or [])
+        for k, v in headers:
+            if k == b"x-original-path":
+                raw = v.decode("utf-8", errors="replace").strip()
+                if raw and raw.startswith("/"):
+                    new_path = raw.rstrip("/") if len(raw) > 1 else raw
+                    from_header = True
+                break
+        if not from_header:
+            qs = scope.get("query_string", b"").decode("utf-8")
             for part in qs.split("&"):
                 if part.startswith("x-path="):
-                    new_path = unquote(part[7:].strip())
-                    if new_path and new_path.startswith("/"):
-                        if len(new_path) > 1 and new_path.endswith("/"):
-                            new_path = new_path.rstrip("/")
+                    raw = unquote(part[7:].strip())
+                    if raw and raw.startswith("/"):
+                        new_path = raw.rstrip("/") if len(raw) > 1 else raw
+                        new_qs = urlencode([(k, v) for k, v in parse_qsl(qs, keep_blank_values=True) if k != "x-path"])
                         scope = dict(scope)
                         scope["path"] = new_path
                         scope["raw_path"] = new_path.encode("utf-8")
-                        # Do not modify query_string - can break body parsing on Vercel
+                        scope["query_string"] = new_qs.encode("utf-8")
                     break
+        if from_header and new_path:
+            scope = dict(scope)
+            scope["path"] = new_path
+            scope["raw_path"] = new_path.encode("utf-8")
+            scope["headers"] = [(k, v) for k, v in headers if k != b"x-original-path"]
         await self.app(scope, receive, send)
 
 

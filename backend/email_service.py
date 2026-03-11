@@ -62,8 +62,8 @@ def send_consultant_booking_request(
     decline_token: str,
 ) -> bool:
     """Email consultant with appointment request and Confirm/Decline links."""
-    confirm_url = f"{API_BASE_URL}/api/book/confirm?token={confirm_token}"
-    decline_url = f"{API_BASE_URL}/api/book/decline?token={decline_token}"
+    confirm_url = f"{API_BASE_URL}/confirm?token={confirm_token}"
+    decline_url = f"{API_BASE_URL}/decline?token={decline_token}"
     subject = f"Заявка за консултация – {client_name} – {date_str} {time_str}"
     html = f"""
     <html>

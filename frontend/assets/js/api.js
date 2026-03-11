@@ -17,8 +17,13 @@
       : '');
 
   function url(path) {
-    path = path.replace(/^\//, '');
+    path = (path || '').replace(/^\//, '');
     return API_BASE ? API_BASE + '/' + path : '/' + path;
+  }
+
+  function pathForHeader(path) {
+    var p = (path || '').split('?')[0];
+    return p && !p.startsWith('/') ? '/' + p : p || '/';
   }
 
   async function authHeaders() {
@@ -35,7 +40,9 @@
 
     get: function (path) {
       return authHeaders().then(function (h) {
-        return fetch(url(path), { credentials: 'include', headers: h });
+        var headers = Object.assign({}, h);
+        if (!API_BASE) headers['X-Original-Path'] = pathForHeader(path);
+        return fetch(url(path), { credentials: 'include', headers: headers });
       });
     },
 
@@ -43,6 +50,7 @@
       timeoutMs = timeoutMs || 30000;
       return authHeaders().then(function (h) {
         var headers = Object.assign({}, h, { 'Content-Type': 'application/json' });
+        if (!API_BASE) headers['X-Original-Path'] = pathForHeader(path);
         var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
         var id = ctrl ? setTimeout(function () { ctrl.abort(); }, timeoutMs) : null;
         return fetch(url(path), {

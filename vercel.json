@@ -3,7 +3,9 @@
   "buildCommand": "mkdir -p public && cp -r frontend/* public/",
   "trailingSlash": true,
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api?x-path=/api/$1" },
-    { "source": "/health", "destination": "/api?x-path=/health" }
+    { "source": "/api/:path*", "destination": "/api" },
+    { "source": "/health", "destination": "/api" },
+    { "source": "/confirm", "destination": "/api?x-path=/api/book/confirm" },
+    { "source": "/decline", "destination": "/api?x-path=/api/book/decline" }
   ]
 }
