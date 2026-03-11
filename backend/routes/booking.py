@@ -9,7 +9,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
-from config import API_BASE_URL, SUPABASE_JWT_SECRET
+from config import API_BASE_URL, SUPABASE_JWT_SECRET, SUPABASE_URL
 from consultants import CONSULTANTS
 from limiter import limiter
 from email_service import send_client_confirmation, send_client_decline, send_consultant_booking_request
@@ -20,6 +20,7 @@ security = HTTPBearer(auto_error=False)
 
 # Lazy import to avoid circular dependency
 _supabase = None
+_jwks_client = None
 
 
 def get_supabase():
@@ -29,6 +30,50 @@ def get_supabase():
         from config import SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL
         _supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
     return _supabase
+
+
+def _get_jwks_client():
+    global _jwks_client
+    if _jwks_client is None:
+        # Supabase JWKS endpoint for RS256 verification
+        # Example: https://<project-ref>.supabase.co/auth/v1/keys
+        from jwt import PyJWKClient
+
+        if not SUPABASE_URL:
+            raise RuntimeError("SUPABASE_URL is not set")
+        _jwks_client = PyJWKClient(f"{SUPABASE_URL.rstrip('/')}/auth/v1/keys")
+    return _jwks_client
+
+
+def _decode_supabase_jwt(token: str) -> dict:
+    """Decode Supabase JWT supporting HS256 (legacy secret) and RS256 (JWKS)."""
+    if not token:
+        raise jwt.InvalidTokenError("Empty token")
+
+    header = jwt.get_unverified_header(token) or {}
+    alg = header.get("alg")
+
+    if alg == "HS256":
+        if not SUPABASE_JWT_SECRET:
+            raise jwt.InvalidTokenError("SUPABASE_JWT_SECRET not set")
+        return jwt.decode(
+            token,
+            SUPABASE_JWT_SECRET,
+            audience="authenticated",
+            algorithms=["HS256"],
+        )
+
+    if alg == "RS256":
+        jwks_client = _get_jwks_client()
+        signing_key = jwks_client.get_signing_key_from_jwt(token).key
+        return jwt.decode(
+            token,
+            signing_key,
+            audience="authenticated",
+            algorithms=["RS256"],
+        )
+
+    raise jwt.InvalidAlgorithmError(f"The specified alg value is not allowed: {alg}")
 
 
 class BookRequest(BaseModel):
@@ -172,15 +217,10 @@ async def create_booking_request(
 
 async def _get_email_from_auth(credentials: Optional[HTTPAuthorizationCredentials]) -> Optional[str]:
     """Extract email from Supabase JWT. Returns None if not authenticated."""
-    if not credentials or not SUPABASE_JWT_SECRET:
+    if not credentials:
         return None
     try:
-        payload = jwt.decode(
-            credentials.credentials,
-            SUPABASE_JWT_SECRET,
-            audience="authenticated",
-            algorithms=["HS256"],
-        )
+        payload = _decode_supabase_jwt(credentials.credentials)
         return (payload.get("email") or "").lower()
     except jwt.PyJWTError:
         return None
@@ -190,18 +230,8 @@ async def _require_email_from_auth(credentials: Optional[HTTPAuthorizationCreden
     """Extract email from Supabase JWT or raise an HTTPException with a clear reason."""
     if not credentials:
         raise HTTPException(status_code=401, detail="Моля влезте в профила си, за да направите запис.")
-    if not SUPABASE_JWT_SECRET:
-        raise HTTPException(
-            status_code=503,
-            detail="Входът не може да се провери: липсва SUPABASE_JWT_SECRET във Vercel. Задайте го в Settings → Environment Variables.",
-        )
     try:
-        payload = jwt.decode(
-            credentials.credentials,
-            SUPABASE_JWT_SECRET,
-            audience="authenticated",
-            algorithms=["HS256"],
-        )
+        payload = _decode_supabase_jwt(credentials.credentials)
         email = (payload.get("email") or "").lower()
         if not email:
             raise HTTPException(status_code=401, detail="Входът не може да се провери: липсва email в токена.")
@@ -215,6 +245,13 @@ async def _require_email_from_auth(credentials: Optional[HTTPAuthorizationCreden
         )
     except jwt.InvalidAudienceError:
         raise HTTPException(status_code=401, detail="Невалиден токен: грешна аудитория (aud).")
+    except jwt.InvalidAlgorithmError:
+        raise HTTPException(
+            status_code=401,
+            detail="Невалиден токен: неподдържан алгоритъм. Ако Supabase е на RS256, уверете се че SUPABASE_URL е зададен и бекендът може да достъпи /auth/v1/keys.",
+        )
+    except RuntimeError as e:
+        raise HTTPException(status_code=503, detail=str(e))
     except jwt.PyJWTError as e:
         detail = str(e).strip()
         suffix = f": {detail}" if detail else ""
