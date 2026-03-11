@@ -46,6 +46,8 @@ class VercelPathMiddleware:
                 if part.startswith("x-path="):
                     new_path = unquote(part[7:].strip())
                     if new_path and new_path.startswith("/"):
+                        if len(new_path) > 1 and new_path.endswith("/"):
+                            new_path = new_path.rstrip("/")
                         scope = dict(scope)
                         scope["path"] = new_path
                         scope["raw_path"] = new_path.encode("utf-8")
