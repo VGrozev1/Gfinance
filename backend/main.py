@@ -93,12 +93,10 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 _booking_security = HTTPBearer(auto_error=False)
 
 
-@app.post("/api")
-async def vercel_book_post(
+async def _vercel_book_post_impl(
     request: Request,
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(_booking_security),
+    credentials: Optional[HTTPAuthorizationCredentials],
 ):
-    """Vercel: POST /api with JSON body (no query) so body is preserved."""
     try:
         body = await request.json()
     except Exception:
@@ -112,6 +110,16 @@ async def vercel_book_post(
     if not auth_email:
         raise HTTPException(status_code=401, detail="Моля влезте в профила си, за да направите запис.")
     return await _create_booking_with_auth(req, auth_email)
+
+
+@app.post("/api")
+@app.post("/api/")
+async def vercel_book_post(
+    request: Request,
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(_booking_security),
+):
+    """Vercel: POST /api (or /api/) with JSON body so body is preserved."""
+    return await _vercel_book_post_impl(request, credentials)
 
 
 @app.on_event("startup")

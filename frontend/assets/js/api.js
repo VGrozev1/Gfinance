@@ -22,7 +22,7 @@
       p = p.replace(/^\//, '');
       return API_BASE + '/' + p;
     }
-    if (isPostBooking) return '/api';
+    if (isPostBooking) return '/api/';
     var pathOnly = p.split('?')[0].replace(/^\//, '') || 'api';
     var qs = p.indexOf('?') >= 0 ? p.substring(p.indexOf('?') + 1) : '';
     var xpath = pathOnly.startsWith('api') ? '/' + pathOnly : (pathOnly === 'health' ? '/health' : '/api/' + pathOnly);
