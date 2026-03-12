@@ -5,7 +5,7 @@ Replace with real emails before launch (see roadmap Section 0.4).
 CONSULTANTS = {
     "georgi_grozev": {
         "name": "Georgi Grozev",
-        "email": "foodydeliveryapp@gmail.com",
+        "email": "ggrozev77@gmail.com",
     },
     "petya_grozeva": {
         "name": "Petya Grozeva",
