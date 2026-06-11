@@ -1,0 +1,15 @@
+# https://gfinance.bg/robots.txt
+User-agent: *
+Allow: /
+
+# Private / post-action / utility pages
+Disallow: /my_profile/
+Disallow: /my_appointments/
+Disallow: /booking_confirmed/
+Disallow: /zohoverify/
+Disallow: /api/
+Disallow: /confirm
+Disallow: /decline
+Disallow: /health
+
+Sitemap: https://gfinance.bg/sitemap.xml
