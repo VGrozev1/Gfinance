@@ -412,11 +412,19 @@ async def confirm_booking(token: str):
     time_s = str(booking["booking_time"])[:8]  # HH:MM:SS
     start_dt = datetime.strptime(f"{date_s} {time_s}", "%Y-%m-%d %H:%M:%S")
     end_dt = start_dt.replace(hour=start_dt.hour + 1, minute=0, second=0)
+    description_lines = [
+        f"Клиент: {booking['client_name']}",
+        f"Имейл: {booking['client_email']}",
+        f"Консултант: {consultant_name}",
+        f"Услуга: {booking.get('service') or '—'}",
+        "",
+        booking.get("notes") or "",
+    ]
     event_id = create_event(
-        summary=f"Консултация: {booking['client_name']}",
+        summary=f"Консултация: {booking['client_name']} – {consultant_name}",
         start_datetime=start_dt,
         end_datetime=end_dt,
-        description=booking.get("notes") or "",
+        description="\n".join(description_lines),
         attendee_emails=[booking["client_email"]],
     )
     supabase = get_supabase()
