@@ -7,7 +7,7 @@ import time
 import urllib.request
 import urllib.error
 import jwt
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, EmailStr, Field, field_validator
@@ -271,7 +271,7 @@ async def _create_booking_with_auth(req: BookRequest, auth_email: str) -> dict:
 async def create_booking_request(
     request: Request,
     req: BookRequest,
-    credentials: Optional[HTTPAuthorizationCredentials] = security,
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ) -> dict:
     """Create a pending booking request and email the consultant. Requires login."""
     auth_email = await _require_email_from_auth(credentials)
@@ -338,7 +338,7 @@ async def _require_email_from_auth(credentials: Optional[HTTPAuthorizationCreden
 @limiter.limit("30/minute")
 async def list_bookings(
     request: Request,
-    credentials: Optional[HTTPAuthorizationCredentials] = security,
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
     email_param: Optional[str] = None,
 ) -> dict:
     """Return bookings for the user's email.

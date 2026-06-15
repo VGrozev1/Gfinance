@@ -2,7 +2,7 @@
 from typing import Optional
 
 import jwt
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from config import ADMIN_EMAILS, SUPABASE_JWT_SECRET
@@ -37,7 +37,7 @@ async def _get_user_from_token(credentials: Optional[HTTPAuthorizationCredential
 @limiter.limit("30/minute")
 async def get_me(
     request: Request,
-    credentials: Optional[HTTPAuthorizationCredentials] = security,
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ):
     """Return current user info if valid JWT provided."""
     user = await _get_user_from_token(credentials)

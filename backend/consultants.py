@@ -5,10 +5,10 @@ Replace with real emails before launch (see roadmap Section 0.4).
 CONSULTANTS = {
     "georgi_grozev": {
         "name": "Georgi Grozev",
-        "email": "ggrozev77@gmail.com",
+        "email": "ggrozev@gfinance.bg",
     },
     "petya_grozeva": {
         "name": "Petya Grozeva",
-        "email": "pgrozeva78@gmail.com",
+        "email": "pgrozeva@gfinance.bg",
     },
 }
