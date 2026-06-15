@@ -64,10 +64,10 @@
 <!-- Tabs -->
 <div class="bg-white dark:bg-slate-900 pb-1">
 <div class="flex border-b border-slate-200 dark:border-slate-800 px-4 gap-8">
-<a class="flex flex-col items-center justify-center border-b-[3px] border-primary text-primary pb-[13px] pt-4" href="#">
+<a id="tab-upcoming" data-tab="upcoming" class="flex flex-col items-center justify-center border-b-[3px] border-primary text-primary pb-[13px] pt-4" href="#">
 <p class="text-sm font-bold leading-normal tracking-wide">Предстоящи</p>
 </a>
-<a class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-slate-500 dark:text-slate-400 pb-[13px] pt-4 hover:text-primary transition-colors" href="#">
+<a id="tab-past" data-tab="past" class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-slate-500 dark:text-slate-400 pb-[13px] pt-4 hover:text-primary transition-colors" href="#">
 <p class="text-sm font-bold leading-normal tracking-wide">Минали</p>
 </a>
 </div>
@@ -75,7 +75,7 @@
 <!-- Section Title -->
 <div class="px-4 pb-2 pt-6">
 <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight mb-2">Моите срещи</h2>
-<h3 class="text-slate-900 dark:text-slate-100 text-xl font-extrabold leading-tight tracking-tight">Следващи консултации</h3>
+<h3 id="meetings-title" class="text-slate-900 dark:text-slate-100 text-xl font-extrabold leading-tight tracking-tight">Следващи консултации</h3>
 <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Управлявайте вашите запазени часове с финансови експерти</p>
 </div>
 <!-- Meetings List -->
@@ -109,8 +109,11 @@
 (function() {
   var CONSULTANTS = {
     georgi_grozev: { name: 'Georgi Grozev', title: 'Специалист в банкирането', img: '../assets/images/georgi-grozev.png' },
-    petya_grozeva: { name: 'Petya Grozeva', title: 'Специалист мама', img: '../assets/images/petya-grozeva.png' }
+    petya_grozeva: { name: 'Petya Grozeva', title: 'Специалист мама', img: '../assets/images/petya-grozeva.png' },
+    irina_panayotova: { name: 'Irina Panayotova', title: 'Експерт жилищно кредитиране', img: '../assets/images/irina-panayotova.png' }
   };
+  var currentTab = 'upcoming';
+  var allBookings = [];
   var MONTHS_BG = ['Януари','Февруари','Март','Април','Май','Юни','Юли','Август','Септември','Октомври','Ноември','Декември'];
   function formatDate(dateStr) {
     var d = new Date(dateStr + 'T12:00:00');
@@ -161,6 +164,45 @@
       fetchAppointments(url);
     }
   }
+  function renderList() {
+    var list = document.getElementById('bookings-list');
+    if (!list) return;
+    var now = new Date();
+    var filtered = allBookings.filter(function(b) {
+      var dt = new Date(b.booking_date + 'T' + (b.booking_time || '23:59:59'));
+      return currentTab === 'upcoming' ? dt >= now : dt < now;
+    });
+    filtered.sort(function(a, b) {
+      var da = new Date(a.booking_date + 'T' + (a.booking_time || '00:00:00'));
+      var db = new Date(b.booking_date + 'T' + (b.booking_time || '00:00:00'));
+      return currentTab === 'upcoming' ? da - db : db - da;
+    });
+    var title = document.getElementById('meetings-title');
+    if (title) title.textContent = currentTab === 'upcoming' ? 'Следващи консултации' : 'Минали консултации';
+    list.innerHTML = '';
+    filtered.forEach(function(b) {
+      list.insertAdjacentHTML('beforeend', renderCard(b));
+    });
+  }
+  function setupTabs() {
+    var tabs = document.querySelectorAll('[data-tab]');
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        currentTab = tab.getAttribute('data-tab');
+        tabs.forEach(function(t) {
+          if (t === tab) {
+            t.classList.add('border-primary', 'text-primary');
+            t.classList.remove('border-transparent', 'text-slate-500', 'dark:text-slate-400');
+          } else {
+            t.classList.remove('border-primary', 'text-primary');
+            t.classList.add('border-transparent', 'text-slate-500', 'dark:text-slate-400');
+          }
+        });
+        renderList();
+      });
+    });
+  }
   function fetchAppointments(url) {
     var list = document.getElementById('bookings-list');
     var prompt = document.getElementById('bookings-login-prompt');
@@ -175,20 +217,17 @@
       if (!data) return;
       if (prompt) prompt.classList.add('hidden');
       list.classList.remove('hidden');
-      list.innerHTML = '';
-      var bookings = data.bookings || [];
-      var upcoming = bookings.filter(function(b) { return new Date(b.booking_date + 'T' + (b.booking_time || '23:59:59')) >= new Date(); });
-      (upcoming.length ? upcoming : bookings).forEach(function(b) {
-        list.insertAdjacentHTML('beforeend', renderCard(b));
-      });
+      allBookings = data.bookings || [];
+      renderList();
     }).catch(function() {
       list.classList.add('hidden');
       if (prompt) { prompt.classList.remove('hidden'); prompt.classList.add('flex'); }
     });
   }
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadBookings);
+    document.addEventListener('DOMContentLoaded', function() { setupTabs(); loadBookings(); });
   } else {
+    setupTabs();
     loadBookings();
   }
 })();

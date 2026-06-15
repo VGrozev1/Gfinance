@@ -357,18 +357,19 @@
     goToLogin();
     return;
   }
-  // First try getUser; if that fails, fall back to getSession to avoid blank profile glitches.
-  window.auth.getUser().then(function(r) {
-    if (!r.error && r.data && r.data.user) {
-      renderProfile(r.data.user);
-      return;
+  // Use the locally-stored session first (fast, reliable on cold load), then
+  // refresh with getUser() to pick up the latest user_metadata from the server.
+  window.supabase.auth.getSession().then(function(sess) {
+    var sessionUser = sess && sess.data && sess.data.session && sess.data.session.user;
+    if (sessionUser) {
+      renderProfile(sessionUser);
     }
-    return window.supabase.auth.getSession().then(function(sess) {
-      if (!sess || !sess.data || !sess.data.session || !sess.data.session.user) {
+    return window.auth.getUser().then(function(r) {
+      if (!r.error && r.data && r.data.user) {
+        renderProfile(r.data.user);
+      } else if (!sessionUser) {
         goToLogin();
-        return;
       }
-      renderProfile(sess.data.session.user);
     });
   }).catch(function() {
     goToLogin();

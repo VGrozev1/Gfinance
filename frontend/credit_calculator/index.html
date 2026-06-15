@@ -28,10 +28,19 @@
 <link rel="stylesheet" href="../assets/css/main.css"/>
 <style>
         body { min-height: max(884px, 100dvh); }
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        input[type=number] {
+          -moz-appearance: textfield;
+          appearance: textfield;
+        }
     </style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
-<div class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-xl">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark">
 <div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
 <nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
   <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
@@ -56,7 +65,7 @@
 </a>
 <div class="size-12"></div>
 </header>
-<main class="flex-1 px-4">
+<main class="flex-1 px-4 w-full max-w-xl mx-auto">
 <div class="py-6">
 <h3 class="text-slate-900 dark:text-slate-100 tracking-tight text-2xl font-extrabold leading-tight">
                 Изчислете вашия кредит
@@ -139,11 +148,11 @@
 </div>
 </main>
 <!-- CTA Section -->
-<footer class="p-4 mt-auto">
-<button class="w-full bg-primary hover:bg-slate-900 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-black/20">
+<footer class="p-4 mt-auto w-full max-w-xl mx-auto">
+<a href="/booking_appointment" class="w-full bg-primary hover:bg-slate-900 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-black/20">
 <span class="material-symbols-outlined text-xl">contact_page</span>
             Заяви консултация
-        </button>
+        </a>
 <p class="text-center text-[10px] text-slate-400 mt-4 leading-relaxed">
             * Изчисленията са ориентировъчни и не представляват официална оферта. 
             Gfinance е регистриран кредитен посредник.
