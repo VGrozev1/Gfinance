@@ -124,7 +124,7 @@
 </div>
 <div class="flex-1">
 <p class="text-sm font-bold text-slate-900 dark:text-white">Georgi Grozev</p>
-<p class="text-xs text-slate-500 dark:text-slate-400">Специалист в банкирането от 20г.</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Над 25 години банков опит на различни Експертски и Мениджърски позиции.</p>
 </div>
 <span class="consultant-check material-symbols-outlined text-primary text-xl opacity-0">check_circle</span>
 </button>
@@ -135,7 +135,18 @@
 </div>
 <div class="flex-1">
 <p class="text-sm font-bold text-slate-900 dark:text-white">Petya Grozeva</p>
-<p class="text-xs text-slate-500 dark:text-slate-400">Специалист мама. Най-голямата машина</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Специалист кредитиране с 15 години банков стаж във водещи финансови институции.</p>
+</div>
+<span class="consultant-check material-symbols-outlined text-primary text-xl opacity-0">check_circle</span>
+</button>
+<button type="button" class="consultant-option flex gap-4 items-center p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all text-left" data-consultant-id="irina_panayotova">
+<div class="relative size-12 shrink-0">
+<img alt="" class="size-full rounded-full object-cover" src="../assets/images/irina-panayotova.png"/>
+<div class="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full"></div>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-slate-900 dark:text-white">Irina Panayotova</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Експерт жилищно кредитиране с над 20 години опит в най-големите банки в България.</p>
 </div>
 <span class="consultant-check material-symbols-outlined text-primary text-xl opacity-0">check_circle</span>
 </button>
@@ -425,7 +436,7 @@
       })
       .then(function(res) {
         if (res.ok) {
-          var names = { georgi_grozev: 'Georgi Grozev', petya_grozeva: 'Petya Grozeva' };
+          var names = { georgi_grozev: 'Georgi Grozev', petya_grozeva: 'Petya Grozeva', irina_panayotova: 'Irina Panayotova' };
           sessionStorage.setItem('lastBooking', JSON.stringify({
             consultant_id: consultantId,
             consultant_name: names[consultantId] || consultantId,

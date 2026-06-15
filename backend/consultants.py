@@ -11,4 +11,8 @@ CONSULTANTS = {
         "name": "Petya Grozeva",
         "email": "pgrozeva@gfinance.bg",
     },
+    "irina_panayotova": {
+        "name": "Irina Panayotova",
+        "email": "ipanayotova@gfinance.bg",
+    },
 }
