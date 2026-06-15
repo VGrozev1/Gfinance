@@ -54,6 +54,7 @@ def send_consultant_booking_request(
     consultant_email: str,
     client_name: str,
     client_email: str,
+    client_phone: str,
     date_str: str,
     time_str: str,
     service: str,
@@ -71,6 +72,7 @@ def send_consultant_booking_request(
     <h2>Нова заявка за консултация</h2>
     <p><strong>Клиент:</strong> {client_name}</p>
     <p><strong>Имейл:</strong> {client_email}</p>
+    <p><strong>Телефон:</strong> {client_phone}</p>
     <p><strong>Дата:</strong> {date_str}</p>
     <p><strong>Час:</strong> {time_str}</p>
     <p><strong>Услуга:</strong> {service or '—'}</p>

@@ -130,21 +130,33 @@ def _decode_supabase_jwt(token: str) -> dict:
 class BookRequest(BaseModel):
     client_name: str = Field(..., min_length=1, max_length=200)
     client_email: EmailStr
+    client_phone: str = Field(..., min_length=1, max_length=30)
     consultant_id: str = Field(..., min_length=1, max_length=100)
     date: str = Field(..., pattern=r"^\d{4}-\d{2}-\d{2}$")
     time: str = Field(..., pattern=r"^\d{1,2}:\d{2}(?::\d{2})?$")
     service: str = Field(default="", max_length=200)
-    notes: str = Field(default="", max_length=2000)
+    notes: str = Field(..., min_length=1, max_length=2000)
 
     @field_validator("client_name", "service")
     @classmethod
     def sanitize_short(cls, v: str) -> str:
         return (v or "").strip()[:200]
 
+    @field_validator("client_phone")
+    @classmethod
+    def sanitize_phone(cls, v: str) -> str:
+        v = (v or "").strip()[:30]
+        if not v:
+            raise ValueError("Моля въведете телефон за връзка.")
+        return v
+
     @field_validator("notes")
     @classmethod
     def sanitize_notes(cls, v: str) -> str:
-        return (v or "").strip()[:2000]
+        v = (v or "").strip()[:2000]
+        if not v:
+            raise ValueError("Моля опишете накратко за какво се отнася консултацията.")
+        return v
 
     @field_validator("date")
     @classmethod
@@ -240,7 +252,7 @@ async def _create_booking_with_auth(req: BookRequest, auth_email: str) -> dict:
         "booking_date": req.date,
         "booking_time": time_val,
         "service": req.service,
-        "notes": req.notes,
+        "notes": f"Телефон: {req.client_phone}\n{req.notes}",
         "status": "pending",
         "token": token,
     }
@@ -256,6 +268,7 @@ async def _create_booking_with_auth(req: BookRequest, auth_email: str) -> dict:
         consultant_email=consultant["email"],
         client_name=req.client_name,
         client_email=req.client_email,
+        client_phone=req.client_phone,
         date_str=req.date,
         time_str=req.time,
         service=req.service,
