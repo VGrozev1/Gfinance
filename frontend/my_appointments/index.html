@@ -151,18 +151,8 @@
   }
   function loadBookings() {
     var list = document.getElementById('bookings-list');
-    var prompt = document.getElementById('bookings-login-prompt');
     if (!list) return;
-    var url = '/api/book/list';
-    if (window.supabase && window.supabase.auth) {
-      window.supabase.auth.getSession().then(function(sess) {
-        var email = sess.data?.session?.user?.email;
-        if (email) url += '?email_param=' + encodeURIComponent(email);
-        return fetchAppointments(url);
-      }).catch(function() { fetchAppointments(url); });
-    } else {
-      fetchAppointments(url);
-    }
+    fetchAppointments('/api/book/list');
   }
   function renderList() {
     var list = document.getElementById('bookings-list');

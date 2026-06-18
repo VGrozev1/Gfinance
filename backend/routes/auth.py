@@ -5,7 +5,8 @@ import jwt
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-from config import ADMIN_EMAILS, SUPABASE_JWT_SECRET
+from config import ADMIN_EMAILS
+from jwt_utils import decode_supabase_jwt
 from limiter import limiter
 
 router = APIRouter(prefix="/api/auth", tags=["auth"])
@@ -16,19 +17,13 @@ async def _get_user_from_token(credentials: Optional[HTTPAuthorizationCredential
     """Verify Supabase JWT and return user payload. Raises HTTPException on invalid."""
     if not credentials:
         raise HTTPException(status_code=401, detail="Missing authorization")
-    token = credentials.credentials
-    if not SUPABASE_JWT_SECRET:
-        raise HTTPException(status_code=500, detail="Auth not configured")
     try:
-        payload = jwt.decode(
-            token,
-            SUPABASE_JWT_SECRET,
-            audience="authenticated",
-            algorithms=["HS256"],
-        )
+        payload = decode_supabase_jwt(credentials.credentials)
         email = (payload.get("email") or "").lower()
         role = "admin" if email in ADMIN_EMAILS else "client"
         return {"email": email, "role": role, "sub": payload.get("sub")}
+    except RuntimeError as e:
+        raise HTTPException(status_code=503, detail=str(e))
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid or expired token")
 

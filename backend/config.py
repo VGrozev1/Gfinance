@@ -42,3 +42,13 @@ API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
 # Admin emails (comma-separated). Users with these emails get role=admin.
 _ADMIN_EMAILS = os.getenv("ADMIN_EMAILS", "vikigrozev@gmail.com,bibigrozeva@gmail.com")
 ADMIN_EMAILS = {e.strip().lower() for e in _ADMIN_EMAILS.split(",") if e.strip()}
+
+# CORS allowed origins (comma-separated). Set to your production domain(s) in Vercel env vars.
+# Example: CORS_ORIGINS=https://gfinance.vercel.app,https://www.gfinance.bg
+# Leave unset for local development (defaults to allow all).
+_CORS_ORIGINS_RAW = os.getenv("CORS_ORIGINS", "")
+CORS_ORIGINS: list[str] = (
+    [o.strip() for o in _CORS_ORIGINS_RAW.split(",") if o.strip()]
+    if _CORS_ORIGINS_RAW.strip()
+    else ["*"]
+)

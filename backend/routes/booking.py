@@ -3,17 +3,15 @@ import logging
 import uuid
 from typing import Optional
 from datetime import datetime, timedelta
-import time
-import urllib.request
-import urllib.error
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
-from config import API_BASE_URL, SUPABASE_ANON_KEY, SUPABASE_JWT_SECRET, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL
+from config import API_BASE_URL
 from consultants import CONSULTANTS
+from jwt_utils import decode_supabase_jwt
 from limiter import limiter
 from email_service import send_client_confirmation, send_client_decline, send_consultant_booking_request
 from google_calendar import create_event
@@ -21,9 +19,7 @@ from google_calendar import create_event
 router = APIRouter(prefix="/api/book", tags=["booking"])
 security = HTTPBearer(auto_error=False)
 
-# Lazy import to avoid circular dependency
 _supabase = None
-_jwks_cache = {"expires_at": 0.0, "jwks_json": ""}
 
 
 def get_supabase():
@@ -33,98 +29,6 @@ def get_supabase():
         from config import SUPABASE_SERVICE_ROLE_KEY, SUPABASE_URL
         _supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
     return _supabase
-
-
-def _fetch_supabase_jwks_json() -> str:
-    if not SUPABASE_URL:
-        raise RuntimeError("SUPABASE_URL is not set")
-    api_key = SUPABASE_ANON_KEY or SUPABASE_SERVICE_ROLE_KEY
-    if not api_key:
-        raise RuntimeError("SUPABASE_ANON_KEY (or SUPABASE_SERVICE_ROLE_KEY) is not set")
-    base = SUPABASE_URL.rstrip("/")
-    # Preferred Supabase JWKS endpoints for ES256/RS256
-    candidates = [
-        f"{base}/auth/v1/.well-known/jwks.json",
-        f"{base}/auth/v1/jwks",
-    ]
-    last_err: Exception | None = None
-    for url in candidates:
-        try:
-            req = urllib.request.Request(
-                url,
-                headers={
-                    "apikey": api_key,
-                    "Authorization": f"Bearer {api_key}",
-                },
-                method="GET",
-            )
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                raw = resp.read()
-                return raw.decode("utf-8", errors="replace")
-        except urllib.error.HTTPError as e:
-            last_err = e
-            # Try next candidate on 404; for 401/403 we also fall through to raise a clear error
-            continue
-        except urllib.error.URLError as e:
-            last_err = e
-            continue
-    if last_err is not None:
-        raise RuntimeError(f"Failed to fetch Supabase JWKS: {last_err}")
-    raise RuntimeError("Failed to fetch Supabase JWKS: unknown error")
-
-
-def _get_jwks_set():
-    now = time.time()
-    if _jwks_cache["jwks_json"] and now < float(_jwks_cache["expires_at"]):
-        return jwt.PyJWKSet.from_json(_jwks_cache["jwks_json"])
-    jwks_json = _fetch_supabase_jwks_json()
-    # Cache for 10 minutes
-    _jwks_cache["jwks_json"] = jwks_json
-    _jwks_cache["expires_at"] = now + 600.0
-    return jwt.PyJWKSet.from_json(jwks_json)
-
-
-def _get_signing_key_from_jwks(token: str):
-    header = jwt.get_unverified_header(token) or {}
-    kid = header.get("kid")
-    if not kid:
-        raise jwt.InvalidTokenError("Missing kid in JWT header")
-    jwks_set = _get_jwks_set()
-    for jwk in (jwks_set.keys or []):
-        if getattr(jwk, "key_id", None) == kid:
-            return jwk.key
-    raise jwt.InvalidTokenError(f"No matching JWK for kid={kid}")
-
-
-def _decode_supabase_jwt(token: str) -> dict:
-    """Decode Supabase JWT supporting HS256 (legacy secret) and RS256 (JWKS)."""
-    if not token:
-        raise jwt.InvalidTokenError("Empty token")
-
-    header = jwt.get_unverified_header(token) or {}
-    alg_raw = header.get("alg")
-    alg = str(alg_raw).strip().upper() if alg_raw is not None else None
-
-    if alg in {"HS256", "HS512"}:
-        if not SUPABASE_JWT_SECRET:
-            raise jwt.InvalidTokenError("SUPABASE_JWT_SECRET not set")
-        return jwt.decode(
-            token,
-            SUPABASE_JWT_SECRET,
-            audience="authenticated",
-            algorithms=[alg],
-        )
-
-    if alg in {"RS256", "RS512", "ES256", "ES384", "ES512"}:
-        signing_key = _get_signing_key_from_jwks(token)
-        return jwt.decode(
-            token,
-            signing_key,
-            audience="authenticated",
-            algorithms=[alg],
-        )
-
-    raise jwt.InvalidAlgorithmError(f"The specified alg value is not allowed: {alg_raw}")
 
 
 class BookRequest(BaseModel):
@@ -261,7 +165,15 @@ async def _create_booking_with_auth(req: BookRequest, auth_email: str) -> dict:
         result = supabase.table("bookings").insert(row).execute()
         if not result.data:
             raise HTTPException(status_code=500, detail="Failed to save booking")
+    except HTTPException:
+        raise
     except Exception as e:
+        err_str = str(e).lower()
+        if "duplicate" in err_str or "unique" in err_str or "23505" in err_str:
+            raise HTTPException(
+                status_code=400,
+                detail="Този час вече е зает. Моля изберете друг ден или час.",
+            )
         raise HTTPException(status_code=500, detail=str(e))
     logging.getLogger("gfinance").info("Sending consultant email to %s for booking %s", consultant["email"], req.client_name)
     send_consultant_booking_request(
@@ -296,7 +208,7 @@ async def _get_email_from_auth(credentials: Optional[HTTPAuthorizationCredential
     if not credentials:
         return None
     try:
-        payload = _decode_supabase_jwt(credentials.credentials)
+        payload = decode_supabase_jwt(credentials.credentials)
         return (payload.get("email") or "").lower()
     except jwt.PyJWTError:
         return None
@@ -317,7 +229,7 @@ async def _require_email_from_auth(credentials: Optional[HTTPAuthorizationCreden
     except Exception:
         header_hint = " (jwt header: unreadable)"
     try:
-        payload = _decode_supabase_jwt(credentials.credentials)
+        payload = decode_supabase_jwt(credentials.credentials)
         email = (payload.get("email") or "").lower()
         if not email:
             raise HTTPException(status_code=401, detail="Входът не може да се провери: липсва email в токена.")
@@ -352,32 +264,9 @@ async def _require_email_from_auth(credentials: Optional[HTTPAuthorizationCreden
 async def list_bookings(
     request: Request,
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
-    email_param: Optional[str] = None,
 ) -> dict:
-    """Return bookings for the user's email.
-
-    Prefers Supabase JWT, but also accepts explicit ?email_param=<email>
-    so logged-in users can still see bookings even if JWT verification
-    is temporarily misconfigured on the backend.
-    """
-    email: Optional[str] = None
-
-    # 1) Prefer explicit email_param when present (frontend passes it from Supabase session)
-    if email_param and "@" in email_param:
-        email = email_param.strip().lower()
-
-    # 2) Otherwise, try strong auth via JWT (if header present)
-    if not email and credentials and credentials.credentials:
-        try:
-            email = await _require_email_from_auth(credentials)
-        except HTTPException:
-            email = None
-
-    if not email:
-        raise HTTPException(
-            status_code=401,
-            detail="Моля влезте в профила си, за да видите вашите срещи.",
-        )
+    """Return bookings for the authenticated user. Requires valid JWT."""
+    email = await _require_email_from_auth(credentials)
     supabase = get_supabase()
     r = (
         supabase.table("bookings")

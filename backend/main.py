@@ -72,9 +72,11 @@ class VercelPathMiddleware:
 
 
 app.add_middleware(VercelPathMiddleware)
+
+from config import CORS_ORIGINS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
