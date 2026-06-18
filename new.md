@@ -31,23 +31,23 @@
 
 ## Frontend / UX
 
-8. **External stock images from `lh3.googleusercontent.com/aida-public`**
+8. **External stock images from `lh3.googleusercontent.com/aida-public`** *(partially done — booking_confirmed now uses local photos)*
    `credit_info`, `consultants_info`, `index.html`, `my_profile`, and `booking_confirmed` all use Google-hosted placeholder images. These can break, load slowly, or get blocked. Replace with owned images stored in `frontend/assets/images/`.
 
-9. **No favicon**
+9. ✅ **No favicon**
    No page defines a `<link rel="icon">`. The browser tab shows a blank icon. Add a favicon at `frontend/assets/images/favicon.ico` and reference it in every page's `<head>`.
 
-10. **No Open Graph / meta description tags**
+10. ✅ **No Open Graph / meta description tags**
     None of the pages have `<meta name="description">`, `og:title`, `og:image`, or `og:description` tags. This hurts SEO and looks bad when shared on social media.
 
-11. **`booking_confirmed` is still phone-app width**
+11. ✅ **`booking_confirmed` is still phone-app width**
     The root container uses `max-w-md mx-auto` — the same narrow phone-app constraint that was fixed on `credit_calculator`. On desktop it looks like a narrow phone screen in the middle of the page.
 
-12. **No loading state on booking form submission**
+12. ✅ **No loading state on booking form submission**
     After the user clicks "Потвърди часа" on `booking_appointment`, the button stays active with no spinner or disabled state while the API call is in flight. A user can double-click and submit twice. Disable the button and show a loading indicator on submit.
 
-13. **No client-side booking cancellation**
-    Users can see their bookings in `my_appointments` but cannot cancel a pending booking themselves. They have to contact the consultant separately. Add a cancel button that calls a new `PATCH /api/book/{id}/cancel` endpoint.
+13. ✅ **No client-side booking cancellation**
+    Users can see their bookings in `my_appointments` but cannot cancel a pending booking themselves. They have to contact the consultant separately. Added cancel button in `my_appointments` for pending bookings; DELETE `/api/book/{id}` endpoint verifies JWT ownership before setting status to `cancelled`.
 
 14. **Confirmation email has no calendar attachment**
     When a consultant confirms a booking, the client gets a plain HTML email but no `.ics` file. Add an ICS attachment so clients can click once to add it to Google Calendar / Apple Calendar / Outlook.
@@ -55,7 +55,7 @@
 15. **No admin dashboard**
     The config defines `ADMIN_EMAILS` and the auth route returns `role: admin`, but there is no admin UI. Admins have no way to see all bookings, manage consultants, or act on pending requests from the app itself.
 
-16. **`booking_confirmed` page details are hardcoded / not populated from URL state**
+16. ✅ **`booking_confirmed` page details are hardcoded / not populated from URL state**
     The "Детайли за срещата" card on `booking_confirmed` shows empty or static placeholder text unless the booking form explicitly populates it. If the user lands there via a direct link or page refresh, the card is blank.
 
 ---

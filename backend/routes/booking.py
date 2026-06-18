@@ -284,6 +284,28 @@ async def list_bookings(
     return {"bookings": r.data or []}
 
 
+@router.delete("/{booking_id}")
+@limiter.limit("10/minute")
+async def cancel_booking(
+    request: Request,
+    booking_id: int,
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
+) -> dict:
+    """Cancel a pending booking. Only the booking owner can cancel."""
+    email = await _require_email_from_auth(credentials)
+    supabase = get_supabase()
+    r = supabase.table("bookings").select("id, client_email, status").eq("id", booking_id).execute()
+    if not r.data:
+        raise HTTPException(status_code=404, detail="Заявката не е намерена.")
+    booking = r.data[0]
+    if booking["client_email"].lower() != email:
+        raise HTTPException(status_code=403, detail="Нямате право да откажете тази заявка.")
+    if booking["status"] != "pending":
+        raise HTTPException(status_code=400, detail="Може да отказвате само очакващи потвърждение заявки.")
+    supabase.table("bookings").update({"status": "cancelled"}).eq("id", booking_id).execute()
+    return {"ok": True}
+
+
 def _get_booking_by_token(token: str) -> Optional[dict]:
     supabase = get_supabase()
     r = supabase.table("bookings").select("*").eq("token", token).execute()

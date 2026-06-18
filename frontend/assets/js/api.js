@@ -67,6 +67,12 @@
       });
     },
 
+    del: function (path) {
+      return authHeaders().then(function (h) {
+        return fetch(url(path), { method: 'DELETE', credentials: 'include', headers: h });
+      });
+    },
+
     health: function () {
       return fetch(url('health'), { credentials: 'include' }).then(function (
         res

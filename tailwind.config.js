@@ -32,6 +32,9 @@ module.exports = {
     'line-through', 'opacity-0', 'opacity-60',
     'shadow-sm', 'text-primary',
     'text-slate-400', 'text-slate-500', 'text-slate-700',
+    // cancel booking button (generated inside JS renderCard)
+    'bg-red-50', 'hover:bg-red-100', 'text-red-500',
+    'dark:bg-red-900/10', 'dark:hover:bg-red-900/20',
   ],
   plugins: [
     require('@tailwindcss/forms'),

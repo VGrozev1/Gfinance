@@ -11,9 +11,15 @@
 <style>
         body { min-height: max(884px, 100dvh); }
     </style>
+<meta name="description" content="Заявката ви е изпратена успешно. Очаквайте потвърждение от консултанта на Gfinance по имейл."/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Потвърждение - Gfinance"/>
+<meta property="og:description" content="Заявката ви е изпратена успешно. Очаквайте потвърждение от консултанта на Gfinance по имейл."/>
+<meta property="og:image" content="/assets/images/logo.png"/>
+<link rel="icon" href="/assets/images/logo.png" type="image/png"/>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
-<div class="relative flex h-auto min-h-screen w-full max-w-md mx-auto flex-col bg-background-light dark:bg-background-dark overflow-x-hidden border-x border-slate-200 dark:border-slate-800">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
 <div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
 <nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
   <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
@@ -40,6 +46,7 @@
 <span class="material-symbols-outlined">menu</span>
 </button>
 </div>
+<div class="w-full max-w-md mx-auto flex-1 flex flex-col">
 <!-- Success Content -->
 <div class="flex flex-col px-4 py-8">
 <div class="flex flex-col items-center gap-6">
@@ -63,7 +70,7 @@
 <!-- Consultant -->
 <div class="flex items-center gap-4">
 <div class="bg-slate-100 dark:bg-slate-800 flex items-center justify-center rounded-full h-12 w-12 overflow-hidden border border-slate-200 dark:border-slate-700">
-<img id="booking-consultant-photo" class="h-full w-full object-cover" alt="Портрет на консултант" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7Bx8WSDJRA-tFmTsr4MQTATFRsYLpjIFOtgmGYjb3W7l8y_M2jHZ-BmI250X_1oxxyxJpDpYcJUAJxKBjQm8QCp5fepmJFtQ-jGihCuW4TJ4CC9jSq_-vCJVIGjAzb6UeovHsECtX-wFlp6w1kqtlxo7BK5g2YgQn9O3kwE_U2IAyOzAUJVwWXnO4C9GQLQBQ6CUxBfwmWjPz_8fHJcF1TUfwVJSI8RP-Hu5uZef71mdF8myRO-gtgoaHFT7TQOC0X7alNEk9uhm3"/>
+<img id="booking-consultant-photo" class="h-full w-full object-cover" alt="Портрет на консултант" src="../assets/images/georgi-grozev.png"/>
 </div>
 <div class="flex flex-col">
 <p class="text-slate-500 dark:text-slate-400 text-xs font-medium">Консултант</p>
@@ -98,6 +105,7 @@
 </a>
 </div>
 </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../assets/js/supabase-config.js"></script>
 <script>if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) { window.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY); }</script>
@@ -107,7 +115,7 @@
 <script>
 (function() {
   var MONTHS_BG = ['Януари','Февруари','Март','Април','Май','Юни','Юли','Август','Септември','Октомври','Ноември','Декември'];
-  var photo = { georgi_grozev: '../assets/images/georgi-grozev.png', petya_grozeva: '../assets/images/petya-grozeva.png' };
+  var photo = { georgi_grozev: '../assets/images/georgi-grozev.png', petya_grozeva: '../assets/images/petya-grozeva.png', irina_panayotova: '../assets/images/irina-panayotova.png' };
   try {
     var raw = sessionStorage.getItem('lastBooking');
     if (raw) {
