@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="bg"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<title>Администрация - Gfinance</title>
+<link rel="stylesheet" href="../assets/css/tailwind.min.css"/>
+<link rel="stylesheet" href="../assets/css/main.css"/>
+<style>body { min-height: max(884px, 100dvh); }</style>
+<meta name="robots" content="noindex,nofollow"/>
+<link rel="icon" href="/assets/images/favicon.png" type="image/png"/>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+
+<!-- Nav overlay + drawer (reused from other pages) -->
+<div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
+<nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
+  <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
+    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="py-4">
+    <a href="/">Начало</a>
+    <a href="/consultants_info">Експерти</a>
+    <a href="/credit_info">Информация за кредити</a>
+    <a href="/credit_calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment">Запис на час</a>
+    <a href="/my_profile">Моят профил</a>
+    <a href="/my_appointments">Моите срещи</a>
+    <a href="/login" data-nav-login>Вход</a>
+  </div>
+</nav>
+
+<!-- Header -->
+<div class="flex items-center bg-white dark:bg-slate-900 p-4 pb-2 justify-between border-b border-slate-200 dark:border-slate-800">
+  <a class="text-primary flex size-12 shrink-0 items-center justify-start transition-colors hover:text-primary/70" href="/">
+    <span class="material-symbols-outlined" style="font-size:28px">arrow_back</span>
+  </a>
+  <a href="/" class="flex-1 flex justify-center">
+    <img alt="Gfinance Logo" class="h-8 w-auto object-contain dark:invert" src="/assets/images/logo-icon.png"/>
+  </a>
+  <button type="button" data-nav-toggle class="size-12 shrink-0 flex items-center justify-center cursor-pointer" aria-label="Отвори меню">
+    <span class="material-symbols-outlined">menu</span>
+  </button>
+</div>
+
+<!-- Access denied state (hidden by default, shown if not admin) -->
+<div id="access-denied" class="hidden flex-1 flex flex-col items-center justify-center gap-4 p-8 text-center">
+  <span class="material-symbols-outlined text-red-400" style="font-size:56px">lock</span>
+  <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100">Нямате достъп</h2>
+  <p class="text-slate-500 dark:text-slate-400 text-sm max-w-xs">Тази страница е достъпна само за администратори. Влезте с администраторски акаунт.</p>
+  <a href="/login" class="mt-2 px-6 py-2.5 bg-primary text-white font-bold rounded-xl text-sm hover:opacity-80 transition-opacity">Вход</a>
+</div>
+
+<!-- Main content (hidden until auth confirmed) -->
+<div id="admin-content" class="hidden flex-1 flex flex-col">
+
+  <!-- Page title + stats -->
+  <div class="px-4 pt-6 pb-4">
+    <h1 class="text-2xl font-extrabold text-slate-900 dark:text-slate-100">Администрация</h1>
+    <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Всички заявки за консултации</p>
+    <!-- Stats row -->
+    <div id="stats-row" class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4"></div>
+  </div>
+
+  <!-- Filters -->
+  <div class="px-4 pb-4 flex flex-wrap gap-3 items-center">
+    <div class="flex gap-1 flex-wrap">
+      <button type="button" data-filter="all"    class="filter-btn active px-3 py-1.5 rounded-full text-xs font-bold border transition-colors">Всички</button>
+      <button type="button" data-filter="pending"    class="filter-btn px-3 py-1.5 rounded-full text-xs font-bold border transition-colors">Очакващи</button>
+      <button type="button" data-filter="confirmed"  class="filter-btn px-3 py-1.5 rounded-full text-xs font-bold border transition-colors">Потвърдени</button>
+      <button type="button" data-filter="declined"   class="filter-btn px-3 py-1.5 rounded-full text-xs font-bold border transition-colors">Отхвърлени</button>
+      <button type="button" data-filter="cancelled"  class="filter-btn px-3 py-1.5 rounded-full text-xs font-bold border transition-colors">Отказани</button>
+    </div>
+    <select id="consultant-filter" class="ml-auto text-xs border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+      <option value="">Всички консултанти</option>
+      <option value="georgi_grozev">Georgi Grozev</option>
+      <option value="petya_grozeva">Petya Grozeva</option>
+      <option value="irina_panayotova">Irina Panayotova</option>
+    </select>
+    <button type="button" id="refresh-btn" title="Обнови" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+      <span class="material-symbols-outlined text-slate-500" style="font-size:18px">refresh</span>
+    </button>
+  </div>
+
+  <!-- Bookings table / cards -->
+  <div class="px-4 pb-8 flex-1">
+    <div id="bookings-loading" class="flex items-center justify-center py-16">
+      <span class="material-symbols-outlined text-primary animate-spin" style="font-size:36px">progress_activity</span>
+    </div>
+    <div id="bookings-empty" class="hidden flex flex-col items-center justify-center py-16 text-center">
+      <span class="material-symbols-outlined text-slate-300 dark:text-slate-600" style="font-size:48px">inbox</span>
+      <p class="mt-3 text-slate-500 dark:text-slate-400 text-sm">Няма намерени заявки</p>
+    </div>
+    <div id="bookings-list" class="hidden flex flex-col gap-3"></div>
+  </div>
+
+</div><!-- /admin-content -->
+
+</div><!-- /root -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/js/supabase-config.js"></script>
+<script>if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) { window.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY); }</script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/main.js" defer></script>
+
+<script>
+(function () {
+  'use strict';
+
+  var CONSULTANTS = {
+    georgi_grozev:    'Georgi Grozev',
+    petya_grozeva:    'Petya Grozeva',
+    irina_panayotova: 'Irina Panayotova',
+  };
+
+  var MONTHS_BG = ['Януари','Февруари','Март','Април','Май','Юни','Юли','Август','Септември','Октомври','Ноември','Декември'];
+
+  var currentFilter    = 'all';
+  var currentConsultant = '';
+  var allBookings      = [];
+
+  /* ── helpers ─────────────────────────────────────────── */
+  function fmtDate(s) {
+    if (!s) return '—';
+    var p = s.split('-');
+    var d = new Date(+p[0], +p[1]-1, +p[2]);
+    return d.getDate() + ' ' + MONTHS_BG[d.getMonth()] + ' ' + d.getFullYear();
+  }
+  function fmtTime(t) {
+    return t ? String(t).substring(0, 5) : '—';
+  }
+
+  var STATUS_LABELS = { pending: 'Очаква', confirmed: 'Потвърдена', declined: 'Отхвърлена', cancelled: 'Отказана' };
+  var STATUS_COLORS = {
+    pending:   'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
+    confirmed: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+    declined:  'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
+    cancelled: 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400',
+  };
+
+  function badge(status) {
+    var cls = STATUS_COLORS[status] || 'bg-slate-100 text-slate-600';
+    return '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ' + cls + '">' + (STATUS_LABELS[status] || status) + '</span>';
+  }
+
+  /* ── stats ───────────────────────────────────────────── */
+  function renderStats() {
+    var counts = { all: allBookings.length, pending: 0, confirmed: 0, declined: 0, cancelled: 0 };
+    allBookings.forEach(function (b) { if (counts[b.status] !== undefined) counts[b.status]++; });
+    var labels = { all: 'Общо', pending: 'Очакващи', confirmed: 'Потвърдени', declined: 'Отхвърлени' };
+    var icons  = { all: 'list', pending: 'schedule', confirmed: 'check_circle', declined: 'cancel' };
+    var row = document.getElementById('stats-row');
+    if (!row) return;
+    row.innerHTML = ['all','pending','confirmed','declined'].map(function (k) {
+      return '<div class="bg-white dark:bg-slate-900 rounded-xl p-3 border border-slate-100 dark:border-slate-800 flex items-center gap-3">' +
+        '<span class="material-symbols-outlined text-primary" style="font-size:22px">' + icons[k] + '</span>' +
+        '<div><p class="text-xl font-extrabold leading-none">' + counts[k] + '</p>' +
+        '<p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">' + labels[k] + '</p></div></div>';
+    }).join('');
+  }
+
+  /* ── card rendering ──────────────────────────────────── */
+  function renderCard(b) {
+    var cName = CONSULTANTS[b.consultant_id] || b.consultant_id;
+    var actions = '';
+    if (b.status === 'pending') {
+      actions =
+        '<button type="button" data-action="confirmed" data-id="' + b.id + '" ' +
+          'class="action-btn flex-1 py-2 rounded-lg text-xs font-bold bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/40 transition-colors">' +
+          '<span class="material-symbols-outlined align-middle mr-1" style="font-size:15px">check</span>Потвърди</button>' +
+        '<button type="button" data-action="declined" data-id="' + b.id + '" ' +
+          'class="action-btn flex-1 py-2 rounded-lg text-xs font-bold bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors">' +
+          '<span class="material-symbols-outlined align-middle mr-1" style="font-size:15px">close</span>Откажи</button>';
+    }
+
+    return '<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden">' +
+      /* header row */
+      '<div class="flex items-start justify-between p-4 pb-3">' +
+        '<div class="flex-1 min-w-0">' +
+          '<p class="font-bold text-slate-900 dark:text-slate-100 truncate">' + esc(b.client_name) + '</p>' +
+          '<p class="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">' + esc(b.client_email) + '</p>' +
+        '</div>' +
+        '<div class="ml-3 shrink-0">' + badge(b.status) + '</div>' +
+      '</div>' +
+      /* details grid */
+      '<div class="px-4 pb-3 grid grid-cols-2 gap-x-4 gap-y-2 text-xs">' +
+        '<div><span class="text-slate-400 dark:text-slate-500 block">Консултант</span><span class="font-semibold text-slate-700 dark:text-slate-300">' + esc(cName) + '</span></div>' +
+        '<div><span class="text-slate-400 dark:text-slate-500 block">Услуга</span><span class="font-semibold text-slate-700 dark:text-slate-300">' + esc(b.service || '—') + '</span></div>' +
+        '<div><span class="text-slate-400 dark:text-slate-500 block">Дата</span><span class="font-semibold text-slate-700 dark:text-slate-300">' + fmtDate(b.booking_date) + '</span></div>' +
+        '<div><span class="text-slate-400 dark:text-slate-500 block">Час</span><span class="font-semibold text-slate-700 dark:text-slate-300">' + fmtTime(b.booking_time) + ' ч.</span></div>' +
+      '</div>' +
+      /* notes collapsible */
+      (b.notes ? '<details class="px-4 pb-3 text-xs"><summary class="cursor-pointer text-slate-400 dark:text-slate-500 select-none">Бележки</summary>' +
+        '<p class="mt-1 text-slate-600 dark:text-slate-400 whitespace-pre-wrap">' + esc(b.notes) + '</p></details>' : '') +
+      /* actions */
+      (actions ? '<div class="flex gap-2 px-4 pb-4">' + actions + '</div>' : '') +
+    '</div>';
+  }
+
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* ── list rendering ──────────────────────────────────── */
+  function filtered() {
+    return allBookings.filter(function (b) {
+      if (currentFilter !== 'all' && b.status !== currentFilter) return false;
+      if (currentConsultant && b.consultant_id !== currentConsultant) return false;
+      return true;
+    });
+  }
+
+  function renderList() {
+    var list  = document.getElementById('bookings-list');
+    var empty = document.getElementById('bookings-empty');
+    if (!list || !empty) return;
+    var rows = filtered();
+    if (!rows.length) {
+      list.classList.add('hidden');
+      empty.classList.remove('hidden');
+      return;
+    }
+    empty.classList.add('hidden');
+    list.classList.remove('hidden');
+    list.innerHTML = rows.map(renderCard).join('');
+  }
+
+  /* ── data fetching ───────────────────────────────────── */
+  function loadBookings() {
+    var loading = document.getElementById('bookings-loading');
+    var list    = document.getElementById('bookings-list');
+    var empty   = document.getElementById('bookings-empty');
+    if (loading) loading.classList.remove('hidden');
+    if (list)    list.classList.add('hidden');
+    if (empty)   empty.classList.add('hidden');
+
+    window.api.get('/api/admin/bookings')
+      .then(function (r) {
+        if (r.status === 401 || r.status === 403) {
+          showAccessDenied();
+          return null;
+        }
+        return r.json();
+      })
+      .then(function (data) {
+        if (!data) return;
+        if (loading) loading.classList.add('hidden');
+        allBookings = data.bookings || [];
+        renderStats();
+        renderList();
+      })
+      .catch(function () {
+        if (loading) loading.classList.add('hidden');
+        if (empty) { empty.classList.remove('hidden'); empty.querySelector('p').textContent = 'Грешка при зареждане.'; }
+      });
+  }
+
+  /* ── actions ─────────────────────────────────────────── */
+  function setupActions() {
+    var list = document.getElementById('bookings-list');
+    if (!list) return;
+    list.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-action]');
+      if (!btn) return;
+      var id     = btn.getAttribute('data-id');
+      var action = btn.getAttribute('data-action');
+      var label  = action === 'confirmed' ? 'потвърдите' : 'откажете';
+      if (!confirm('Сигурни ли сте, че искате да ' + label + ' тази заявка?')) return;
+      btn.disabled = true;
+      var orig = btn.innerHTML;
+      btn.innerHTML = '<span class="material-symbols-outlined animate-spin align-middle" style="font-size:15px">progress_activity</span>';
+
+      window.api.patch('/api/admin/bookings/' + id, { status: action })
+        .then(function (r) {
+        return r.json().then(function (d) { return { ok: r.ok, d: d }; });
+      }).then(function (res) {
+        if (res.ok) {
+          allBookings = allBookings.map(function (b) {
+            return String(b.id) === String(id) ? Object.assign({}, b, { status: action }) : b;
+          });
+          renderStats();
+          renderList();
+        } else {
+          alert(res.d.detail || 'Грешка.');
+          btn.disabled = false;
+          btn.innerHTML = orig;
+        }
+      }).catch(function () {
+        alert('Грешка при свързване.');
+        btn.disabled = false;
+        btn.innerHTML = orig;
+      });
+    });
+  }
+
+  /* ── filter buttons ──────────────────────────────────── */
+  function setupFilters() {
+    document.querySelectorAll('.filter-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        currentFilter = btn.getAttribute('data-filter');
+        document.querySelectorAll('.filter-btn').forEach(function (b) {
+          b.classList.toggle('active', b === btn);
+        });
+        renderList();
+      });
+    });
+    var sel = document.getElementById('consultant-filter');
+    if (sel) sel.addEventListener('change', function () {
+      currentConsultant = sel.value;
+      renderList();
+    });
+    var refresh = document.getElementById('refresh-btn');
+    if (refresh) refresh.addEventListener('click', loadBookings);
+  }
+
+  /* ── access denied ───────────────────────────────────── */
+  function showAccessDenied() {
+    document.getElementById('admin-content').classList.add('hidden');
+    var el = document.getElementById('access-denied');
+    if (el) { el.classList.remove('hidden'); el.classList.add('flex'); }
+  }
+
+  /* ── init ────────────────────────────────────────────── */
+  function init() {
+    document.getElementById('admin-content').classList.remove('hidden');
+    document.getElementById('admin-content').classList.add('flex');
+    setupFilters();
+    setupActions();
+    loadBookings();
+  }
+
+  /* Wait for auth.js to expose getAuthToken, then check role */
+  function waitForAuth(attempts) {
+    attempts = attempts || 0;
+    if (typeof window.getAuthToken !== 'function') {
+      if (attempts > 40) { showAccessDenied(); return; }
+      return setTimeout(function () { waitForAuth(attempts + 1); }, 100);
+    }
+    window.api.get('/api/auth/me')
+      .then(function (r) {
+        if (!r.ok) { showAccessDenied(); return; }
+        return r.json().then(function (u) {
+          if (u.role !== 'admin') { showAccessDenied(); return; }
+          init();
+        });
+      })
+      .catch(function () { showAccessDenied(); });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { waitForAuth(); });
+  } else {
+    waitForAuth();
+  }
+})();
+</script>
+
+<style>
+  .filter-btn {
+    border-color: #e2e8f0;
+    color: #64748b;
+    background: white;
+  }
+  .dark .filter-btn {
+    border-color: #334155;
+    color: #94a3b8;
+    background: #1e293b;
+  }
+  .filter-btn.active {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+  }
+  .dark .filter-btn.active {
+    background: #f1f5f9;
+    color: #0f172a;
+    border-color: #f1f5f9;
+  }
+</style>
+</body></html>

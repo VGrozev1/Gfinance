@@ -52,8 +52,8 @@
 14. **Confirmation email has no calendar attachment**
     When a consultant confirms a booking, the client gets a plain HTML email but no `.ics` file. Add an ICS attachment so clients can click once to add it to Google Calendar / Apple Calendar / Outlook.
 
-15. **No admin dashboard**
-    The config defines `ADMIN_EMAILS` and the auth route returns `role: admin`, but there is no admin UI. Admins have no way to see all bookings, manage consultants, or act on pending requests from the app itself.
+15. ✅ **No admin dashboard**
+    The config defines `ADMIN_EMAILS` and the auth route returns `role: admin`, but there is no admin UI. Added `frontend/admin/index.html` — shows all bookings with status/consultant filters, stats row, and confirm/decline actions for pending bookings. Backend: `GET /api/admin/bookings` + `PATCH /api/admin/bookings/{id}` in `backend/routes/admin.py`, guarded by `ADMIN_EMAILS`.
 
 16. ✅ **`booking_confirmed` page details are hardcoded / not populated from URL state**
     The "Детайли за срещата" card on `booking_confirmed` shows empty or static placeholder text unless the booking form explicitly populates it. If the user lands there via a direct link or page refresh, the card is blank.

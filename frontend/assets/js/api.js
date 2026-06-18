@@ -73,6 +73,17 @@
       });
     },
 
+    patch: function (path, data) {
+      return authHeaders().then(function (h) {
+        return fetch(url(path), {
+          method: 'PATCH',
+          headers: Object.assign({}, h, { 'Content-Type': 'application/json' }),
+          credentials: 'include',
+          body: JSON.stringify(data),
+        });
+      });
+    },
+
     health: function () {
       return fetch(url('health'), { credentials: 'include' }).then(function (
         res

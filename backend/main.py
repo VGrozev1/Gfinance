@@ -139,8 +139,11 @@ async def shutdown():
     logger.info("Gfinance backend shutting down")
 
 
+from routes.admin import router as admin_router
+
 app.include_router(booking_router)
 app.include_router(auth_router)
+app.include_router(admin_router)
 
 
 @app.get("/health")
