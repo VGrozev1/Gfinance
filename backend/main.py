@@ -89,7 +89,7 @@ from routes.booking import (
     _create_booking_with_auth,
     _require_email_from_auth as booking_require_email,
 )
-from fastapi import Depends, Request, HTTPException
+from fastapi import BackgroundTasks, Depends, Request, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 _booking_security = HTTPBearer(auto_error=False)
@@ -98,6 +98,7 @@ _booking_security = HTTPBearer(auto_error=False)
 async def _vercel_book_post_impl(
     request: Request,
     credentials: Optional[HTTPAuthorizationCredentials],
+    background_tasks: BackgroundTasks,
 ):
     try:
         body = await request.json()
@@ -109,17 +110,18 @@ async def _vercel_book_post_impl(
     except Exception as e:
         raise HTTPException(status_code=422, detail=str(e))
     auth_email = await booking_require_email(credentials)
-    return await _create_booking_with_auth(req, auth_email)
+    return await _create_booking_with_auth(req, auth_email, background_tasks)
 
 
 @app.post("/api")
 @app.post("/api/")
 async def vercel_book_post(
     request: Request,
+    background_tasks: BackgroundTasks,
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(_booking_security),
 ):
     """Vercel: POST /api (or /api/) with JSON body so body is preserved."""
-    return await _vercel_book_post_impl(request, credentials)
+    return await _vercel_book_post_impl(request, credentials, background_tasks)
 
 
 @app.on_event("startup")

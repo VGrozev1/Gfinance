@@ -4,7 +4,7 @@ import uuid
 from typing import Optional
 from datetime import datetime, timedelta
 import jwt
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, EmailStr, Field, field_validator
@@ -119,7 +119,7 @@ async def get_taken_slots(
     return {"taken": taken}
 
 
-async def _create_booking_with_auth(req: BookRequest, auth_email: str) -> dict:
+async def _create_booking_with_auth(req: BookRequest, auth_email: str, background_tasks: Optional[BackgroundTasks] = None) -> dict:
     """Core booking creation (used by both POST /api/book and POST /api for Vercel)."""
     if req.client_email.lower() != auth_email:
         raise HTTPException(
@@ -175,8 +175,8 @@ async def _create_booking_with_auth(req: BookRequest, auth_email: str) -> dict:
                 detail="Този час вече е зает. Моля изберете друг ден или час.",
             )
         raise HTTPException(status_code=500, detail=str(e))
-    logging.getLogger("gfinance").info("Sending consultant email to %s for booking %s", consultant["email"], req.client_name)
-    send_consultant_booking_request(
+    logging.getLogger("gfinance").info("Queuing consultant email to %s for booking %s", consultant["email"], req.client_name)
+    email_kwargs = dict(
         consultant_email=consultant["email"],
         client_name=req.client_name,
         client_email=req.client_email,
@@ -186,8 +186,12 @@ async def _create_booking_with_auth(req: BookRequest, auth_email: str) -> dict:
         service=req.service,
         notes=req.notes,
         confirm_token=token,
-        decline_token=token,  # same token for both; we distinguish by path
+        decline_token=token,
     )
+    if background_tasks is not None:
+        background_tasks.add_task(send_consultant_booking_request, **email_kwargs)
+    else:
+        send_consultant_booking_request(**email_kwargs)
     return {"ok": True, "message": "Your request has been sent. The consultant will confirm shortly."}
 
 
@@ -196,11 +200,12 @@ async def _create_booking_with_auth(req: BookRequest, auth_email: str) -> dict:
 async def create_booking_request(
     request: Request,
     req: BookRequest,
+    background_tasks: BackgroundTasks,
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ) -> dict:
     """Create a pending booking request and email the consultant. Requires login."""
     auth_email = await _require_email_from_auth(credentials)
-    return await _create_booking_with_auth(req, auth_email)
+    return await _create_booking_with_auth(req, auth_email, background_tasks)
 
 
 async def _get_email_from_auth(credentials: Optional[HTTPAuthorizationCredentials]) -> Optional[str]:

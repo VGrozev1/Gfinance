@@ -1,6 +1,6 @@
 {
-  "installCommand": "pip install --break-system-packages -r requirements.txt",
-  "buildCommand": "mkdir -p public && cp -r frontend/* public/",
+  "installCommand": "pip install --break-system-packages -r requirements.txt && npm install",
+  "buildCommand": "npx tailwindcss -i frontend/assets/css/tailwind-src.css -o frontend/assets/css/tailwind.min.css --minify && mkdir -p public && cp -r frontend/* public/",
   "trailingSlash": true,
   "rewrites": [
     { "source": "/api/:path*", "destination": "/api" },

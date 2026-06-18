@@ -18,14 +18,14 @@
 
 ## Performance
 
-5. **Tailwind CDN in production**
-   Every page loads the full Tailwind CDN script with JIT compilation in the browser. Replace with a pre-built, purged CSS file. This will cut per-page CSS payload by 90%+ and remove the compile step from page load.
+5. ✅ **Tailwind CDN in production**
+   Every page loads the full Tailwind CDN script with JIT compilation in the browser. Replaced with a pre-built, purged CSS file (`tailwind.min.css`, 36KB vs ~350KB CDN). All 12 pages updated. Vercel build command updated to run `npx tailwindcss --minify` before copying files. Run `npm run build:css` locally after adding new HTML classes.
 
-6. **Google Fonts loaded twice on several pages**
-   `booking_confirmed`, `my_appointments`, and others have two `<link>` tags for `Material+Symbols+Outlined` (one without FILL, one with FILL). Merge them into a single request.
+6. ✅ **Google Fonts loaded twice on several pages**
+   `booking_confirmed`, `my_appointments`, and others had two `<link>` tags for `Material+Symbols+Outlined` (one without FILL, one with FILL). Removed the old one without the FILL axis from all 5 affected pages.
 
-7. **SMTP connection opened per email**
-   `email_service.py` opens and tears down a new SMTP connection for every email sent. This adds ~300–500 ms latency to every booking confirmation. Cache or reuse the connection, or switch to an async email library.
+7. ✅ **SMTP connection opened per email**
+   `email_service.py` opens and tears down a new SMTP connection for every email sent. This was blocking the booking API response for ~300–500 ms. Email is now sent via FastAPI `BackgroundTasks` — the HTTP response returns immediately after the DB insert, and the email fires in the background.
 
 ---
 
