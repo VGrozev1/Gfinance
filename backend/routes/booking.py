@@ -288,7 +288,7 @@ async def list_bookings(
 @limiter.limit("10/minute")
 async def cancel_booking(
     request: Request,
-    booking_id: int,
+    booking_id: str,
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ) -> dict:
     """Cancel a pending booking. Only the booking owner can cancel."""

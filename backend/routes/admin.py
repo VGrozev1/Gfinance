@@ -61,7 +61,7 @@ async def list_all_bookings(
 @limiter.limit("30/minute")
 async def update_booking_status(
     request: Request,
-    booking_id: int,
+    booking_id: str,
     body: StatusUpdate,
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ) -> dict:
