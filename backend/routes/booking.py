@@ -156,7 +156,8 @@ async def _create_booking_with_auth(req: BookRequest, auth_email: str, backgroun
         "booking_date": req.date,
         "booking_time": time_val,
         "service": req.service,
-        "notes": f"Телефон: {req.client_phone}\n{req.notes}",
+        "client_phone": req.client_phone,
+        "notes": req.notes,
         "status": "pending",
         "token": token,
     }
@@ -275,7 +276,7 @@ async def list_bookings(
     supabase = get_supabase()
     r = (
         supabase.table("bookings")
-        .select("id, client_name, client_email, consultant_id, booking_date, booking_time, service, notes, status, created_at")
+        .select("id, client_name, client_email, client_phone, consultant_id, booking_date, booking_time, service, notes, status, created_at")
         .eq("client_email", email)
         .order("booking_date", desc=True)
         .order("booking_time", desc=True)
@@ -304,6 +305,25 @@ async def cancel_booking(
         raise HTTPException(status_code=400, detail="Може да отказвате само очакващи потвърждение заявки.")
     supabase.table("bookings").update({"status": "cancelled"}).eq("id", booking_id).execute()
     return {"ok": True}
+
+
+async def handle_vercel_booking(
+    request: Request,
+    credentials: Optional[HTTPAuthorizationCredentials],
+    background_tasks: BackgroundTasks,
+) -> dict:
+    """Handle booking from Vercel's POST /api entry point (raw JSON body)."""
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON body")
+    body = {k: v for k, v in (body or {}).items() if k != "_path"}
+    try:
+        req = BookRequest(**body)
+    except Exception as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    auth_email = await _require_email_from_auth(credentials)
+    return await _create_booking_with_auth(req, auth_email, background_tasks)
 
 
 def _get_booking_by_token(token: str) -> Optional[dict]:
@@ -380,12 +400,42 @@ async def decline_booking(token: str):
 
 
 def _html_page(title: str, message: str, error: bool = False) -> HTMLResponse:
-    color = "#ef4444" if error else "#22c55e"
+    icon = "cancel" if error else "check_circle"
+    icon_color = "#ef4444" if error else "#22c55e"
     html = f"""<!DOCTYPE html>
-<html lang="bg"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{title}</title></head>
-<body style="font-family: sans-serif; max-width: 480px; margin: 60px auto; padding: 24px;">
-<h2 style="color: {color};">{title}</h2>
-<p>{message}</p>
-</body></html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>{title} – Gfinance</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after {{ box-sizing: border-box; margin: 0; padding: 0; }}
+  body {{ font-family: Manrope, sans-serif; background: #f6f6f8; color: #0f172a; min-height: 100dvh; display: flex; flex-direction: column; }}
+  .nav {{ display: flex; align-items: center; justify-content: center; padding: 16px; background: #fff; border-bottom: 1px solid #e2e8f0; }}
+  .nav img {{ height: 36px; width: auto; }}
+  .card {{ background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; padding: 40px 32px; max-width: 440px; width: 100%; margin: auto; text-align: center; }}
+  .icon {{ font-size: 64px; color: {icon_color}; }}
+  h1 {{ font-size: 1.5rem; font-weight: 800; margin: 16px 0 8px; }}
+  p {{ color: #475569; font-size: 0.95rem; line-height: 1.6; }}
+  .btn {{ display: inline-block; margin-top: 28px; padding: 12px 28px; background: #000; color: #fff; font-weight: 700; font-size: 0.9rem; border-radius: 12px; text-decoration: none; }}
+  .btn:hover {{ opacity: 0.85; }}
+</style>
+</head>
+<body>
+<div class="nav">
+  <a href="/"><img src="/assets/images/logo-icon.png" alt="Gfinance"/></a>
+</div>
+<div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div class="card">
+    <span class="material-symbols-outlined icon">{icon}</span>
+    <h1>{title}</h1>
+    <p>{message}</p>
+    <a href="/" class="btn">Към началната страница</a>
+  </div>
+</div>
+</body>
+</html>
 """
     return HTMLResponse(content=html, headers={"Content-Type": "text/html; charset=utf-8"})

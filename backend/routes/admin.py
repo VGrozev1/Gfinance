@@ -47,7 +47,7 @@ async def list_all_bookings(
     from routes.booking import get_supabase
     supabase = get_supabase()
     q = supabase.table("bookings").select(
-        "id, client_name, client_email, consultant_id, booking_date, booking_time, service, notes, status, created_at"
+        "id, client_name, client_email, client_phone, consultant_id, booking_date, booking_time, service, notes, status, created_at"
     )
     if status and status in _ALLOWED_STATUSES:
         q = q.eq("status", status)

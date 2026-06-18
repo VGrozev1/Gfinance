@@ -62,14 +62,18 @@
 
 ## Backend / Code Quality
 
-17. **`@app.on_event("startup"/"shutdown")` is deprecated**
-    FastAPI recommends using the `lifespan` context manager (introduced in Starlette 0.20). The `@on_event` decorator will be removed in a future version. Migrate `backend/main.py` to use `@asynccontextmanager`.
+17. ✅ **`@app.on_event("startup"/"shutdown")` is deprecated**
+    Migrated `backend/main.py` to use `@asynccontextmanager` lifespan. Startup and shutdown logic are now in a single `lifespan()` function passed to `FastAPI(lifespan=lifespan)`.
 
-18. **`_html_page` for confirm/decline has no branding**
-    When a consultant clicks Confirm or Decline from their email, they land on a plain white page with no logo, no navigation, and no link back to the site. Give it minimal Gfinance branding and a "Go back to site" link.
+18. ✅ **`_html_page` for confirm/decline has no branding**
+    Replaced plain white page with a branded page: Gfinance logo, Material icon, card layout, "Към началната страница" button.
 
-19. **Duplicate router import in `main.py`**
-    `backend/main.py` imports `booking_router` via `from routes.booking import router as booking_router` and then also imports `BookRequest`, `_create_booking_with_auth`, and `_require_email_from_auth` from the same module. The private helpers should stay private; the Vercel POST handler in `main.py` should be moved into `routes/booking.py` as a proper route.
+19. ✅ **Duplicate router import in `main.py`**
+    Extracted Vercel POST handler logic into `handle_vercel_booking()` (public) in `routes/booking.py`. `main.py` now only imports `router` and `handle_vercel_booking` — no private helpers, no `BookRequest` re-import.
 
-20. **Phone number stored inside the `notes` field**
-    `_create_booking_with_auth` prepends `"Телефон: {req.client_phone}\n"` into the `notes` column instead of writing to a dedicated `client_phone` column. This makes it impossible to query or display the phone number separately without string parsing.
+20. ✅ **Phone number stored inside the `notes` field**
+    `client_phone` is now stored in its own column. **Requires one manual SQL step in Supabase SQL Editor:**
+    ```sql
+    ALTER TABLE bookings ADD COLUMN IF NOT EXISTS client_phone TEXT NOT NULL DEFAULT '';
+    ```
+    Admin dashboard shows phone number in its own row on each booking card.

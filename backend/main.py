@@ -1,5 +1,6 @@
 import logging
 import sys
+from contextlib import asynccontextmanager
 from pathlib import Path
 from urllib.parse import unquote, parse_qsl, urlencode
 
@@ -23,7 +24,20 @@ from .limiter import limiter
 # Ensure backend is on path for imports
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-app = FastAPI(title="Gfinance Backend")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    from config import EMAIL_SMTP_HOST, EMAIL_SMTP_USER
+    logger.info("Gfinance backend starting")
+    if EMAIL_SMTP_HOST and EMAIL_SMTP_USER:
+        logger.info("Email configured: sending from %s via %s", EMAIL_SMTP_USER, EMAIL_SMTP_HOST)
+    else:
+        logger.warning("Email NOT configured. Appointment emails will not be sent. Set EMAIL_SMTP_* in backend/.env")
+    yield
+    logger.info("Gfinance backend shutting down")
+
+
+app = FastAPI(title="Gfinance Backend", lifespan=lifespan)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
@@ -82,35 +96,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from routes.booking import router as booking_router
+from routes.booking import router as booking_router, handle_vercel_booking
 from routes.auth import router as auth_router
-from routes.booking import (
-    BookRequest,
-    _create_booking_with_auth,
-    _require_email_from_auth as booking_require_email,
-)
-from fastapi import BackgroundTasks, Depends, Request, HTTPException
+from routes.admin import router as admin_router
+from fastapi import BackgroundTasks, Depends, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 _booking_security = HTTPBearer(auto_error=False)
-
-
-async def _vercel_book_post_impl(
-    request: Request,
-    credentials: Optional[HTTPAuthorizationCredentials],
-    background_tasks: BackgroundTasks,
-):
-    try:
-        body = await request.json()
-    except Exception:
-        raise HTTPException(status_code=400, detail="Invalid JSON body")
-    body = {k: v for k, v in (body or {}).items() if k != "_path"}
-    try:
-        req = BookRequest(**body)
-    except Exception as e:
-        raise HTTPException(status_code=422, detail=str(e))
-    auth_email = await booking_require_email(credentials)
-    return await _create_booking_with_auth(req, auth_email, background_tasks)
 
 
 @app.post("/api")
@@ -120,26 +112,8 @@ async def vercel_book_post(
     background_tasks: BackgroundTasks,
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(_booking_security),
 ):
-    """Vercel: POST /api (or /api/) with JSON body so body is preserved."""
-    return await _vercel_book_post_impl(request, credentials, background_tasks)
-
-
-@app.on_event("startup")
-async def startup():
-    from config import EMAIL_SMTP_HOST, EMAIL_SMTP_USER
-    logger.info("Gfinance backend starting")
-    if EMAIL_SMTP_HOST and EMAIL_SMTP_USER:
-        logger.info("Email configured: sending from %s via %s", EMAIL_SMTP_USER, EMAIL_SMTP_HOST)
-    else:
-        logger.warning("Email NOT configured. Appointment emails will not be sent. Set EMAIL_SMTP_* in backend/.env")
-
-
-@app.on_event("shutdown")
-async def shutdown():
-    logger.info("Gfinance backend shutting down")
-
-
-from routes.admin import router as admin_router
+    """Vercel: POST /api (or /api/) entry point — delegates to booking handler."""
+    return await handle_vercel_booking(request, credentials, background_tasks)
 
 app.include_router(booking_router)
 app.include_router(auth_router)
