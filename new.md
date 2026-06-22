@@ -207,7 +207,7 @@ Recommended changes:
 
 For descriptions: include the city (Бургас), the service (кредитна консултация), and a benefit (безплатна, без ангажимент).
 
-### Step 5 — Target local keywords in page content
+### Step 5 ✅ — Target local keywords in page content
 Add these phrases naturally in the text of `credit_info` and `consultants_info`:
 - "кредитен консултант Бургас"
 - "ипотечен кредит Бургас"
@@ -229,7 +229,7 @@ Easy first links to get:
 
 **Target:** aim for 10–20 quality Bulgarian backlinks in the first 3 months.
 
-### Step 7 — Add a blog or articles section
+### Step 7 ✅ — Add a blog or articles section
 Google strongly favors sites that publish fresh, useful content.
 
 Article ideas that match what people search for:
@@ -263,4 +263,4 @@ Action plan:
 1. Check Google Search Console weekly: which queries bring traffic? What pages get impressions but no clicks? (Those need better titles/descriptions.)
 2. Check Google Analytics (add it to the site — free): where do users drop off?
 3. Every month: publish one new article, respond to new reviews, check for new backlink opportunities
-4. Track your position for "кредитен консултант Бургас" — it should improve within 3–6 months if you follow Steps 1–7
+4. Track your position for "кредитен консултант Бургас" — it should improve within 3–6 months if you follow Steps 1–72

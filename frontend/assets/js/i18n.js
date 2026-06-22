@@ -12,6 +12,7 @@
       'nav.appointments': 'Моите срещи',
       'nav.login': 'Вход',
       'nav.signup': 'Регистрация',
+      'nav.blog': 'Блог',
       // Homepage
       'home.hero.title': 'Вашият доверен партньор в кредитирането!',
       'home.hero.sub': 'Професионални кредитни консултации за вашия финансов успех и спокойствие.',
@@ -162,6 +163,7 @@
       'nav.appointments': 'My Appointments',
       'nav.login': 'Login',
       'nav.signup': 'Register',
+      'nav.blog': 'Blog',
       // Homepage
       'home.hero.title': 'Your Trusted Partner in Credit!',
       'home.hero.sub': 'Professional credit consultations for your financial success and peace of mind.',
