@@ -31,8 +31,8 @@
 
 ## Frontend / UX
 
-8. **External stock images from `lh3.googleusercontent.com/aida-public`** *(partially done — booking_confirmed now uses local photos)*
-   `credit_info`, `consultants_info`, `index.html`, `my_profile`, and `booking_confirmed` all use Google-hosted placeholder images. These can break, load slowly, or get blocked. Replace with owned images stored in `frontend/assets/images/`.
+8. ✅ **External stock images from `lh3.googleusercontent.com/aida-public`**
+   Skipped — will replace with owned images when available.
 
 9. ✅ **No favicon**
    No page defines a `<link rel="icon">`. The browser tab shows a blank icon. Add a favicon at `frontend/assets/images/favicon.ico` and reference it in every page's `<head>`.
@@ -49,8 +49,7 @@
 13. ✅ **No client-side booking cancellation**
     Users can see their bookings in `my_appointments` but cannot cancel a pending booking themselves. They have to contact the consultant separately. Added cancel button in `my_appointments` for pending bookings; DELETE `/api/book/{id}` endpoint verifies JWT ownership before setting status to `cancelled`.
 
-14. **Confirmation email has no calendar attachment**
-    When a consultant confirms a booking, the client gets a plain HTML email but no `.ics` file. Add an ICS attachment so clients can click once to add it to Google Calendar / Apple Calendar / Outlook.
+14. ✅ **Confirmation email has no calendar attachment** *(skipped — keeping it basic)*
 
 15. ✅ **No admin dashboard**
     The config defines `ADMIN_EMAILS` and the auth route returns `role: admin`, but there is no admin UI. Added `frontend/admin/index.html` — shows all bookings with status/consultant filters, stats row, and confirm/decline actions for pending bookings. Backend: `GET /api/admin/bookings` + `PATCH /api/admin/bookings/{id}` in `backend/routes/admin.py`, guarded by `ADMIN_EMAILS`.
@@ -153,7 +152,7 @@
 
 These are actions ranked from highest to lowest impact. Do them in order.
 
-### Step 1 — Google Search Console (do this today, free)
+### Step 1 ✅ — Google Search Console
 1. Go to [search.google.com/search-console](https://search.google.com/search-console)
 2. Add `https://gfinance.bg` as a property
 3. Verify ownership via the HTML tag method — add `<meta name="google-site-verification" content="YOUR_CODE"/>` to `frontend/index.html`
@@ -161,7 +160,7 @@ These are actions ranked from highest to lowest impact. Do them in order.
 5. Check "Coverage" after 2–3 days to see if all pages are indexed
 6. **Why it matters:** Google can't rank pages it hasn't found. Search Console tells you exactly what Google sees and what's broken.
 
-### Step 2 — Google Business Profile (do this today, free)
+### Step 2 ✅ — Google Business Profile
 1. Go to [business.google.com](https://business.google.com) and create a profile for Gfinance
 2. Fill in: business name (Gfinance), category (Финансов консултант / Financial Consultant), address (Бургас, ул. Поп Груйо 66А), phone, website, hours
 3. Verify via postcard or phone
@@ -169,7 +168,7 @@ These are actions ranked from highest to lowest impact. Do them in order.
 5. Ask your first 5 clients to leave a Google review
 6. **Why it matters:** Google Business Profile is how you appear in Google Maps and in the local "3-pack" results — the box with 3 businesses that shows up before regular search results for "кредитен консултант Бургас"
 
-### Step 3 — Add Schema.org structured data to the homepage
+### Step 3 ✅ — Add Schema.org structured data to the homepage
 Structured data tells Google exactly what your business is. Add this JSON-LD block inside `<head>` of `frontend/index.html`:
 ```html
 <script type="application/ld+json">
@@ -244,7 +243,7 @@ Even 4–6 articles (500–800 words each) will significantly increase the numbe
 ### Step 8 — Core Web Vitals (technical performance)
 Google uses page speed as a ranking signal.
 
-Check your scores at [pagespeed.web.dev](https://pagespeed.web.dev) with your live URL. Target: all scores above 90.
+Check your scores at [pagespeed.web.dev](2 with your live URL. Target: all scores above 90.
 
 Current optimizations already done: compiled Tailwind CSS, no CDN JS frameworks on most pages.
 Remaining quick wins:
