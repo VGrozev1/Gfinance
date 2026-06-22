@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../assets/css/tailwind.min.css"/>
+<script src="../assets/js/i18n.js"></script>
 <link rel="stylesheet" href="../assets/css/main.css"/>
 <style>
         body { min-height: max(884px, 100dvh); }
@@ -32,17 +33,25 @@
 <div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
 <nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
   <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
-    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <span class="text-slate-900 dark:text-slate-100 font-bold" data-i18n="nav.menu">Меню</span>
     <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
   </div>
   <div class="py-4">
-    <a href="/">Начало</a>
-    <a href="/consultants_info">Експерти</a>
-    <a href="/credit_info">Информация за кредити</a>
-    <a href="/credit_calculator">Кредитен калкулатор</a>
-    <a href="/booking_appointment">Запис на час</a>
-    <a href="/login" data-nav-login>Вход</a>
+    <a href="/" data-i18n="nav.home">Начало</a>
+    <a href="/consultants_info" data-i18n="nav.experts">Експерти</a>
+    <a href="/credit_info" data-i18n="nav.credit_info">Информация за кредити</a>
+    <a href="/credit_calculator" data-i18n="nav.calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment" data-i18n="nav.book">Запис на час</a>
+    <a href="/my_profile" data-i18n="nav.profile">Моят профил</a>
+    <a href="/my_appointments" data-i18n="nav.appointments">Моите срещи</a>
+    <a href="/login" data-nav-login data-i18n="nav.login">Вход</a>
   </div>
+<div class="px-4 pt-2 mt-2 border-t border-slate-100 dark:border-slate-700">
+  <button type="button" onclick="window.i18n && window.i18n.toggle()" class="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-primary dark:text-slate-100 border border-primary/20 dark:border-slate-600 rounded-lg hover:bg-primary/5 dark:hover:bg-white/5 transition-colors">
+    <span class="material-symbols-outlined" style="font-size:18px">language</span>
+    <span id="lang-label">EN</span>
+  </button>
+</div>
 </nav>
 <header class="flex items-center p-4 pb-2 justify-between">
 <button type="button" data-nav-toggle aria-label="Отвори меню" class="text-primary flex size-12 shrink-0 items-center justify-start cursor-pointer">
@@ -55,7 +64,7 @@
 </header>
 <main class="flex-1 px-4 w-full max-w-xl mx-auto">
 <div class="py-6">
-<h3 class="text-slate-900 dark:text-slate-100 tracking-tight text-2xl font-extrabold leading-tight">
+<h3 class="text-slate-900 dark:text-slate-100 tracking-tight text-2xl font-extrabold leading-tight" data-i18n="calc.title">
                 Изчислете вашия кредит
             </h3>
 <p class="text-slate-500 dark:text-slate-400 mt-2 text-sm">
@@ -109,16 +118,16 @@
 </div>
 <div class="relative z-10">
 <div class="flex flex-col items-center mb-6">
-<p class="text-white/70 text-sm font-medium mb-1">Месечна вноска</p>
+<p class="text-white/70 text-sm font-medium mb-1" data-i18n="calc.monthly.label">Месечна вноска</p>
 <p id="result-monthly" class="text-4xl font-extrabold tracking-tight">— eur.</p>
 </div>
 <div class="border-t border-white/20 pt-4 flex justify-between items-center">
 <div class="text-left">
-<p class="text-xs text-white/60 uppercase tracking-wider">Обща сума</p>
+<p class="text-xs text-white/60 uppercase tracking-wider" data-i18n="calc.total.label">Обща сума</p>
 <p id="result-total" class="text-lg font-bold">— eur.</p>
 </div>
 <div class="text-right">
-<p class="text-xs text-white/60 uppercase tracking-wider">Общо лихва</p>
+<p class="text-xs text-white/60 uppercase tracking-wider" data-i18n="calc.interest.label">Общо лихва</p>
 <p id="result-interest" class="text-lg font-bold text-white/90">— eur.</p>
 </div>
 </div>
@@ -130,7 +139,7 @@
 <span class="material-symbols-outlined">verified</span>
 </div>
 <div>
-<h4 class="text-sm font-bold text-slate-900 dark:text-white">Индивидуални условия</h4>
+<h4 class="text-sm font-bold text-slate-900 dark:text-white" data-i18n="calc.promo.title">Индивидуални условия</h4>
 <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Gfinance договаря най-добрите условия за вас спрямо вашия профил.</p>
 </div>
 </div>

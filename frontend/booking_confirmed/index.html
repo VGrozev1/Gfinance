@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <title>Потвърждение - Gfinance</title>
 <link rel="stylesheet" href="../assets/css/tailwind.min.css"/>
+<script src="../assets/js/i18n.js"></script>
 <link rel="stylesheet" href="../assets/css/main.css"/>
 <style>
         body { min-height: max(884px, 100dvh); }
@@ -23,17 +24,25 @@
 <div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
 <nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
   <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
-    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <span class="text-slate-900 dark:text-slate-100 font-bold" data-i18n="nav.menu">Меню</span>
     <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
   </div>
   <div class="py-4">
-    <a href="/">Начало</a>
-    <a href="/consultants_info">Експерти</a>
-    <a href="/credit_info">Информация за кредити</a>
-    <a href="/credit_calculator">Кредитен калкулатор</a>
-    <a href="/booking_appointment">Запис на час</a>
-    <a href="/login" data-nav-login>Вход</a>
+    <a href="/" data-i18n="nav.home">Начало</a>
+    <a href="/consultants_info" data-i18n="nav.experts">Експерти</a>
+    <a href="/credit_info" data-i18n="nav.credit_info">Информация за кредити</a>
+    <a href="/credit_calculator" data-i18n="nav.calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment" data-i18n="nav.book">Запис на час</a>
+    <a href="/my_profile" data-i18n="nav.profile">Моят профил</a>
+    <a href="/my_appointments" data-i18n="nav.appointments">Моите срещи</a>
+    <a href="/login" data-nav-login data-i18n="nav.login">Вход</a>
   </div>
+<div class="px-4 pt-2 mt-2 border-t border-slate-100 dark:border-slate-700">
+  <button type="button" onclick="window.i18n && window.i18n.toggle()" class="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-primary dark:text-slate-100 border border-primary/20 dark:border-slate-600 rounded-lg hover:bg-primary/5 dark:hover:bg-white/5 transition-colors">
+    <span class="material-symbols-outlined" style="font-size:18px">language</span>
+    <span id="lang-label">EN</span>
+  </button>
+</div>
 </nav>
 <div class="flex items-center p-4 pb-2 justify-between border-b border-slate-200 dark:border-slate-800">
 <a href="/" class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center">
@@ -55,7 +64,7 @@
 <span class="material-symbols-outlined text-primary text-5xl">check_circle</span>
 </div>
 <div class="flex flex-col items-center gap-2 text-center">
-<h1 class="text-2xl font-extrabold text-slate-900 dark:text-white">Вашата заявка е изпратена за потвърждение!</h1>
+<h1 class="text-2xl font-extrabold text-slate-900 dark:text-white" data-i18n="confirmed.title">Вашата заявка е изпратена за потвърждение!</h1>
 <p class="text-slate-600 dark:text-slate-400 text-sm font-normal max-w-[320px]">
                         Вашата резервация е изпратена на консултанта. Ще получите потвърждение по имейл, когато бъде одобрена.
                     </p>
@@ -65,7 +74,7 @@
 <!-- Booking Details Card -->
 <div class="px-4 py-2">
 <div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
-<h3 class="text-primary text-sm font-bold uppercase tracking-wider mb-4">Детайли за срещата</h3>
+<h3 class="text-primary text-sm font-bold uppercase tracking-wider mb-4" data-i18n="confirmed.card.title">Детайли за срещата</h3>
 <div class="space-y-4">
 <!-- Consultant -->
 <div class="flex items-center gap-4">
@@ -101,7 +110,7 @@
 <!-- Actions -->
 <div class="mt-auto px-4 py-8 flex flex-col gap-3">
 <a href="/" class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm font-bold leading-normal tracking-[0.015em] hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
-<span class="truncate">Към началната страница</span>
+<span class="truncate" data-i18n="confirmed.home.btn">Към началната страница</span>
 </a>
 </div>
 </div>
@@ -114,11 +123,10 @@
 <script src="../assets/js/main.js" defer></script>
 <script>
 (function() {
-  var MONTHS_BG = ['Януари','Февруари','Март','Април','Май','Юни','Юли','Август','Септември','Октомври','Ноември','Декември'];
+  var MONTHS_BG = (window.i18n && window.i18n.getMonths) ? window.i18n.getMonths() : ['Януари','Февруари','Март','Април','Май','Юни','Юли','Август','Септември','Октомври','Ноември','Декември'];
   var photo = { georgi_grozev: '../assets/images/georgi-grozev.png', petya_grozeva: '../assets/images/petya-grozeva.png', irina_panayotova: '../assets/images/irina-panayotova.png' };
-  try {
-    var raw = sessionStorage.getItem('lastBooking');
-    if (raw) {
+  var raw = null; try { raw = sessionStorage.getItem('lastBooking'); } catch(e){}
+  if (raw) {
       var b = JSON.parse(raw);
       document.getElementById('booking-consultant').textContent = b.consultant_name || '—';
       document.getElementById('booking-time').textContent = (b.time || '—') + ' ч.';

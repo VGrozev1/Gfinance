@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <title>Моите срещи - Gfinance</title>
 <link rel="stylesheet" href="../assets/css/tailwind.min.css"/>
+<script src="../assets/js/i18n.js"></script>
 <link rel="stylesheet" href="../assets/css/main.css"/>
 <style>
         body { min-height: max(884px, 100dvh); }
@@ -23,19 +24,25 @@
 <div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
 <nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
   <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
-    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <span class="text-slate-900 dark:text-slate-100 font-bold" data-i18n="nav.menu">Меню</span>
     <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
   </div>
   <div class="py-4">
-    <a href="/">Начало</a>
-    <a href="/consultants_info">Експерти</a>
-    <a href="/credit_info">Информация за кредити</a>
-    <a href="/credit_calculator">Кредитен калкулатор</a>
-    <a href="/booking_appointment">Запис на час</a>
-    <a href="/my_profile">Моят профил</a>
-    <a href="/my_appointments">Моите срещи</a>
-    <a href="/login" data-nav-login>Вход</a>
+    <a href="/" data-i18n="nav.home">Начало</a>
+    <a href="/consultants_info" data-i18n="nav.experts">Експерти</a>
+    <a href="/credit_info" data-i18n="nav.credit_info">Информация за кредити</a>
+    <a href="/credit_calculator" data-i18n="nav.calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment" data-i18n="nav.book">Запис на час</a>
+    <a href="/my_profile" data-i18n="nav.profile">Моят профил</a>
+    <a href="/my_appointments" data-i18n="nav.appointments">Моите срещи</a>
+    <a href="/login" data-nav-login data-i18n="nav.login">Вход</a>
   </div>
+<div class="px-4 pt-2 mt-2 border-t border-slate-100 dark:border-slate-700">
+  <button type="button" onclick="window.i18n && window.i18n.toggle()" class="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-primary dark:text-slate-100 border border-primary/20 dark:border-slate-600 rounded-lg hover:bg-primary/5 dark:hover:bg-white/5 transition-colors">
+    <span class="material-symbols-outlined" style="font-size:18px">language</span>
+    <span id="lang-label">EN</span>
+  </button>
+</div>
 </nav>
 <div class="flex items-center bg-white dark:bg-slate-900 p-4 pb-2 justify-between border-b border-slate-200 dark:border-slate-800">
 <a class="text-primary flex size-12 shrink-0 items-center justify-start transition-colors hover:text-primary/70" href="/">
@@ -52,16 +59,16 @@
 <div class="bg-white dark:bg-slate-900 pb-1">
 <div class="flex border-b border-slate-200 dark:border-slate-800 px-4 gap-8">
 <a id="tab-upcoming" data-tab="upcoming" class="flex flex-col items-center justify-center border-b-[3px] border-primary text-primary pb-[13px] pt-4" href="#">
-<p class="text-sm font-bold leading-normal tracking-wide">Предстоящи</p>
+<p class="text-sm font-bold leading-normal tracking-wide" data-i18n="appt.tab.upcoming">Предстоящи</p>
 </a>
 <a id="tab-past" data-tab="past" class="flex flex-col items-center justify-center border-b-[3px] border-transparent text-slate-500 dark:text-slate-400 pb-[13px] pt-4 hover:text-primary transition-colors" href="#">
-<p class="text-sm font-bold leading-normal tracking-wide">Минали</p>
+<p class="text-sm font-bold leading-normal tracking-wide" data-i18n="appt.tab.past">Минали</p>
 </a>
 </div>
 </div>
 <!-- Section Title -->
 <div class="px-4 pb-2 pt-6">
-<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight mb-2">Моите срещи</h2>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight mb-2" data-i18n="appt.section.title">Моите срещи</h2>
 <h3 id="meetings-title" class="text-slate-900 dark:text-slate-100 text-xl font-extrabold leading-tight tracking-tight">Следващи консултации</h3>
 <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Управлявайте вашите запазени часове с финансови експерти</p>
 </div>
@@ -77,8 +84,8 @@
 <div class="bg-primary/10 p-3 rounded-full mb-3">
 <span class="material-symbols-outlined text-primary" style="font-size: 32px;">add_task</span>
 </div>
-<p class="text-slate-900 dark:text-slate-100 font-bold text-center">Нуждаете се от още помощ?</p>
-<p class="text-slate-500 dark:text-slate-400 text-sm text-center mb-4">Нашите експерти са на разположение за нова консултация.</p>
+<p class="text-slate-900 dark:text-slate-100 font-bold text-center" data-i18n="appt.cta.title">Нуждаете се от още помощ?</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm text-center mb-4" data-i18n="appt.cta.sub">Нашите експерти са на разположение за нова консултация.</p>
 <a href="/booking_appointment" class="px-6 py-2 bg-primary text-white font-bold rounded-full text-sm hover:scale-105 transition-transform inline-block">
                 Запази нов час
             </a>
@@ -96,7 +103,7 @@
 (function() {
   var CONSULTANTS = {
     georgi_grozev: { name: 'Georgi Grozev', title: 'Специалист в банкирането', img: '../assets/images/georgi-grozev.png' },
-    petya_grozeva: { name: 'Petya Grozeva', title: 'Специалист мама', img: '../assets/images/petya-grozeva.png' },
+    petya_grozeva: { name: 'Petya Grozeva', title: 'Кредитен консултант', img: '../assets/images/petya-grozeva.png' },
     irina_panayotova: { name: 'Irina Panayotova', title: 'Експерт жилищно кредитиране', img: '../assets/images/irina-panayotova.png' }
   };
   var currentTab = 'upcoming';

@@ -8,8 +8,8 @@ Disallow: /my_appointments/
 Disallow: /booking_confirmed/
 Disallow: /zohoverify/
 Disallow: /api/
-Disallow: /confirm
-Disallow: /decline
+Disallow: /api/book/confirm
+Disallow: /api/book/decline
 Disallow: /health
 
 Sitemap: https://gfinance.bg/sitemap.xml

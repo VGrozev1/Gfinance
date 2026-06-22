@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <title>Gfinance Profile</title>
 <link rel="stylesheet" href="../assets/css/tailwind.min.css"/>
+<script src="../assets/js/i18n.js"></script>
 <link rel="stylesheet" href="../assets/css/main.css"/>
 <style>
         body { min-height: max(884px, 100dvh); }
@@ -23,19 +24,25 @@
 <div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
 <nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
   <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
-    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <span class="text-slate-900 dark:text-slate-100 font-bold" data-i18n="nav.menu">Меню</span>
     <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
   </div>
   <div class="py-4">
-    <a href="/">Начало</a>
-    <a href="/consultants_info">Експерти</a>
-    <a href="/credit_info">Информация за кредити</a>
-    <a href="/credit_calculator">Кредитен калкулатор</a>
-    <a href="/booking_appointment">Запис на час</a>
-    <a href="/my_profile">Моят профил</a>
-    <a href="/my_appointments">Моите срещи</a>
-    <a href="/login" data-nav-login>Вход</a>
+    <a href="/" data-i18n="nav.home">Начало</a>
+    <a href="/consultants_info" data-i18n="nav.experts">Експерти</a>
+    <a href="/credit_info" data-i18n="nav.credit_info">Информация за кредити</a>
+    <a href="/credit_calculator" data-i18n="nav.calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment" data-i18n="nav.book">Запис на час</a>
+    <a href="/my_profile" data-i18n="nav.profile">Моят профил</a>
+    <a href="/my_appointments" data-i18n="nav.appointments">Моите срещи</a>
+    <a href="/login" data-nav-login data-i18n="nav.login">Вход</a>
   </div>
+<div class="px-4 pt-2 mt-2 border-t border-slate-100 dark:border-slate-700">
+  <button type="button" onclick="window.i18n && window.i18n.toggle()" class="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-primary dark:text-slate-100 border border-primary/20 dark:border-slate-600 rounded-lg hover:bg-primary/5 dark:hover:bg-white/5 transition-colors">
+    <span class="material-symbols-outlined" style="font-size:18px">language</span>
+    <span id="lang-label">EN</span>
+  </button>
+</div>
 </nav>
 <div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800">
 <button type="button" data-nav-toggle class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center cursor-pointer" aria-label="Отвори меню">
@@ -61,7 +68,7 @@
 </div>
 </div>
 <!-- Personal Info Section -->
-<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4">Лична информация</h3>
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4" data-i18n="profile.personal">Лична информация</h3>
 <div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between border-b border-slate-100 dark:border-slate-800">
 <div class="flex items-center gap-4">
 <div class="text-primary dark:text-slate-100 flex items-center justify-center rounded-lg bg-primary/10 dark:bg-white/10 shrink-0 size-12">
@@ -111,46 +118,46 @@
 </div>
 </div>
 <!-- Security Section -->
-<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-6">Сигурност</h3>
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-6" data-i18n="profile.security">Сигурност</h3>
 <div id="password-change-row" class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between border-b border-slate-100 dark:border-slate-800 cursor-pointer">
 <div class="flex items-center gap-4">
 <div class="text-primary dark:text-slate-100 flex items-center justify-center rounded-lg bg-primary/10 dark:bg-white/10 shrink-0 size-12">
 <span class="material-symbols-outlined text-2xl">lock</span>
 </div>
 <div class="flex flex-col justify-center">
-<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Промяна на паролата</p>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Последна промяна преди 3 месеца</p>
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal" data-i18n="profile.password.title">Промяна на паролата</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Управлявайте достъпа до вашия профил</p>
 </div>
 </div>
 <span class="material-symbols-outlined text-slate-400">chevron_right</span>
 </div>
 <!-- My Consultations Section -->
-<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-6">Моите консултации</h3>
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-6" data-i18n="profile.consultations">Моите консултации</h3>
 <div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between border-b border-slate-100 dark:border-slate-800 cursor-pointer">
 <div class="flex items-center gap-4">
 <div class="text-primary dark:text-slate-100 flex items-center justify-center rounded-lg bg-primary/10 dark:bg-white/10 shrink-0 size-12">
 <span class="material-symbols-outlined text-2xl">calendar_today</span>
 </div>
 <div class="flex flex-col justify-center">
-<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Планирани срещи</p>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Вижте графика си</p>
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal" data-i18n="profile.planned.title">Планирани срещи</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal" data-i18n="profile.planned.sub">Вижте графика си</p>
 </div>
 </div>
 <div class="flex items-center gap-2">
-<span class="bg-primary dark:bg-slate-100 text-white dark:text-black text-[10px] font-bold px-2 py-0.5 rounded-full">2 нови</span>
+
 <span class="material-symbols-outlined text-slate-400">chevron_right</span>
 </div>
 </div>
 <!-- Preferences Section -->
-<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-6">Предпочитания</h3>
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-6" data-i18n="profile.preferences">Предпочитания</h3>
 <div class="flex items-center gap-4 bg-background-light dark:bg-background-dark px-4 min-h-[72px] py-2 justify-between border-b border-slate-100 dark:border-slate-800">
 <div class="flex items-center gap-4">
 <div class="text-primary dark:text-slate-100 flex items-center justify-center rounded-lg bg-primary/10 dark:bg-white/10 shrink-0 size-12">
 <span class="material-symbols-outlined text-2xl">notifications_active</span>
 </div>
 <div class="flex flex-col justify-center">
-<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Известия</p>
-<p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Push и имейл известия</p>
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal" data-i18n="profile.notif.title">Известия</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal" data-i18n="profile.notif.sub">Push и имейл известия</p>
 </div>
 </div>
 <div class="flex items-center">

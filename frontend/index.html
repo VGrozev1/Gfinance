@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="assets/css/tailwind.min.css"/>
+<script src="assets/js/i18n.js"></script>
 <link rel="stylesheet" href="assets/css/main.css"/>
 <meta name="description" content="Gfinance — вашият надежден финансов партньор. Безплатна консултация с опитни кредитни експерти за жилищни, потребителски и бизнес кредити."/>
 <meta property="og:type" content="website"/>
@@ -21,22 +22,28 @@
   <!-- Slide-out nav -->
   <nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
     <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
-      <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+      <span class="text-slate-900 dark:text-slate-100 font-bold" data-i18n="nav.menu">Меню</span>
       <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню">
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
     <div class="py-4">
-      <a href="/">Начало</a>
-      <a href="/consultants_info">Експерти</a>
-      <a href="/credit_info">Информация за кредити</a>
-      <a href="/credit_calculator">Кредитен калкулатор</a>
-      <a href="/booking_appointment">Запис на час</a>
-      <a href="/my_profile">Моят профил</a>
-      <a href="/my_appointments">Моите срещи</a>
-      <a href="/login" data-nav-login>Вход</a>
+      <a href="/" data-i18n="nav.home">Начало</a>
+      <a href="/consultants_info" data-i18n="nav.experts">Експерти</a>
+      <a href="/credit_info" data-i18n="nav.credit_info">Информация за кредити</a>
+      <a href="/credit_calculator" data-i18n="nav.calculator">Кредитен калкулатор</a>
+      <a href="/booking_appointment" data-i18n="nav.book">Запис на час</a>
+      <a href="/my_profile" data-i18n="nav.profile">Моят профил</a>
+      <a href="/my_appointments" data-i18n="nav.appointments">Моите срещи</a>
+      <a href="/login" data-nav-login data-i18n="nav.login">Вход</a>
     </div>
-  </nav>
+  <div class="px-4 pt-2 mt-2 border-t border-slate-100 dark:border-slate-700">
+  <button type="button" onclick="window.i18n && window.i18n.toggle()" class="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-primary dark:text-slate-100 border border-primary/20 dark:border-slate-600 rounded-lg hover:bg-primary/5 dark:hover:bg-white/5 transition-colors">
+    <span class="material-symbols-outlined" style="font-size:18px">language</span>
+    <span id="lang-label">EN</span>
+  </button>
+</div>
+</nav>
 
   <header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
     <div class="flex items-center p-4 max-w-7xl mx-auto">
@@ -55,12 +62,12 @@
     <section class="@container p-0 md:p-4">
       <div class="relative flex min-h-[520px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:rounded-xl items-center justify-center p-6 overflow-hidden" data-alt="Modern professional office" style="background-image: linear-gradient(rgba(0,0,0,0.5) 0%, rgba(16,22,34,0.9) 100%), url('https://lh3.googleusercontent.com/aida-public/AB6AXuAhXLPSKVzsRW1OdFjFTlEqLBQBeUNE76_NvV79Rh7GIAsJjPFzyRGKI-turrh3DutyUIlT-KytE31y76GmG-sD4Sg3nKqK97DD-vTIPQE3C6KFtvyt86mk8Uw-OMf-BZe2vqGQ5wHFD3y7YQcpgK3Hhv_JtuyEi8a0gsgBlbD4l9QhLk8Z4Qoiys-WUrxbsSxYJvxKgxXA0L48mfBf0JX_vJRHXYZ0GZynlV5uOofcAt48exTYXr3nRHkTkkdgA8YXw3dgx7ToRhlO');">
         <div class="flex flex-col gap-4 text-center max-w-3xl z-10">
-          <h1 class="text-white text-4xl font-extrabold leading-tight tracking-tight @[480px]:text-6xl">Вашият доверен партньор в кредитирането!</h1>
-          <p class="text-white/90 text-lg font-medium leading-relaxed @[480px]:text-xl">Професионални кредитни консултации за вашия финансов успех и спокойствие.</p>
+          <h1 class="text-white text-4xl font-extrabold leading-tight tracking-tight @[480px]:text-6xl" data-i18n="home.hero.title">Вашият доверен партньор в кредитирането!</h1>
+          <p class="text-white/90 text-lg font-medium leading-relaxed @[480px]:text-xl" data-i18n="home.hero.sub">Професионални кредитни консултации за вашия финансов успех и спокойствие.</p>
         </div>
         <div class="flex flex-wrap gap-4 justify-center z-10 mt-4">
-          <a href="/booking_appointment" class="flex min-w-[160px] cursor-pointer items-center justify-center rounded-full h-12 px-8 bg-primary text-white text-base font-bold shadow-lg shadow-black/30 hover:bg-black/90 transition-all">Безплатна консултация</a>
-          <a href="#services" class="flex min-w-[160px] cursor-pointer items-center justify-center rounded-full h-12 px-8 bg-white/10 backdrop-blur-md text-white border border-white/20 text-base font-bold hover:bg-white/20 transition-all">Научете повече</a>
+          <a href="/booking_appointment" class="flex min-w-[160px] cursor-pointer items-center justify-center rounded-full h-12 px-8 bg-primary text-white text-base font-bold shadow-lg shadow-black/30 hover:bg-black/90 transition-all" data-i18n="home.hero.cta1">Безплатна консултация</a>
+          <a href="#services" class="flex min-w-[160px] cursor-pointer items-center justify-center rounded-full h-12 px-8 bg-white/10 backdrop-blur-md text-white border border-white/20 text-base font-bold hover:bg-white/20 transition-all" data-i18n="home.hero.cta2">Научете повече</a>
         </div>
       </div>
     </section>
@@ -68,8 +75,8 @@
     <section id="services" class="py-12 px-4">
       <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-8">
         <div>
-          <span class="text-primary font-bold text-sm uppercase tracking-widest">Експертиза</span>
-          <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-bold leading-tight">Нашите услуги</h2>
+          <span class="text-primary font-bold text-sm uppercase tracking-widest" data-i18n="home.services.eyebrow">Експертиза</span>
+          <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-bold leading-tight" data-i18n="home.services.title">Нашите услуги</h2>
         </div>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -77,43 +84,43 @@
           <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
             <span class="material-symbols-outlined text-3xl">home</span>
           </div>
-          <h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold mb-2">Жилищни кредити</h3>
-          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Намираме най-добрите условия и лихвени проценти за закупуване на вашия нов дом или рефинансиране.</p>
+          <h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold mb-2" data-i18n="home.s1.title">Жилищни кредити</h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed" data-i18n="home.s1.desc">Намираме най-добрите условия и лихвени проценти за закупуване на вашия нов дом или рефинансиране.</p>
         </div>
         <div class="group flex flex-col gap-4 p-6 bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 hover:border-primary/20 transition-all shadow-sm">
           <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
             <span class="material-symbols-outlined text-3xl">person</span>
           </div>
-          <h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold mb-2">Потребителски кредити</h3>
-          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Бързо одобрение и гъвкави погасителни планове за вашите лични проекти, пътувания или ремонт.</p>
+          <h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold mb-2" data-i18n="home.s2.title">Потребителски кредити</h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed" data-i18n="home.s2.desc">Бързо одобрение и гъвкави погасителни планове за вашите лични проекти, пътувания или ремонт.</p>
         </div>
         <div class="group flex flex-col gap-4 p-6 bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 hover:border-primary/20 transition-all shadow-sm">
           <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-colors">
             <span class="material-symbols-outlined text-3xl">business_center</span>
           </div>
-          <h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold mb-2">Бизнес финансиране</h3>
-          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">Експертни решения за растеж на вашия бизнес, инвестиционни кредити и оборотен капитал.</p>
+          <h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold mb-2" data-i18n="home.s3.title">Бизнес финансиране</h3>
+          <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed" data-i18n="home.s3.desc">Експертни решения за растеж на вашия бизнес, инвестиционни кредити и оборотен капитал.</p>
         </div>
       </div>
     </section>
 
     <section class="py-16 px-4 bg-primary/5 dark:bg-primary/10 rounded-3xl mx-4 mb-12">
       <div class="max-w-4xl mx-auto text-center">
-        <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-bold mb-12">Защо да изберете Gfinance?</h2>
+        <h2 class="text-slate-900 dark:text-slate-100 text-3xl font-bold mb-12" data-i18n="home.why.title">Защо да изберете Gfinance?</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 text-left">
-          <div class="flex gap-4"><div class="text-primary mt-1"><span class="material-symbols-outlined font-bold">check_circle</span></div><div><h4 class="font-bold text-slate-900 dark:text-slate-100">Без такси за клиента</h4><p class="text-slate-600 dark:text-slate-400 text-sm">Нашите услуги се заплащат от банковите институции, не от вас.</p></div></div>
-          <div class="flex gap-4"><div class="text-primary mt-1"><span class="material-symbols-outlined font-bold">check_circle</span></div><div><h4 class="font-bold text-slate-900 dark:text-slate-100">Пълно съдействие</h4><p class="text-slate-600 dark:text-slate-400 text-sm">Подготвяме всички необходими документи и преговаряме вместо вас.</p></div></div>
-          <div class="flex gap-4"><div class="text-primary mt-1"><span class="material-symbols-outlined font-bold">check_circle</span></div><div><h4 class="font-bold text-slate-900 dark:text-slate-100">Най-добри пазарни оферти</h4><p class="text-slate-600 dark:text-slate-400 text-sm">Работим с всички водещи банки, за да осигурим най-ниските лихви.</p></div></div>
-          <div class="flex gap-4"><div class="text-primary mt-1"><span class="material-symbols-outlined font-bold">check_circle</span></div><div><h4 class="font-bold text-slate-900 dark:text-slate-100">Експертен анализ</h4><p class="text-slate-600 dark:text-slate-400 text-sm">Детайлно сравнение на условията и скритите такси във всеки договор.</p></div></div>
+          <div class="flex gap-4"><div class="text-primary mt-1"><span class="material-symbols-outlined font-bold">check_circle</span></div><div><h4 class="font-bold text-slate-900 dark:text-slate-100" data-i18n="home.why1.title">Без такси за клиента</h4><p class="text-slate-600 dark:text-slate-400 text-sm" data-i18n="home.why1.desc">Нашите услуги се заплащат от банковите институции, не от вас.</p></div></div>
+          <div class="flex gap-4"><div class="text-primary mt-1"><span class="material-symbols-outlined font-bold">check_circle</span></div><div><h4 class="font-bold text-slate-900 dark:text-slate-100" data-i18n="home.why2.title">Пълно съдействие</h4><p class="text-slate-600 dark:text-slate-400 text-sm" data-i18n="home.why2.desc">Подготвяме всички необходими документи и преговаряме вместо вас.</p></div></div>
+          <div class="flex gap-4"><div class="text-primary mt-1"><span class="material-symbols-outlined font-bold">check_circle</span></div><div><h4 class="font-bold text-slate-900 dark:text-slate-100" data-i18n="home.why3.title">Най-добри пазарни оферти</h4><p class="text-slate-600 dark:text-slate-400 text-sm" data-i18n="home.why3.desc">Работим с всички водещи банки, за да осигурим най-ниските лихви.</p></div></div>
+          <div class="flex gap-4"><div class="text-primary mt-1"><span class="material-symbols-outlined font-bold">check_circle</span></div><div><h4 class="font-bold text-slate-900 dark:text-slate-100" data-i18n="home.why4.title">Експертен анализ</h4><p class="text-slate-600 dark:text-slate-400 text-sm" data-i18n="home.why4.desc">Детайлно сравнение на условията и скритите такси във всеки договор.</p></div></div>
         </div>
       </div>
     </section>
 
     <section class="py-12 px-4 text-center">
       <div class="bg-primary p-8 md:p-12 rounded-2xl flex flex-col items-center gap-6 shadow-2xl shadow-black/20">
-        <h2 class="text-white text-3xl font-bold">Готови ли сте за следващата стъпка?</h2>
-        <p class="text-white/80 max-w-xl text-lg">Свържете се с нас днес за безплатна и необвързваща консултация относно вашия кредит.</p>
-        <a href="/booking_appointment" class="flex min-w-[200px] items-center justify-center rounded-full h-14 px-10 bg-white text-primary text-lg font-extrabold hover:bg-slate-100 transition-colors">Свържете се с нас</a>
+        <h2 class="text-white text-3xl font-bold" data-i18n="home.cta.title">Готови ли сте за следващата стъпка?</h2>
+        <p class="text-white/80 max-w-xl text-lg" data-i18n="home.cta.desc">Свържете се с нас днес за безплатна и необвързваща консултация относно вашия кредит.</p>
+        <a href="/booking_appointment" class="flex min-w-[200px] items-center justify-center rounded-full h-14 px-10 bg-white text-primary text-lg font-extrabold hover:bg-slate-100 transition-colors" data-i18n="home.cta.btn">Свържете се с нас</a>
       </div>
     </section>
   </main>
@@ -126,17 +133,17 @@
           <h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold">Gfinance</h2>
         </a>
         <div class="flex flex-wrap justify-center gap-6 md:gap-8 text-sm text-slate-600 dark:text-slate-400 font-medium">
-          <a href="/consultants_info" class="hover:text-primary transition-colors">Експерти</a>
-          <a href="/credit_info" class="hover:text-primary transition-colors">Кредити</a>
-          <a href="/booking_appointment" class="hover:text-primary transition-colors">Запис на час</a>
-          <a href="/my_profile" class="hover:text-primary transition-colors">Моят профил</a>
-          <a href="/my_appointments" class="hover:text-primary transition-colors">Моите срещи</a>
-          <a href="/login" class="hover:text-primary transition-colors" data-nav-login>Вход</a>
+          <a href="/consultants_info" class="hover:text-primary transition-colors" data-i18n="footer.experts">Експерти</a>
+          <a href="/credit_info" class="hover:text-primary transition-colors" data-i18n="footer.credits">Кредити</a>
+          <a href="/booking_appointment" class="hover:text-primary transition-colors" data-i18n="footer.book">Запис на час</a>
+          <a href="/my_profile" class="hover:text-primary transition-colors" data-i18n="footer.profile">Моят профил</a>
+          <a href="/my_appointments" class="hover:text-primary transition-colors" data-i18n="footer.appointments">Моите срещи</a>
+          <a href="/login" class="hover:text-primary transition-colors" data-nav-login data-i18n="footer.login">Вход</a>
         </div>
         <div class="flex items-center gap-4 text-slate-500 text-xs">
-          <a href="/legal/terms" class="hover:text-primary transition-colors">Общи условия</a>
+          <a href="/legal/terms" class="hover:text-primary transition-colors" data-i18n="footer.terms">Общи условия</a>
           <span>|</span>
-          <a href="/legal/privacy" class="hover:text-primary transition-colors">Поверителност</a>
+          <a href="/legal/privacy" class="hover:text-primary transition-colors" data-i18n="footer.privacy">Поверителност</a>
           <span>|</span>
           <span>© 2026 Gfinance</span>
         </div>

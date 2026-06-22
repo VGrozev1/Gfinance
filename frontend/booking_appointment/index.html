@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <title>Gfinance - Записване на час</title>
 <link rel="stylesheet" href="../assets/css/tailwind.min.css"/>
+<script src="../assets/js/i18n.js"></script>
 <link rel="stylesheet" href="../assets/css/main.css"/>
 <style>
         body { min-height: max(884px, 100dvh); }
@@ -23,17 +24,25 @@
 <div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
 <nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
   <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
-    <span class="text-slate-900 dark:text-slate-100 font-bold">Меню</span>
+    <span class="text-slate-900 dark:text-slate-100 font-bold" data-i18n="nav.menu">Меню</span>
     <button type="button" data-nav-toggle class="p-2" aria-label="Затвори меню"><span class="material-symbols-outlined">close</span></button>
   </div>
   <div class="py-4">
-    <a href="/">Начало</a>
-    <a href="/consultants_info">Експерти</a>
-    <a href="/credit_info">Информация за кредити</a>
-    <a href="/credit_calculator">Кредитен калкулатор</a>
-    <a href="/booking_appointment">Запис на час</a>
-    <a href="/login" data-nav-login>Вход</a>
+    <a href="/" data-i18n="nav.home">Начало</a>
+    <a href="/consultants_info" data-i18n="nav.experts">Експерти</a>
+    <a href="/credit_info" data-i18n="nav.credit_info">Информация за кредити</a>
+    <a href="/credit_calculator" data-i18n="nav.calculator">Кредитен калкулатор</a>
+    <a href="/booking_appointment" data-i18n="nav.book">Запис на час</a>
+    <a href="/my_profile" data-i18n="nav.profile">Моят профил</a>
+    <a href="/my_appointments" data-i18n="nav.appointments">Моите срещи</a>
+    <a href="/login" data-nav-login data-i18n="nav.login">Вход</a>
   </div>
+<div class="px-4 pt-2 mt-2 border-t border-slate-100 dark:border-slate-700">
+  <button type="button" onclick="window.i18n && window.i18n.toggle()" class="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-primary dark:text-slate-100 border border-primary/20 dark:border-slate-600 rounded-lg hover:bg-primary/5 dark:hover:bg-white/5 transition-colors">
+    <span class="material-symbols-outlined" style="font-size:18px">language</span>
+    <span id="lang-label">EN</span>
+  </button>
+</div>
 </nav>
 <header class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-10">
 <a href="/" class="flex items-center justify-center size-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
@@ -49,8 +58,8 @@
 <main class="flex-1 overflow-y-auto pb-24">
 <!-- Title Section -->
 <section class="p-6">
-<h1 class="text-2xl font-bold text-slate-900 dark:text-white mb-1">Кредитна консултация</h1>
-<p class="text-sm text-slate-500 dark:text-slate-400">Изберете удобен за вас ден и час за среща с наш експерт.</p>
+<h1 class="text-2xl font-bold text-slate-900 dark:text-white mb-1" data-i18n="book.title">Кредитна консултация</h1>
+<p class="text-sm text-slate-500 dark:text-slate-400" data-i18n="book.sub">Изберете удобен за вас ден и час за среща с наш експерт.</p>
 </section>
 <!-- Calendar Component -->
 <section class="px-4 mb-8">
@@ -80,7 +89,7 @@
 <!-- Time Slots -->
 <section class="px-6">
 <div class="flex items-center justify-between mb-4">
-<h3 class="text-lg font-bold text-slate-900 dark:text-white">Свободни часове</h3>
+<h3 class="text-lg font-bold text-slate-900 dark:text-white" data-i18n="book.slots.title">Свободни часове</h3>
 <span id="time-slot-date" class="text-xs font-medium px-2.5 py-1 bg-primary/10 text-primary rounded-full"></span>
 </div>
 <div id="time-slots" class="grid grid-cols-3 gap-3">
@@ -103,7 +112,7 @@
 </div>
 <!-- Consultant Selection -->
 <div class="mt-8">
-<p class="text-sm font-bold text-slate-900 dark:text-white mb-3">Изберете консултант</p>
+<p class="text-sm font-bold text-slate-900 dark:text-white mb-3" data-i18n="book.consultant.label">Изберете консултант</p>
 <div class="flex flex-col gap-3">
 <button type="button" class="consultant-option flex gap-4 items-center p-4 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-primary/50 transition-all text-left" data-consultant-id="georgi_grozev">
 <div class="relative size-12 shrink-0">
@@ -169,8 +178,8 @@
       }
     });
   }
-  var MONTHS_BG = ['Януари','Февруари','Март','Април','Май','Юни','Юли','Август','Септември','Октомври','Ноември','Декември'];
-  var DAYS_BG = ['Нд','Пн','Вт','Ср','Чт','Пт','Сб'];
+  var MONTHS_BG = (window.i18n && window.i18n.getMonths) ? window.i18n.getMonths() : ['Януари','Февруари','Март','Април','Май','Юни','Юли','Август','Септември','Октомври','Ноември','Декември'];
+  var DAYS_BG = (window.i18n && window.i18n.getDays) ? window.i18n.getDays() : ['Нд','Пн','Вт','Ср','Чт','Пт','Сб'];
   var today = new Date();
   today.setHours(0,0,0,0);
 
