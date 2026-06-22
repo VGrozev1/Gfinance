@@ -77,3 +77,192 @@
     ALTER TABLE bookings ADD COLUMN IF NOT EXISTS client_phone TEXT NOT NULL DEFAULT '';
     ```
     Admin dashboard shows phone number in its own row on each booking card.
+
+---
+
+## Bugs Found (not yet fixed)
+
+21. **`consultants_info` page has English `lang`, title, and heading** *(SEO + accessibility)*
+    - `frontend/consultants_info/index.html:3` — `<html lang="en">` should be `lang="bg"`
+    - `<title>Gfinance Consultants</title>` should be Bulgarian
+    - `<h1>Gfinance Consultants</h1>` same — Google uses this for search snippets
+
+22. **Petya Grozeva has placeholder title "Специалист мама"** *(content)*
+    - Appears in `frontend/my_appointments/index.html:99` and `frontend/booking_appointment/index.html:99`
+    - Should be her actual professional title (e.g. "Кредитен консултант")
+
+23. **Hardcoded fake data in `my_profile`** *(UX)*
+    - `frontend/my_profile/index.html:122` — "Последна промяна преди 3 месеца" is static text, never updates
+    - `frontend/my_profile/index.html:140` — "2 нови" badge next to Appointments is hardcoded, not a real count
+    - Both should either be removed or wired to real data
+
+24. **`robots.txt` disallows wrong paths for confirm/decline** *(SEO)*
+    - Currently: `Disallow: /confirm` and `Disallow: /decline`
+    - Actual routes are `/api/book/confirm` and `/api/book/decline` — the current rules do nothing
+    - Fix to: `Disallow: /api/book/confirm` and `Disallow: /api/book/decline`
+
+25. **`frontend/homepage/homepage.html` is a dead duplicate** *(maintenance)*
+    - Served at `/homepage/` which is never linked anywhere in the app
+    - Still uses Tailwind CDN (not the compiled CSS), has "© 2024" copyright
+    - Should be deleted — `frontend/index.html` is the real homepage
+
+26. **Subpage navigation drawers are missing profile/appointments links** *(UX)*
+    - All subpages (`booking_appointment`, `credit_info`, `consultants_info`, etc.) have a hamburger menu that only shows: Начало, Експерти, Кредити, Калкулатор, Запис, Вход
+    - Logged-in users have no way to reach "Моят профил" or "Моите срещи" from any subpage without going back to the homepage first
+
+27. **`booking_confirmed` shows dashes when accessed directly** *(UX)*
+    - If a user navigates to `/booking_confirmed` directly or refreshes after booking, all fields show "—" because `sessionStorage.lastBooking` is gone
+    - Should show a generic "Заявката ви е изпратена" message instead of empty fields
+
+---
+
+## New Improvements
+
+28. **Guest booking: no reference number shown on confirmation** *(UX)*
+    - When a guest (not logged in) books, they see the confirmation page but have no booking ID or reference number
+    - They have no way to reference the booking if they want to cancel it later (no account = no "Моите срещи")
+    - Show the booking ID on `booking_confirmed` and suggest creating an account to manage bookings
+
+29. **Service type is hardcoded as "Кредитна консултация"** *(UX)*
+    - `booking_appointment/index.html` always sends `service: 'Кредитна консултация'` regardless of what the user needs
+    - Replace with a dropdown: Жилищен кредит, Потребителски кредит, Рефинансиране, Ипотека, Друго
+
+30. **No booking reminder emails** *(feature)*
+    - After a booking is confirmed, neither the client nor the consultant receives a reminder before the appointment
+    - Add a background job or Supabase cron that sends a reminder 24h before each confirmed booking
+
+31. **No password reset flow** *(UX)*
+    - `login/index.html` has no "Забравена парола?" link
+    - Supabase supports `supabase.auth.resetPasswordForEmail()` — wire it up with a simple modal or separate page
+
+32. **Admin: confirm/decline doesn't send emails** *(feature)*
+    - When an admin clicks Confirm or Decline in the admin dashboard, it updates the status in the DB
+    - But it does NOT send the confirmation/decline email to the client (only the consultant's email link does)
+    - Admin actions should trigger the same email flow as the consultant token links
+
+33. **No "Запиши час" CTA on consultants_info page** *(UX)*
+    - Users browsing consultants have no direct "Book this consultant" button
+    - Each consultant card should link to `/booking_appointment?consultant=georgi_grozev` and pre-select that consultant
+
+34. **Credit calculator results not shareable** *(UX)*
+    - After calculating, there's no way to share or save the result
+    - Add a "Копирай линк" button that encodes the inputs into the URL (`?amount=100000&rate=3.5&months=240`) so users can bookmark or share their calculation
+
+---
+
+## SEO — Step-by-Step Guide to Rank Higher
+
+These are actions ranked from highest to lowest impact. Do them in order.
+
+### Step 1 — Google Search Console (do this today, free)
+1. Go to [search.google.com/search-console](https://search.google.com/search-console)
+2. Add `https://gfinance.bg` as a property
+3. Verify ownership via the HTML tag method — add `<meta name="google-site-verification" content="YOUR_CODE"/>` to `frontend/index.html`
+4. Submit your sitemap: enter `https://gfinance.bg/sitemap.xml` in the Sitemaps section
+5. Check "Coverage" after 2–3 days to see if all pages are indexed
+6. **Why it matters:** Google can't rank pages it hasn't found. Search Console tells you exactly what Google sees and what's broken.
+
+### Step 2 — Google Business Profile (do this today, free)
+1. Go to [business.google.com](https://business.google.com) and create a profile for Gfinance
+2. Fill in: business name (Gfinance), category (Финансов консултант / Financial Consultant), address (Бургас, ул. Поп Груйо 66А), phone, website, hours
+3. Verify via postcard or phone
+4. Add photos: office, consultants, logo
+5. Ask your first 5 clients to leave a Google review
+6. **Why it matters:** Google Business Profile is how you appear in Google Maps and in the local "3-pack" results — the box with 3 businesses that shows up before regular search results for "кредитен консултант Бургас"
+
+### Step 3 — Add Schema.org structured data to the homepage
+Structured data tells Google exactly what your business is. Add this JSON-LD block inside `<head>` of `frontend/index.html`:
+```html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FinancialService",
+  "name": "Gfinance",
+  "description": "Вашият доверен партньор в кредитирането. Консултации за жилищни и потребителски кредити в Бургас.",
+  "url": "https://gfinance.bg",
+  "telephone": "+359888152181",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "ул. Поп Груйо 66А",
+    "addressLocality": "Бургас",
+    "addressCountry": "BG"
+  },
+  "openingHours": "Mo-Fr 09:00-18:00",
+  "image": "https://gfinance.bg/assets/images/logo-icon.png",
+  "areaServed": "Бургас",
+  "priceRange": "Безплатно"
+}
+</script>
+```
+**Why it matters:** Google uses this to show rich results (star ratings, address, phone) directly in search — which increases click-through rate by 20–30%.
+
+### Step 4 — Improve page titles and descriptions for each page
+Each page's `<title>` and `<meta name="description">` is your ad in Google search results. Currently they're generic.
+
+Recommended changes:
+| Page | Current title | Better title |
+|------|--------------|--------------|
+| Homepage | Gfinance | Кредитен консултант Бургас – Gfinance |
+| consultants_info | Gfinance Consultants | Нашите експерти – Gfinance |
+| credit_info | Информация за кредити – Gfinance | Кредити и ипотеки – сравни и избери – Gfinance |
+| booking_appointment | Запис на час – Gfinance | Запази консултация безплатно – Gfinance |
+
+For descriptions: include the city (Бургас), the service (кредитна консултация), and a benefit (безплатна, без ангажимент).
+
+### Step 5 — Target local keywords in page content
+Add these phrases naturally in the text of `credit_info` and `consultants_info`:
+- "кредитен консултант Бургас"
+- "ипотечен кредит Бургас"
+- "потребителски кредит консултация"
+- "рефинансиране на кредит"
+- "безплатна кредитна консултация"
+
+Google ranks pages for terms that appear in their content. If these words aren't on your pages, you won't rank for them.
+
+### Step 6 — Build backlinks (ongoing, biggest long-term factor)
+Backlinks (other sites linking to yours) are the #1 ranking factor after page content.
+
+Easy first links to get:
+1. **Local business directories:** Register on zaplata.bg, yelp.bg, goldenpages.bg, biznes.bg with your website URL
+2. **Facebook page:** Create a Facebook business page for Gfinance, add website link, post regularly
+3. **LinkedIn:** Create a company page, link to gfinance.bg
+4. **Partner sites:** Ask mortgage brokers, real estate agencies, or accountants in Бургас to add you to their "useful links" page
+5. **Local news:** Reach out to local Бургас news sites (Burgasinfo.bg, Focus-news.net) for a small feature or listing
+
+**Target:** aim for 10–20 quality Bulgarian backlinks in the first 3 months.
+
+### Step 7 — Add a blog or articles section
+Google strongly favors sites that publish fresh, useful content.
+
+Article ideas that match what people search for:
+- "Как да изберем ипотечен кредит през 2026"
+- "Разлика между ипотечен и потребителски кредит"
+- "Кога си струва да рефинансираш кредита си"
+- "Какви документи са нужни за кредит"
+
+Even 4–6 articles (500–800 words each) will significantly increase the number of keywords you rank for. Host them at `/blog/article-slug`.
+
+### Step 8 — Core Web Vitals (technical performance)
+Google uses page speed as a ranking signal.
+
+Check your scores at [pagespeed.web.dev](https://pagespeed.web.dev) with your live URL. Target: all scores above 90.
+
+Current optimizations already done: compiled Tailwind CSS, no CDN JS frameworks on most pages.
+Remaining quick wins:
+- Add `loading="lazy"` to all `<img>` tags below the fold
+- Add explicit `width` and `height` attributes to images to prevent layout shift
+- Consider converting consultant photos to WebP format (smaller file size)
+
+### Step 9 — Get and respond to Google reviews
+Reviews directly affect Local Pack ranking.
+
+Action plan:
+1. After each consultation, send a follow-up email with a direct Google review link
+2. Aim for 10+ reviews with 4.5+ average in the first 3 months
+3. Respond to every review (even negative ones) — Google rewards engagement
+
+### Step 10 — Monitor and iterate (monthly)
+1. Check Google Search Console weekly: which queries bring traffic? What pages get impressions but no clicks? (Those need better titles/descriptions.)
+2. Check Google Analytics (add it to the site — free): where do users drop off?
+3. Every month: publish one new article, respond to new reviews, check for new backlink opportunities
+4. Track your position for "кредитен консултант Бургас" — it should improve within 3–6 months if you follow Steps 1–7
