@@ -157,24 +157,15 @@
 <script src="../assets/js/main.js"></script>
 <script>
 (function() {
-  if (window.supabase && typeof window.supabase.auth !== 'undefined') {
-    window.supabase.auth.getSession().then(function(r) {
-      if (!r.data?.session) {
-        window.location.href = '/login?redirect=' + encodeURIComponent('/booking_appointment');
-      }
-    });
-  }
-</script>
-<script>
-(function() {
+  // If logged in, pre-fill name/email (read-only). Guests can book freely.
   if (window.supabase && window.supabase.auth) {
     window.supabase.auth.getSession().then(function(r) {
-      var user = r.data?.session?.user;
+      var user = r.data && r.data.session && r.data.session.user;
       if (user) {
         var emailEl = document.getElementById('booking-email');
         var nameEl = document.getElementById('booking-name');
         if (emailEl) { emailEl.value = user.email || ''; emailEl.readOnly = true; }
-        if (nameEl && user.user_metadata?.full_name) { nameEl.value = user.user_metadata.full_name; }
+        if (nameEl && user.user_metadata && user.user_metadata.full_name) { nameEl.value = user.user_metadata.full_name; }
       }
     });
   }
@@ -393,7 +384,19 @@
       service: 'Кредитна консултация',
       notes: notes
     };
-    window.api.post('/api/book', payload)
+    // Use authenticated endpoint if logged in, guest endpoint otherwise
+    var bookingPromise;
+    if (window.supabase && window.supabase.auth) {
+      bookingPromise = window.supabase.auth.getSession().then(function(r) {
+        var session = r.data && r.data.session;
+        var endpoint = session ? '/api/book' : '/api/book/guest';
+        return window.api.post(endpoint, payload);
+      });
+    } else {
+      bookingPromise = window.api.post('/api/book/guest', payload);
+    }
+
+    bookingPromise
       .then(function(r) {
         return r.text().then(function(t) {
           var d;
@@ -417,19 +420,9 @@
           if (Array.isArray(msg)) msg = msg.map(function(x) { return x.msg || x.loc ? (x.loc + ': ' + (x.msg || '')) : String(x); }).join('. ');
           else if (typeof msg !== 'string') msg = d.message || d.error || (typeof d.detail === 'string' ? d.detail : null) || ('Грешка ' + res.status);
           if (!msg) {
-            // Fallback: show at least part of raw response so we can see server error details (e.g. from Vercel).
-            if (res.raw) {
-              var raw = String(res.raw);
-              msg = 'Грешка ' + res.status + ' от сървъра. Детайли: ' + raw.slice(0, 400);
-            } else {
-              msg = 'Грешка ' + res.status + ' от сървъра. Опитайте отново или влезте в профила си.';
-            }
+            msg = res.raw ? ('Грешка ' + res.status + ': ' + String(res.raw).slice(0, 300)) : ('Грешка ' + res.status);
           }
           alert(msg);
-          if (res.status === 401 && String(msg).indexOf('SUPABASE_JWT_SECRET') < 0) {
-            window.location.href = '/login?redirect=' + encodeURIComponent('/booking_appointment/');
-            return;
-          }
           btn.disabled = false;
           btn.textContent = 'Потвърди часа';
         }

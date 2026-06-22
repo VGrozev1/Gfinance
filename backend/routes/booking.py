@@ -119,9 +119,9 @@ async def get_taken_slots(
     return {"taken": taken}
 
 
-async def _create_booking_with_auth(req: BookRequest, auth_email: str, background_tasks: Optional[BackgroundTasks] = None) -> dict:
-    """Core booking creation (used by both POST /api/book and POST /api for Vercel)."""
-    if req.client_email.lower() != auth_email:
+async def _create_booking_with_auth(req: BookRequest, auth_email: Optional[str], background_tasks: Optional[BackgroundTasks] = None) -> dict:
+    """Core booking creation. auth_email=None means guest booking (email not verified against session)."""
+    if auth_email is not None and req.client_email.lower() != auth_email:
         raise HTTPException(
             status_code=403,
             detail="Имейлът трябва да съвпада с профила ви.",
@@ -204,9 +204,20 @@ async def create_booking_request(
     background_tasks: BackgroundTasks,
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ) -> dict:
-    """Create a pending booking request and email the consultant. Requires login."""
+    """Create a pending booking request. Requires login."""
     auth_email = await _require_email_from_auth(credentials)
     return await _create_booking_with_auth(req, auth_email, background_tasks)
+
+
+@router.post("/guest")
+@limiter.limit("3/minute")
+async def create_guest_booking(
+    request: Request,
+    req: BookRequest,
+    background_tasks: BackgroundTasks,
+) -> dict:
+    """Create a booking without authentication. Email is not verified against a session."""
+    return await _create_booking_with_auth(req, None, background_tasks)
 
 
 async def _get_email_from_auth(credentials: Optional[HTTPAuthorizationCredentials]) -> Optional[str]:
@@ -322,7 +333,8 @@ async def handle_vercel_booking(
         req = BookRequest(**body)
     except Exception as e:
         raise HTTPException(status_code=422, detail=str(e))
-    auth_email = await _require_email_from_auth(credentials)
+    # If credentials are provided, verify them; otherwise treat as guest booking
+    auth_email = await _get_email_from_auth(credentials)
     return await _create_booking_with_auth(req, auth_email, background_tasks)
 
 
