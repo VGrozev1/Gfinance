@@ -20,7 +20,7 @@
 <link rel="icon" href="/assets/images/favicon.png" type="image/png"/>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
-<div class="relative mx-auto max-w-md bg-white dark:bg-slate-900 min-h-screen flex flex-col shadow-xl">
+<div class="relative min-h-screen flex flex-col">
 <div class="nav-overlay" data-nav-overlay aria-hidden="true"></div>
 <nav class="nav-menu" data-nav-menu aria-label="Основна навигация">
   <div class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700">
@@ -44,7 +44,8 @@
   </button>
 </div>
 </nav>
-<header class="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800 sticky top-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-10">
+<header class="border-b border-slate-200 dark:border-slate-800 sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md z-10">
+<div class="max-w-5xl mx-auto w-full flex items-center justify-between p-4">
 <a href="/" class="flex items-center justify-center size-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
 <span class="material-symbols-outlined">arrow_back</span>
 </a>
@@ -54,15 +55,17 @@
 <button type="button" data-nav-toggle class="flex items-center justify-center size-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" aria-label="Отвори меню">
 <span class="material-symbols-outlined">menu</span>
 </button>
+</div>
 </header>
-<main class="flex-1 overflow-y-auto pb-24">
-<!-- Title Section -->
-<section class="p-6">
+<main class="flex-1 pb-28">
+<div class="max-w-5xl mx-auto w-full px-4 py-6">
 <h1 class="text-2xl font-bold text-slate-900 dark:text-white mb-1" data-i18n="book.title">Кредитна консултация</h1>
-<p class="text-sm text-slate-500 dark:text-slate-400" data-i18n="book.sub">Изберете удобен за вас ден и час за среща с наш експерт.</p>
-</section>
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-8" data-i18n="book.sub">Изберете удобен за вас ден и час за среща с наш експерт.</p>
+<div class="md:grid md:grid-cols-2 md:gap-10 md:items-start">
+<!-- Left column: calendar + time slots -->
+<div>
 <!-- Calendar Component -->
-<section class="px-4 mb-8">
+<section class="mb-8">
 <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
 <div class="flex items-center justify-between mb-4">
 <button type="button" id="calendar-prev" class="size-10 flex items-center justify-center rounded-lg hover:bg-white dark:hover:bg-slate-700 shadow-sm transition-all" aria-label="Предишен месец">
@@ -87,7 +90,7 @@
 </div>
 </section>
 <!-- Time Slots -->
-<section class="px-6">
+<section>
 <div class="flex items-center justify-between mb-4">
 <h3 class="text-lg font-bold text-slate-900 dark:text-white" data-i18n="book.slots.title">Свободни часове</h3>
 <span id="time-slot-date" class="text-xs font-medium px-2.5 py-1 bg-primary/10 text-primary rounded-full"></span>
@@ -103,12 +106,26 @@
 <button type="button" class="booking-time py-3 px-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold hover:border-primary hover:text-primary dark:hover:text-primary transition-all text-slate-700 dark:text-slate-300" data-time="16:00">16:00</button>
 <button type="button" class="booking-time py-3 px-2 border border-slate-200 dark:border-slate-700 rounded-xl text-sm font-semibold hover:border-primary hover:text-primary dark:hover:text-primary transition-all text-slate-700 dark:text-slate-300" data-time="17:00">17:00</button>
 </div>
+</section>
+</div>
+<!-- Right column: form + consultant selection -->
+<div class="mt-6 md:mt-0">
 <!-- Client info form -->
-<div class="mt-6 space-y-4" id="booking-form-section">
-<label class="block"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Име и фамилия</span><input type="text" id="booking-name" required class="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-900 dark:text-slate-100" placeholder="Вашето име"/></label>
-<label class="block"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Имейл</span><input type="email" id="booking-email" required class="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-900 dark:text-slate-100" placeholder="ваш@имейл.com"/></label>
-<label class="block"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Телефон</span><input type="tel" id="booking-phone" required class="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-900 dark:text-slate-100" placeholder="08XX XXX XXX"/></label>
-<label class="block"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300">Бележки</span><textarea id="booking-notes" rows="2" required class="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-900 dark:text-slate-100" placeholder="За какво се отнася консултацията?"></textarea></label>
+<div class="space-y-4" id="booking-form-section">
+<label class="block"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300" data-i18n="book.service.label">Вид консултация</span>
+<select id="booking-service" class="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+  <option value="Жилищен кредит">Жилищен кредит</option>
+  <option value="Потребителски кредит">Потребителски кредит</option>
+  <option value="Рефинансиране">Рефинансиране</option>
+  <option value="Ипотека">Ипотека</option>
+  <option value="Бизнес финансиране">Бизнес финансиране</option>
+  <option value="Друго">Друго</option>
+</select>
+</label>
+<label class="block"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300" data-i18n="book.name.label">Име и фамилия</span><input type="text" id="booking-name" required class="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-900 dark:text-slate-100" placeholder="Вашето име"/></label>
+<label class="block"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300" data-i18n="book.email.label">Имейл</span><input type="email" id="booking-email" required class="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-900 dark:text-slate-100" placeholder="ваш@имейл.com"/></label>
+<label class="block"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300" data-i18n="book.phone.label">Телефон</span><input type="tel" id="booking-phone" required class="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-900 dark:text-slate-100" placeholder="08XX XXX XXX"/></label>
+<label class="block"><span class="text-sm font-semibold text-slate-700 dark:text-slate-300" data-i18n="book.notes.label">Бележки</span><textarea id="booking-notes" rows="2" class="mt-1 block w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-900 dark:text-slate-100" placeholder="За какво се отнася консултацията?"></textarea></label>
 </div>
 <!-- Consultant Selection -->
 <div class="mt-8">
@@ -149,13 +166,17 @@
 </button>
 </div>
 </div>
-</section>
+</div>
+</div>
+</div>
 </main>
 <!-- Fixed Footer Action -->
-<div class="fixed bottom-0 left-0 right-0 mx-auto max-w-md p-4 bg-white/90 dark:bg-slate-900/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800 flex flex-col gap-3">
+<div class="fixed bottom-0 left-0 right-0 z-20 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800">
+<div class="max-w-5xl mx-auto w-full p-4">
 <button type="button" id="booking-submit" class="w-full bg-primary text-white py-4 rounded-xl font-bold text-lg shadow-xl shadow-primary/20 active:scale-95 transition-transform">
                 Потвърди часа
             </button>
+</div>
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -355,6 +376,26 @@
   document.querySelector('.consultant-option[data-consultant-id="georgi_grozev"]').classList.add('border-primary','bg-primary/5');
   document.querySelector('.consultant-option[data-consultant-id="georgi_grozev"] .consultant-check').classList.remove('opacity-0');
 
+  // Pre-select consultant from ?consultant= URL param
+  (function() {
+    var VALID = ['georgi_grozev', 'petya_grozeva', 'irina_panayotova'];
+    var param = new URLSearchParams(window.location.search).get('consultant');
+    if (param && VALID.indexOf(param) !== -1 && param !== consultantId) {
+      document.querySelectorAll('.consultant-option').forEach(function(b) {
+        b.classList.remove('border-primary','bg-primary/5');
+        var chk = b.querySelector('.consultant-check');
+        if (chk) chk.classList.add('opacity-0');
+      });
+      consultantId = param;
+      var target = document.querySelector('.consultant-option[data-consultant-id="' + param + '"]');
+      if (target) {
+        target.classList.add('border-primary','bg-primary/5');
+        var chk = target.querySelector('.consultant-check');
+        if (chk) chk.classList.remove('opacity-0');
+      }
+    }
+  })();
+
   document.getElementById('booking-submit').addEventListener('click', function(e) {
     e.preventDefault();
     if (!window.api || typeof window.api.post !== 'function') {
@@ -390,14 +431,16 @@
       consultant_id: consultantId,
       date: selectedDate,
       time: selectedTime,
-      service: 'Кредитна консултация',
+      service: (document.getElementById('booking-service') || {}).value || 'Кредитна консултация',
       notes: notes
     };
     // Use authenticated endpoint if logged in, guest endpoint otherwise
     var bookingPromise;
+    var _isGuest = true;
     if (window.supabase && window.supabase.auth) {
       bookingPromise = window.supabase.auth.getSession().then(function(r) {
         var session = r.data && r.data.session;
+        _isGuest = !session;
         var endpoint = session ? '/api/book' : '/api/book/guest';
         return window.api.post(endpoint, payload);
       });
@@ -420,7 +463,9 @@
             consultant_id: consultantId,
             consultant_name: names[consultantId] || consultantId,
             date: selectedDate,
-            time: selectedTime
+            time: selectedTime,
+            booking_id: (res.data && res.data.booking_id) || '',
+            is_guest: _isGuest
           }));
           window.location.href = '/booking_confirmed/';
         } else {

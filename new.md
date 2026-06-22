@@ -118,35 +118,34 @@
 
 ## New Improvements
 
-28. **Guest booking: no reference number shown on confirmation** *(UX)*
+28. ✅ **Guest booking: no reference number shown on confirmation** *(UX)*
     - When a guest (not logged in) books, they see the confirmation page but have no booking ID or reference number
     - They have no way to reference the booking if they want to cancel it later (no account = no "Моите срещи")
-    - Show the booking ID on `booking_confirmed` and suggest creating an account to manage bookings
+    - `booking_appointment` now stores `booking_id` and `is_guest` in sessionStorage; `booking_confirmed` shows the reference number and a "Създай профил" CTA for guest users
 
-29. **Service type is hardcoded as "Кредитна консултация"** *(UX)*
+29. ✅ **Service type is hardcoded as "Кредитна консултация"** *(UX)*
     - `booking_appointment/index.html` always sends `service: 'Кредитна консултация'` regardless of what the user needs
-    - Replace with a dropdown: Жилищен кредит, Потребителски кредит, Рефинансиране, Ипотека, Друго
+    - Replaced with a dropdown: Жилищен кредит, Потребителски кредит, Рефинансиране, Ипотека, Бизнес финансиране, Друго
 
 30. **No booking reminder emails** *(feature)*
     - After a booking is confirmed, neither the client nor the consultant receives a reminder before the appointment
     - Add a background job or Supabase cron that sends a reminder 24h before each confirmed booking
+    - *Deferred: not feasible on Vercel serverless without an external cron/queue service*
 
-31. **No password reset flow** *(UX)*
-    - `login/index.html` has no "Забравена парола?" link
-    - Supabase supports `supabase.auth.resetPasswordForEmail()` — wire it up with a simple modal or separate page
+31. ✅ **No password reset flow** *(UX)*
+    - `login/index.html` already has "Забравена парола?" modal using `supabase.auth.resetPasswordForEmail()`
 
-32. **Admin: confirm/decline doesn't send emails** *(feature)*
+32. ✅ **Admin: confirm/decline doesn't send emails** *(feature)*
     - When an admin clicks Confirm or Decline in the admin dashboard, it updates the status in the DB
-    - But it does NOT send the confirmation/decline email to the client (only the consultant's email link does)
-    - Admin actions should trigger the same email flow as the consultant token links
+    - `backend/routes/admin.py` now sends confirmation/decline email via `BackgroundTasks` on status change
 
-33. **No "Запиши час" CTA on consultants_info page** *(UX)*
-    - Users browsing consultants have no direct "Book this consultant" button
-    - Each consultant card should link to `/booking_appointment?consultant=georgi_grozev` and pre-select that consultant
+33. ✅ **No "Запиши час" CTA on consultants_info page** *(UX)*
+    - Each consultant card now has a "Запиши час" button linking to `/booking_appointment?consultant=ID`
+    - `booking_appointment` reads `?consultant=` URL param and pre-selects that consultant on load
 
-34. **Credit calculator results not shareable** *(UX)*
-    - After calculating, there's no way to share or save the result
-    - Add a "Копирай линк" button that encodes the inputs into the URL (`?amount=100000&rate=3.5&months=240`) so users can bookmark or share their calculation
+34. ✅ **Credit calculator results not shareable** *(UX)*
+    - Added "Копирай линк" button (link icon) that encodes `?amount=`, `?months=`, `?rate=` into the URL
+    - On load, URL params are read back and pre-fill the inputs; check icon confirms copy success
 
 ---
 

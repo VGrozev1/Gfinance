@@ -146,10 +146,15 @@
 </main>
 <!-- CTA Section -->
 <footer class="p-4 mt-auto w-full max-w-xl mx-auto">
-<a href="/booking_appointment" class="w-full bg-primary hover:bg-slate-900 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-black/20">
+<div class="flex gap-3 mb-3">
+<a href="/booking_appointment" class="flex-1 bg-primary hover:bg-slate-900 text-white font-bold py-4 px-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-black/20">
 <span class="material-symbols-outlined text-xl">contact_page</span>
             Заяви консултация
         </a>
+<button id="copy-link-btn" type="button" title="Копирай линк с изчислението" class="bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 font-bold py-4 px-4 rounded-xl flex items-center justify-center gap-2 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-xl">link</span>
+</button>
+</div>
 <p class="text-center text-[10px] text-slate-400 mt-4 leading-relaxed">
             * Изчисленията са ориентировъчни и не представляват официална оферта. 
             Gfinance е регистриран кредитен посредник.
@@ -189,10 +194,41 @@
     document.getElementById('result-total').textContent = formatNum(total) + ' eur.';
     document.getElementById('result-interest').textContent = formatNum(interest) + ' eur.';
   }
+  // Load values from URL params if present
+  (function() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('amount')) document.getElementById('calc-sum').value = params.get('amount');
+    if (params.get('months')) document.getElementById('calc-months').value = params.get('months');
+    if (params.get('rate')) document.getElementById('calc-rate').value = params.get('rate');
+  })();
+
   ['calc-sum','calc-months','calc-rate'].forEach(function(id) {
     document.getElementById(id).addEventListener('input', calc);
   });
   calc();
+
+  // Copy shareable link
+  document.getElementById('copy-link-btn').addEventListener('click', function() {
+    var amount = document.getElementById('calc-sum').value;
+    var months = document.getElementById('calc-months').value;
+    var rate = document.getElementById('calc-rate').value;
+    var url = window.location.origin + '/credit_calculator?amount=' + encodeURIComponent(amount) + '&months=' + encodeURIComponent(months) + '&rate=' + encodeURIComponent(rate);
+    var btn = document.getElementById('copy-link-btn');
+    var icon = btn.querySelector('.material-symbols-outlined');
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function() {
+        icon.textContent = 'check';
+        setTimeout(function() { icon.textContent = 'link'; }, 2000);
+      });
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+      document.body.removeChild(ta);
+      icon.textContent = 'check';
+      setTimeout(function() { icon.textContent = 'link'; }, 2000);
+    }
+  });
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

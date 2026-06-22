@@ -1,7 +1,7 @@
 """Admin API routes — all-bookings dashboard."""
 import jwt
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel
 
@@ -63,16 +63,36 @@ async def update_booking_status(
     request: Request,
     booking_id: str,
     body: StatusUpdate,
+    background_tasks: BackgroundTasks,
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ) -> dict:
-    """Update a booking's status. Admin only."""
+    """Update a booking's status. Admin only. Sends confirmation/decline email to client."""
     await _require_admin(credentials)
     if body.status not in _ALLOWED_STATUSES:
         raise HTTPException(status_code=400, detail=f"Невалиден статус: {body.status}")
     from routes.booking import get_supabase
     supabase = get_supabase()
-    r = supabase.table("bookings").select("id, status").eq("id", booking_id).execute()
+    r = supabase.table("bookings").select(
+        "id, status, client_name, client_email, consultant_id, booking_date, booking_time"
+    ).eq("id", booking_id).execute()
     if not r.data:
         raise HTTPException(status_code=404, detail="Заявката не е намерена.")
+    booking = r.data[0]
     supabase.table("bookings").update({"status": body.status}).eq("id", booking_id).execute()
+    if body.status in ("confirmed", "declined"):
+        from consultants import CONSULTANTS
+        from email_service import send_client_confirmation, send_client_decline
+        consultant = CONSULTANTS.get(booking["consultant_id"], {})
+        consultant_name = consultant.get("name", booking["consultant_id"])
+        kwargs = dict(
+            client_email=booking["client_email"],
+            client_name=booking["client_name"],
+            date_str=booking.get("booking_date", ""),
+            time_str=booking.get("booking_time", ""),
+            consultant_name=consultant_name,
+        )
+        if body.status == "confirmed":
+            background_tasks.add_task(send_client_confirmation, **kwargs)
+        else:
+            background_tasks.add_task(send_client_decline, **kwargs)
     return {"ok": True}

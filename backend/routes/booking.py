@@ -193,7 +193,8 @@ async def _create_booking_with_auth(req: BookRequest, auth_email: Optional[str],
         background_tasks.add_task(send_consultant_booking_request, **email_kwargs)
     else:
         send_consultant_booking_request(**email_kwargs)
-    return {"ok": True, "message": "Your request has been sent. The consultant will confirm shortly."}
+    booking_id = result.data[0].get("id", "") if result.data else ""
+    return {"ok": True, "message": "Your request has been sent. The consultant will confirm shortly.", "booking_id": str(booking_id)}
 
 
 @router.post("")

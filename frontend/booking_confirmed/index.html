@@ -107,6 +107,27 @@
 </div>
 </div>
 </div>
+<!-- Booking reference number (shown when available) -->
+<div id="booking-ref-row" class="px-4 py-2 hidden">
+<div class="bg-slate-50 dark:bg-slate-800 rounded-xl px-4 py-3 flex items-center gap-3 border border-slate-200 dark:border-slate-700">
+<span class="material-symbols-outlined text-primary text-xl">tag</span>
+<div>
+<p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Референтен номер</p>
+<p id="booking-ref" class="text-slate-900 dark:text-white text-sm font-mono font-bold"></p>
+</div>
+</div>
+</div>
+<!-- Guest account suggestion -->
+<div id="guest-cta" class="px-4 py-2 hidden">
+<div class="bg-primary/5 dark:bg-primary/10 rounded-xl px-4 py-4 border border-primary/20 flex flex-col gap-2">
+<p class="text-sm font-semibold text-slate-900 dark:text-slate-100">Искате да управлявате заявката си?</p>
+<p class="text-xs text-slate-500 dark:text-slate-400">Създайте профил безплатно, за да видите и отмените часа си по всяко време.</p>
+<a href="/signup" class="mt-1 inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-white text-sm font-bold px-4 py-2.5 hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined text-base">person_add</span>
+Създай профил безплатно
+</a>
+</div>
+</div>
 <!-- Actions -->
 <div class="mt-auto px-4 py-8 flex flex-col gap-3">
 <a href="/" class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 px-6 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-sm font-bold leading-normal tracking-[0.015em] hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors">
@@ -127,6 +148,7 @@
   var photo = { georgi_grozev: '../assets/images/georgi-grozev.png', petya_grozeva: '../assets/images/petya-grozeva.png', irina_panayotova: '../assets/images/irina-panayotova.png' };
   var raw = null; try { raw = sessionStorage.getItem('lastBooking'); } catch(e){}
   if (raw) {
+    try {
       var b = JSON.parse(raw);
       document.getElementById('booking-consultant').textContent = b.consultant_name || '—';
       document.getElementById('booking-time').textContent = (b.time || '—') + ' ч.';
@@ -137,8 +159,15 @@
       }
       var img = document.getElementById('booking-consultant-photo');
       if (img && photo[b.consultant_id]) img.src = photo[b.consultant_id];
-    }
-  } catch (e) {}
+      if (b.booking_id) {
+        document.getElementById('booking-ref').textContent = b.booking_id;
+        document.getElementById('booking-ref-row').classList.remove('hidden');
+      }
+      if (b.is_guest) {
+        document.getElementById('guest-cta').classList.remove('hidden');
+      }
+    } catch(e) {}
+  }
 })();
 </script>
 </body></html>
