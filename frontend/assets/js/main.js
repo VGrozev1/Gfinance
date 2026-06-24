@@ -129,6 +129,44 @@
     });
   });
 
+  /* --- Floating phone CTA (mobile only, not on booking pages) --- */
+  function initFloatingCTA() {
+    var path = window.location.pathname;
+    if (path.indexOf('/booking_appointment') !== -1 || path.indexOf('/booking_confirmed') !== -1) return;
+    var btn = document.createElement('a');
+    btn.href = 'tel:+359888152181';
+    btn.setAttribute('aria-label', 'Обади се на Gfinance');
+    btn.style.cssText = [
+      'position:fixed', 'bottom:24px', 'right:20px', 'z-index:900',
+      'width:56px', 'height:56px', 'border-radius:50%',
+      'background:#2563eb', 'color:#fff',
+      'display:flex', 'align-items:center', 'justify-content:center',
+      'box-shadow:0 4px 16px rgba(37,99,235,0.4)',
+      'text-decoration:none', 'transition:transform 0.15s,box-shadow 0.15s'
+    ].join(';');
+    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:26px;line-height:1">call</span>';
+    btn.addEventListener('mouseenter', function() {
+      btn.style.transform = 'scale(1.08)';
+      btn.style.boxShadow = '0 6px 20px rgba(37,99,235,0.5)';
+    });
+    btn.addEventListener('mouseleave', function() {
+      btn.style.transform = '';
+      btn.style.boxShadow = '0 4px 16px rgba(37,99,235,0.4)';
+    });
+    // Only show on mobile (max-width 768px)
+    var mq = window.matchMedia('(max-width:767px)');
+    function toggle(e) { btn.style.display = e.matches ? 'flex' : 'none'; }
+    toggle(mq);
+    if (mq.addEventListener) mq.addEventListener('change', toggle);
+    else mq.addListener(toggle);
+    document.body.appendChild(btn);
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFloatingCTA);
+  } else {
+    initFloatingCTA();
+  }
+
   /* --- Toast / showMessage helper --- */
   window.showMessage = function (text, type) {
     type = type || 'info';

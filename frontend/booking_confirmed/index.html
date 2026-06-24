@@ -77,8 +77,14 @@
 </div>
 </div>
 </div>
+<!-- Fallback shown when no sessionStorage data (direct visit / refresh) -->
+<div id="booking-fallback" class="hidden px-4 py-2">
+<div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-5 border border-slate-200 dark:border-slate-700 text-center">
+<p class="text-sm text-slate-600 dark:text-slate-400">Проверете имейла си за детайлите на срещата.<br/>Ако имате профил, вижте заявката в <a href="/my_appointments" class="text-primary font-semibold hover:underline">Моите срещи</a>.</p>
+</div>
+</div>
 <!-- Booking Details Card -->
-<div class="px-4 py-2">
+<div id="booking-details-card" class="px-4 py-2">
 <div class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
 <h3 class="text-primary text-sm font-bold uppercase tracking-wider mb-4" data-i18n="confirmed.card.title">Детайли за срещата</h3>
 <div class="space-y-4">
@@ -173,6 +179,11 @@
         document.getElementById('guest-cta').classList.remove('hidden');
       }
     } catch(e) {}
+  } else {
+    var card = document.getElementById('booking-details-card');
+    var fallback = document.getElementById('booking-fallback');
+    if (card) card.classList.add('hidden');
+    if (fallback) fallback.classList.remove('hidden');
   }
 })();
 </script>
