@@ -132,7 +132,7 @@
   /* --- Floating phone CTA (mobile only, not on booking pages) --- */
   function initFloatingCTA() {
     var path = window.location.pathname;
-    if (path.indexOf('/booking_appointment') !== -1 || path.indexOf('/booking_confirmed') !== -1) return;
+    if (path.indexOf('/booking_confirmed') !== -1) return;
     var btn = document.createElement('a');
     btn.href = 'tel:+359888152181';
     btn.setAttribute('aria-label', 'Обади се на Gfinance');
