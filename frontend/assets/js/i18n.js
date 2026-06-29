@@ -4,7 +4,7 @@
       // Nav
       'nav.menu': 'Меню',
       'nav.home': 'Начало',
-      'nav.experts': 'Експерти',
+      'nav.experts': 'Контакти',
       'nav.credit_info': 'Информация за кредити',
       'nav.calculator': 'Кредитен калкулатор',
       'nav.book': 'Запис на час',
@@ -39,7 +39,7 @@
       'home.cta.desc': 'Свържете се с нас днес за безплатна и необвързваща консултация относно вашия кредит.',
       'home.cta.btn': 'Свържете се с нас',
       // Footer
-      'footer.experts': 'Експерти',
+      'footer.experts': 'Контакти',
       'footer.credits': 'Кредити',
       'footer.book': 'Запис на час',
       'footer.profile': 'Моят профил',
