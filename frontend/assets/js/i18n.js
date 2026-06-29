@@ -70,6 +70,7 @@
       'book.phone.label': 'Телефон',
       'book.notes.label': 'Бележки',
       'book.notes.placeholder': 'За какво се отнася консултацията?',
+      'book.service.label': 'Вид консултация',
       'book.consultant.label': 'Изберете консултант',
       'book.submit': 'Потвърди часа',
       // Booking Confirmed
@@ -221,6 +222,7 @@
       'book.phone.label': 'Phone',
       'book.notes.label': 'Notes',
       'book.notes.placeholder': 'What is the consultation about?',
+      'book.service.label': 'Consultation Type',
       'book.consultant.label': 'Choose a Consultant',
       'book.submit': 'Confirm Appointment',
       // Booking Confirmed
