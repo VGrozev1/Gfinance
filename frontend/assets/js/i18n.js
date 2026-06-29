@@ -155,7 +155,7 @@
       // Nav
       'nav.menu': 'Menu',
       'nav.home': 'Home',
-      'nav.experts': 'Experts',
+      'nav.experts': 'Contacts',
       'nav.credit_info': 'Credit Information',
       'nav.calculator': 'Credit Calculator',
       'nav.book': 'Book Appointment',
