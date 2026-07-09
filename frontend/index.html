@@ -11,7 +11,7 @@
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"/></noscript>
   <link rel="stylesheet" href="assets/css/tailwind.min.css"/>
-<script src="assets/js/i18n.js?v=3" defer></script>
+<script src="assets/js/i18n.js?v=4" defer></script>
 <link rel="stylesheet" href="assets/css/main.css"/>
 <meta name="description" content="Безплатна кредитна консултация в Бургас. Gfinance – опитни експерти за жилищен кредит, потребителски кредит и рефинансиране. Запишете час онлайн."/>
 <meta property="og:type" content="website"/>
@@ -119,15 +119,15 @@
       <div class="max-w-xl mx-auto grid grid-cols-3 gap-2 text-center">
         <div class="flex flex-col items-center gap-0.5">
           <span class="text-2xl font-extrabold text-primary">10+</span>
-          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">банки сравнени</span>
+          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium" data-i18n="home.trust.banks">банки сравнени</span>
         </div>
         <div class="flex flex-col items-center gap-0.5 border-x border-primary/10">
           <span class="text-2xl font-extrabold text-primary">100%</span>
-          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">безплатно за вас</span>
+          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium" data-i18n="home.trust.free">безплатно за вас</span>
         </div>
         <div class="flex flex-col items-center gap-0.5">
           <span class="text-2xl font-extrabold text-primary">Бургас</span>
-          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">и онлайн</span>
+          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium" data-i18n="home.trust.loc">и онлайн</span>
         </div>
       </div>
     </section>
@@ -187,19 +187,19 @@
     <!-- Contact Information Section -->
     <section class="py-12 px-4">
       <div class="max-w-4xl mx-auto bg-primary/5 dark:bg-primary/10 rounded-2xl p-8 border border-primary/10">
-        <h2 class="text-2xl font-bold mb-8 flex items-center gap-2"><span class="material-symbols-outlined text-primary">contact_support</span> Информация за контакт</h2>
+        <h2 class="text-2xl font-bold mb-8 flex items-center gap-2"><span class="material-symbols-outlined text-primary">contact_support</span> <span data-i18n="contact.title">Информация за контакт</span></h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div class="flex items-start gap-4">
             <div class="bg-primary/10 p-3 rounded-lg text-primary"><span class="material-symbols-outlined">location_on</span></div>
             <div>
-              <h3 class="font-bold text-slate-900 dark:text-slate-100">Адрес</h3>
+              <h3 class="font-bold text-slate-900 dark:text-slate-100" data-i18n="contact.address.label">Адрес</h3>
               <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Бургас, ул. Поп Груйо 66А</p>
             </div>
           </div>
           <div class="flex items-start gap-4">
             <div class="bg-primary/10 p-3 rounded-lg text-primary"><span class="material-symbols-outlined">call</span></div>
             <div>
-              <h3 class="font-bold text-slate-900 dark:text-slate-100">Телефон</h3>
+              <h3 class="font-bold text-slate-900 dark:text-slate-100" data-i18n="contact.phone.label">Телефон</h3>
               <a href="tel:+359888152181" class="text-slate-600 dark:text-slate-400 text-sm mt-1 hover:text-primary transition-colors block">+359 888 152181</a>
               <div class="flex gap-2 mt-2">
                 <a href="https://wa.me/359888152181" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold text-white" style="background:#25D366" aria-label="WhatsApp">
@@ -216,7 +216,7 @@
           <div class="flex items-start gap-4">
             <div class="bg-primary/10 p-3 rounded-lg text-primary"><span class="material-symbols-outlined">mail</span></div>
             <div>
-              <h3 class="font-bold text-slate-900 dark:text-slate-100">Имейл</h3>
+              <h3 class="font-bold text-slate-900 dark:text-slate-100" data-i18n="contact.email.label">Имейл</h3>
               <a href="mailto:ggrozev@gfinance.bg" class="text-slate-600 dark:text-slate-400 text-sm mt-1 hover:text-primary transition-colors block">ggrozev@gfinance.bg</a>
             </div>
           </div>
@@ -226,7 +226,7 @@
           <div class="absolute inset-0 flex items-center justify-center">
             <div class="bg-white dark:bg-slate-800 px-4 py-2 rounded-full shadow-lg flex items-center gap-2 group-hover:bg-primary group-hover:text-white transition-colors">
               <span class="material-symbols-outlined text-primary group-hover:text-white text-sm">location_on</span>
-              <span class="text-xs font-bold">Намерете ни в Бургас – отвори в Google Maps</span>
+              <span class="text-xs font-bold" data-i18n="contact.map.btn">Намерете ни в Бургас – отвори в Google Maps</span>
             </div>
           </div>
         </a>
