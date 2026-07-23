@@ -175,7 +175,21 @@ async def _create_booking_with_auth(req: BookRequest, auth_email: Optional[str],
                 status_code=400,
                 detail="Този час вече е зает. Моля изберете друг ден или час.",
             )
-        raise HTTPException(status_code=500, detail=str(e))
+        # client_phone column missing — fall back to prepending it to notes
+        if "client_phone" in err_str and ("column" in err_str or "42703" in err_str):
+            row_fb = {k: v for k, v in row.items() if k != "client_phone"}
+            row_fb["notes"] = f"Телефон: {req.client_phone}\n{row_fb.get('notes', '')}"
+            try:
+                supabase = get_supabase()
+                result = supabase.table("bookings").insert(row_fb).execute()
+                if not result.data:
+                    raise HTTPException(status_code=500, detail="Failed to save booking")
+            except HTTPException:
+                raise
+            except Exception as e2:
+                raise HTTPException(status_code=500, detail=str(e2))
+        else:
+            raise HTTPException(status_code=500, detail=str(e))
     logging.getLogger("gfinance").info("Queuing consultant email to %s for booking %s", consultant["email"], req.client_name)
     email_kwargs = dict(
         consultant_email=consultant["email"],
