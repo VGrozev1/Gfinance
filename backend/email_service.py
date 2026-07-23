@@ -81,6 +81,11 @@ def send_consultant_booking_request(
     <a href="{confirm_url}" style="background: #22c55e; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px; margin-right: 12px;">Потвърди</a>
     <a href="{decline_url}" style="background: #ef4444; color: white; padding: 10px 20px; text-decoration: none; border-radius: 8px;">Откажи</a>
     </p>
+    <p style="margin-top: 20px; font-size: 12px; color: #64748b;">
+    Ако бутоните не работят, копирайте линковете в браузъра:<br/>
+    ✅ Потвърди: <span style="color:#16a34a">{confirm_url}</span><br/>
+    ❌ Откажи: <span style="color:#dc2626">{decline_url}</span>
+    </p>
     </body>
     </html>
     """
