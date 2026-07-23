@@ -40,7 +40,7 @@ EMAIL_SMTP_PASSWORD = os.getenv("EMAIL_SMTP_PASSWORD", "")
 API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
 
 # Admin emails (comma-separated). Users with these emails get role=admin.
-_ADMIN_EMAILS = os.getenv("ADMIN_EMAILS", "vikigrozev@gmail.com,bibigrozeva@gmail.com")
+_ADMIN_EMAILS = os.getenv("ADMIN_EMAILS", "vikigrozev@gmail.com,bibigrozeva@gmail.com,ggrozev77@gmail.com")
 ADMIN_EMAILS = {e.strip().lower() for e in _ADMIN_EMAILS.split(",") if e.strip()}
 
 # CORS allowed origins (comma-separated). Set to your production domain(s) in Vercel env vars.
