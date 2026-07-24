@@ -193,6 +193,7 @@ async def _create_booking_with_auth(req: BookRequest, auth_email: Optional[str],
     logging.getLogger("gfinance").info("Queuing consultant email to %s for booking %s", consultant["email"], req.client_name)
     email_kwargs = dict(
         consultant_email=consultant["email"],
+        consultant_name=consultant["name"],
         client_name=req.client_name,
         client_email=req.client_email,
         client_phone=req.client_phone,

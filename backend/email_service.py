@@ -52,6 +52,7 @@ def send_email(to: str, subject: str, html_body: str) -> bool:
 
 def send_consultant_booking_request(
     consultant_email: str,
+    consultant_name: str,
     client_name: str,
     client_email: str,
     client_phone: str,
@@ -70,6 +71,7 @@ def send_consultant_booking_request(
     <html>
     <body style="font-family: sans-serif; max-width: 560px;">
     <h2>Нова заявка за консултация</h2>
+    <p><strong>Избран консултант:</strong> {consultant_name}</p>
     <p><strong>Клиент:</strong> {client_name}</p>
     <p><strong>Имейл:</strong> {client_email}</p>
     <p><strong>Телефон:</strong> {client_phone}</p>
